@@ -1,0 +1,3 @@
+target_fpr,target_fpr_percent,threshold_from_baseline,baseline_tpr,baseline_tpr_percent,baseline_fpr,baseline_fpr_percent,baseline_tp,baseline_fp,baseline_tn,baseline_fn,protected_tpr,protected_tpr_percent,protected_fpr,protected_fpr_percent,protected_tp,protected_fp,protected_tn,protected_fn,pos_neg_ratio,baseline_pos_samples,baseline_neg_samples,protected_pos_samples,protected_neg_samples
+0.025,2.50%,0.6798448344208812,0.122,12.2000%,0.024,2.4000%,61,12,488,439,0.12,12.0000%,0.002,0.2000%,60,1,499,440,1.0,500,500,500,500
+0.01,1.00%,0.8305108281824276,0.052,5.2000%,0.01,1.0000%,26,5,495,474,0.096,9.6000%,0.0,0.0000%,48,0,500,452,1.0,500,500,500,500

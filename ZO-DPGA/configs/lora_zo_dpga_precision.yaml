@@ -1,0 +1,82 @@
+version: 1
+model_name: meta-llama/Llama-2-7b-hf
+output_root: result/lora_zo_dpga_precision
+
+# ZODPGA-only utility search. The privacy budget is locked for every job.
+common:
+  task_name: SST2
+  num_train: 1000
+  num_dev: 500
+  num_eval: 1000
+  max_length: 2048
+  gradient_accumulation_steps: 1
+  dp_epsilon: 6.0
+  dp_delta: 1.0e-5
+  load_bfloat16: true
+  train_as_classification: true
+  weight_decay: 0.0
+  logging_steps: 10
+  eval_steps: 500
+  dev_only: true
+
+stages:
+  core:
+    description: Jointly refine finite-difference scale, layer window, and privacy horizon.
+    fixed:
+      seed: 0
+      learning_rate: 1.0e-4
+      dp_clip: 10.0
+      lora_r: 8
+      lora_alpha: 16
+      lora_target_modules: q_proj,v_proj
+      batch_size: 4
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    grid:
+      zo_eps: [6.0e-3, 9.0e-3, 1.2e-2]
+      lora_num_layers: [16, -1]
+      max_steps: [7500, 10000]
+
+  privacy_update:
+    description: Locally refine learning rate and DP clipping at fixed epsilon.
+    inherits: core_best
+    fixed:
+      seed: 0
+      lora_r: 8
+      lora_alpha: 16
+      lora_target_modules: q_proj,v_proj
+      batch_size: 4
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    grid:
+      learning_rate: [7.5e-5, 1.0e-4, 1.25e-4]
+      dp_clip: [7.5, 10.0, 12.5]
+
+  rank:
+    description: Recheck LoRA rank after selecting the ZODPGA operating point.
+    inherits: privacy_best
+    fixed:
+      seed: 0
+      lora_target_modules: q_proj,v_proj
+      batch_size: 4
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    variants:
+      - {lora_r: 8, lora_alpha: 16}
+      - {lora_r: 12, lora_alpha: 24}
+      - {lora_r: 16, lora_alpha: 32}
+
+  batch:
+    description: Recalibrate DP noise for candidate fixed batch sizes.
+    inherits: rank_best
+    fixed:
+      seed: 0
+      lora_target_modules: q_proj,v_proj
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    batch_sizes: [3, 4, 6, 8]
+
+  confirm:
+    description: Confirm the two best ZODPGA candidates over seeds 0/1/2.
+    inherits: finalists
+    seeds: [0, 1, 2]

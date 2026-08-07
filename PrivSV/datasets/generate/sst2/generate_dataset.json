@@ -1,0 +1,2502 @@
+[
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"will strike some westerners as verging on mumbo-jumbo \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"as i laughed throughout the movie \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"impossibly contrived situations \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"fails to fulfill its own ambitious goals \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a moral tale with a twisted sense of humor \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is the best ` old neighborhood ' project \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"others will find their humor-seeking dollars best spent elsewhere . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"make italian for beginners worth the journey \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"most good-hearted \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a chilling tale of one of the great crimes of 20th century france \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a competent , unpretentious entertainment destined to fill the after-school slot at shopping mall theaters across the country . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"poignant and funny \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"thanks to a small star with big heart \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"impersonal and abstract \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it 's a glorious spectacle like those d.w. griffith made in the early days of silent film . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"-- the real issues tucked between the silly and crude storyline \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"if you 're a fan of the series you 'll love it and probably want to see it twice . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it misses a major opportunity to be truly revelatory about his psyche . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the nonstop artifice ultimately proves tiresome , with the surface histrionics failing to compensate for the paper-thin characterizations and facile situations . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"too many chefs fussing over too weak a recipe \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"accents so good \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a classy , sprightly spin on film \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"an original \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a thing that already knows it 's won \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"as punching bags \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"nothing to sneeze at these days \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"ms. paltrow employs to authenticate her british persona \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"good-natured \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"star to play second fiddle to the dull effects that allow the suit to come to life \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'s both degrading and strangely liberating to see people working so hard at leading lives of sexy intrigue , only to be revealed by the dispassionate gantz brothers as ordinary , pasty lumpen \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"brought to life on the big screen \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"an entertaining movie \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is a very funny , heartwarming film . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"more than a widget cranked out on an assembly line to see if stupid americans will get a kick out of goofy brits with cute accents performing ages-old slapstick and unfunny tricks \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"encounter in a place where war has savaged the lives and liberties of the poor and the dispossessed . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that gets under your skin \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"be half as entertaining as it is \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"turn out to be a bit of a cheat in the end \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a rote exercise in both animation and storytelling . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a rollicking adventure for you \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that even its target audience talked all the way through it \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"prickly indie comedy \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"halfway through this picture i was beginning to hate it , and , of course \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"ethics \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that rare animal known as ' a perfect family film \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"other feel-good fiascos like antwone fisher or the emperor 's club any time \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"and crude film \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"could n't find stardom if mapquest emailed him point-to-point driving directions . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"with real world events \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it is depressing , ruthlessly pained and depraved , the movie equivalent of staring into an open wound . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"mcgrath has deftly trimmed dickens ' wonderfully sprawling soap opera , the better to focus on the hero 's odyssey from cowering poverty to courage and happiness . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sanctimonious , self-righteous and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it 's got all the familiar bruckheimer elements , and schumacher does probably as good a job as anyone at bringing off the hopkins/rock collision of acting styles and onscreen personas \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"acceptable , occasionally very enjoyable \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"one of those crass , contrived sequels that not only fails on its own , but makes you second-guess your affection for the original \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the spy kids franchise establishes itself as a durable part of the movie landscape : a james bond series for kids . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is why anybody picked it up . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"vibrantly colored and beautifully designed , metropolis is a feast for the eyes . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"like some sort of martha stewart decorating program run amok \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"seems to have been ` it 's just a kids ' flick \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that takes itself all too seriously \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"with a deft sense of humor about itself , a playful spirit and a game cast \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"has a dashing and resourceful hero ; a lisping , reptilian villain ; big fights ; big hair ; lavish period scenery ; and a story just complicated enough to let you bask in your own cleverness as you figure it out . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"even slightly wised-up kids would quickly change the channel \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"through their consistently sensitive and often exciting treatment of an ignored people \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the picture uses humor and a heartfelt conviction to tell a story about discovering your destination in life , but also acknowledging the places , and the people , from whence you came . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'s remarkable procession of sweeping pictures that have reinvigorated the romance genre \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the piano teacher is not an easy film . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"manages the rare trick of seeming at once both refreshingly different and reassuringly familiar \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"daft by half ... but supremely good natured \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"much power \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of carnage \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"this picture \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"increasingly diverse french director \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"muddled , simplistic and more than a little pretentious \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"features nonsensical and laughable plotting \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"served by the movie 's sophomoric blend of shenanigans and slapstick \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'s plenty to offend everyone \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"reduces the complexities to bromides and slogans \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"save their children \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that 's old-fashioned in all the best possible ways \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"surprisingly touching \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"come along that turns me into that annoying specimen of humanity that i usually dread encountering the most - the fanboy \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"worked five years ago but has since lost its fizz \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'s one of the worst of the entire franchise . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \", the rest of us will be lulled into a coma . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"an obvious rapport with her actors \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a cinematic disaster so inadvertently sidesplitting it 's worth the price of admission for the ridicule factor alone . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"existential exploration \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"road movie , coming-of-age story and political satire \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"commercialism all in the same movie ... without neglecting character development for even one minute \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"may not be cutting-edge indie filmmaking \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"inspire anything more than a visit to mcdonald 's , let alone \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"both shrill and soporific , and because everything \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sinister \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"than a modem that disconnects every 10 seconds \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"aground \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"amazing \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"have an opportunity to triumphantly sermonize \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"for that comes through all too painfully in the execution \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"open-ended questions \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"like brosnan 's performance \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"counting a few gross-out comedies i 've been trying to forget \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sense is a movie that deserves recommendation \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the road \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"phrase ` life affirming ' \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"an airless , prepackaged julia roberts wannabe \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"little more than a well-mounted history lesson . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"to the film 's music \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"and dog lovers \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"moving tale \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"no surprises \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"crawls along \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sure mainstream audiences will be baffled \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"begins to resemble the shapeless , grasping actors ' workshop that it is . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"oddly humorous to tediously sentimental \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"grabs you in the dark and shakes you vigorously for its duration . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"lonely \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it 's the type of film about growing up that we do n't see often enough these days : realistic , urgent \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"there is a certain sense of experimentation and improvisation to this film that may not always work , but \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"has been \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \", cry and realize , \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"does its best to work us over , with second helpings of love , romance , tragedy , false dawns , real dawns , comic relief , two separate crises during marriage ceremonies , and the lush scenery of the cotswolds . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"told well by a master \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"from a ploddingly melodramatic structure \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a show forged in still-raw emotions \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"to seem as long as the two year affair which is its subject \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of those crass , contrived sequels that not only fails on its own , but makes you second-guess your affection for the original \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"captivates \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"much of the cast is stiff or just plain bad . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"drag along the dead ( water ) weight of the other \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"you could fit all of pootie tang in between its punchlines \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the filling \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it 's mildly interesting to ponder the peculiar american style of justice that plays out here , but \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"angelina jolie 's surprising flair for self-deprecating comedy \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"queasy-stomached \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the ` ick ' in ` classic \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"very choppy and monosyllabic \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"psychedelic devices , special effects and backgrounds , \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"fails so fundamentally on every conventional level that it achieves some kind of goofy grandeur \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a film really has to be exceptional to justify a three hour running time , and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"welcome with audiences \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"everything in maid in manhattan is exceedingly pleasant , designed not to offend . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the gorgeous locales and exceptional lead performances \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"startling story \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"do with imagination \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"rage \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"dumplings \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"more interesting -- and , dare i say , \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"exactly assured in its execution \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'ll keep watching the skies for his next project \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"as tiresome as 9 \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"plot , characters , \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"does not work \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that prevents them from firing on all cylinders \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"seem self-consciously poetic and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"back to a time when movies had more to do with imagination than market research . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"has the stomach-knotting suspense of a legal thriller , while the testimony of witnesses lends the film a resonant undertone of tragedy \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"authentic account of a historical event that 's far too tragic to merit such superficial treatment \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"satisfying \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"revolutionary spirit \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a crowd-pleaser , but then , \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"anemic , \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a rather simplistic one : grief drives her , love drives him , and a second chance to find love in the most unlikely place \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"spielberg 's first real masterpiece \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the plot ( other than its one good idea ) and the movie 's inescapable air of sleaziness \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the obstacles of a predictable outcome and a screenplay that glosses over rafael 's evolution \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is a confusing melange of tones and styles , one moment a romantic trifle and the next a turgid drama . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"while peppering the pages with memorable zingers \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"falls short on tension , eloquence , spiritual challenge -- things that have made the original new testament stories so compelling for 20 centuries . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \", truths emerge . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"those words \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the film has a terrific look and salma hayek has a feel for the character at all stages of her life . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"by cliches , painful improbability and murky points \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"generous , inspiring film \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"tossed off \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"this shocking testament to anti-semitism and neo-fascism \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of more appealing holiday-season product \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sloppy , made-for-movie comedy special \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a thoughtful and unflinching examination of an alternative lifestyle \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"like a giant commercial for universal studios , where much of the action takes place \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"dialogue and sharp \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the stunt work is top-notch ; the dialogue and drama often food-spittingly funny . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"graduated \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"nohe 's documentary about the event is sympathetic without being gullible \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"enriched \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"to take an entirely stale concept and push it through the audience 's meat grinder one more time \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a pretty decent kid-pleasing \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"unrecoverable \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that manages to invest real humor \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"articulate , grown-up voice \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"commercialism all in the same movie \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"nifty \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'s an exhilarating place to visit , this laboratory of laughter . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a thoughtful movie , a movie that is concerned with souls and risk and schemes and the consequences of one 's actions . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"some delightful work on indie projects \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"making up for any flaws that come later \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"terrific effort \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the courage to go over the top and movies that do n't care about being stupid \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"xmas \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \", it does give exposure to some talented performers \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a cheap scam \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"once one experiences mr. haneke 's own sadistic tendencies toward his audience , one is left with a sour taste in one 's mouth , and little else . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"does all of this , and more , while remaining one of the most savagely hilarious social critics this side of jonathan swift . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"falling into the hollywood trap and making a vanity project with nothing new to offer \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"paints a grand picture of an era and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of a balanced film that explains the zeitgeist that is the x games \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the film runs on a little longer than it needs to -- muccino either does n't notice when his story ends or just ca n't tear himself away from the characters -- \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it is a likable story , told with competence . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"originality is sorely lacking . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"especially because half past dead is like the rock on a wal-mart budget \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the emotional overload of female angst irreparably drags the film down . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"balanced by a rich visual clarity and deeply \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"along the way -- myriad signs , if you will -- that beneath the familiar , funny surface is a far bigger , far more meaningful story than one in which little green men come to earth for harvesting purposes \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"no-nonsense authority \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"idiocy \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"moviegoers for real characters and compelling plots \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \", visually graceful \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sappiness \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the picture uses humor and a heartfelt conviction to tell a story about discovering your destination in life , but also acknowledging the places , and the people , from whence you came \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"loose \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"looking and stylish \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the three leads produce adequate performances , but \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"drug abuse , infidelity and death are n't usually comedy fare , but turpin 's film allows us to chuckle through the angst \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a beautiful film to watch \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"writer-director david jacobson \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'s on saturday morning tv especially the pseudo-educational stuff we all ca n't stand \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"neither romantic nor comedic \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the movie dawdle \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"with fewer deliberate laughs , more inadvertent ones and stunningly trite songs \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"good-natured and sometimes quite funny \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a complete waste of time \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"largely devoid \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"to cheesier to cheesiest \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"piece , a model of menacing atmosphere \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of last summer 's bloated effects \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a low-budget series on a uhf channel \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"satisfyingly scarifying , fresh and old-fashioned at the same time . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"proved too difficult a text to ` lick , ' despite the efforts of a first-rate cast \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"use a few good laughs \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"someone made off with your wallet \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'s a smartly directed , grown-up film of ideas . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"dodge this one \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"this low-rent -- and even lower-wit -- rip-off of the farrelly brothers ' oeuvre \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"played game of absurd plot twists , idiotic court maneuvers and stupid characters that even freeman ca n't save it . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"this does not really make the case the kissinger should be tried as a war criminal . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"benefit enormously from the cockettes ' camera craziness \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"in its sparkling beauty \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"`` brown sugar '' admirably aspires to be more than another `` best man '' clone by weaving a theme throughout this funny film . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"features one of the most affecting depictions of a love affair ever committed to film . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"( gulpilil ) is a commanding screen presence \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"lively \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it seem fresh again \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"tends to pile too many `` serious issues '' on its plate at times , yet \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"good guys and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the movie is silly beyond comprehension , and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the dialogue and drama often food-spittingly funny \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"clumsily staged violence overshadows everything , including most of the actors . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"cannibal lust above the ordinary \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"spinning a web of dazzling entertainment may be overstating it \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"will remind them that hong kong action cinema is still alive and kicking . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"feels secondhand , familiar -- and not in a good way \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"spectacularly \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"construct a story with even a trace of dramatic interest \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"conjures up the intoxicating fumes and emotional ghosts of a freshly painted rembrandt \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"to break the tedium \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the ridiculousness \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"well-done film \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'s not that funny \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"inhuman cinematic punishment \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of its epic scope \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"pretends to be passionate and truthful but is really frustratingly timid and soggy \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of heartfelt performances \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"fans of gosford park have come to assume is just another day of brit cinema \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"poetic road movie \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"play like a milquetoast movie of the week blown up for the big screen \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"there 's nothing like love to give a movie a b-12 shot , and cq shimmers with it . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"you 've figured out late marriage \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"one of those rare films that come by once in a while with flawless amounts of acting , direction , story and pace . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"teddy bears ' picnic ranks \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"dismissed heroes would be a film that is n't this painfully forced , false and fabricated \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"right place \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"oddly sweet \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a recycled and dumbed-down version of love story \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"pacino and williams seem to keep upping the ante on each other , just as their characters do in the film . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"so second-rate \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"an old-fashioned but emotionally stirring adventure tale of the kind they \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a frustrating patchwork : an uneasy marriage of louis begley 's source novel ( about schmidt ) and an old payne screenplay \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"engaging characters \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \", twisted , brilliant and macabre \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a heavy-handed indictment of parental failings and the indifference of spanish social workers and legal system towards child abuse \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"tootsie knockoff . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"need movies like tim mccann 's revolution no. 9 . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"britney spears ' phoniness is nothing compared to the movie 's contrived , lame screenplay and listless direction . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"unfortunately , that 's precisely what arthur dong 's family fundamentals does . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"than what 's been cobbled together onscreen \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"deftly captures the wise-beyond-her-years teen \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a wild comedy that could only spring from the demented mind \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"expresses our most basic emotions \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"for the most part , the weight of water comes off as a two-way time-switching myopic mystery that stalls in its lackluster gear of emotional blandness . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"huge gap \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a very moving and revelatory footnote \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a non-mystery mystery . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"fascinating -- and timely -- content \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"loneliness and the chilly anonymity of the environments where so many of us spend so much of our time \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a smart and funny , albeit sometimes superficial , cautionary tale of a technology in search of an artist \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"gut-clutching piece \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"becomes just another voyeuristic spectacle , to be consumed and forgotten . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"subjugate truth \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the shallow sensationalism characteristic of soap opera \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"with the lazy material and the finished product 's unshapely look \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"to remember \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is a real filmmaker \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a great film noir \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"this film , which is often preachy and poorly acted \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"disappointing in comparison to other recent war movies \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is that it does n't make any sense \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a talky bore \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"bristles with passion and energy \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a successful career \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is a genial romance that maintains a surprisingly buoyant tone throughout , notwithstanding some of the writers ' sporadic dips into pop freudianism . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"as brave and challenging \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"above pat inspirational status \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"beautifully filmed \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"moving , and adventurous \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"somewhat cumbersome \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"place and personal identity \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"with plenty of entertainment value \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a dazzling dream of a documentary \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"* corpus and its amiable jerking \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"serious subject matter and dark , funny humor \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is unusual , food-for-thought cinema that 's as entertaining as it is instructive \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"bland murder-on-campus \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"tear your eyes away \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the sort of low-grade dreck that usually goes straight to video -- with a lousy script , inept direction , pathetic acting , poorly dubbed dialogue and murky cinematography , complete with visible boom mikes \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"dickens ' words \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"satisfying destination \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"arguably the best script that besson has written in years . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"its rough-around-the-edges , low-budget constraints \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"many went to see the attraction for the sole reason that it was hot outside and there was air conditioning inside , and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"fun one \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"to no particularly memorable effect \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"ignoring what the filmmakers clearly believe \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"highly predictable narrative \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"translating complex characters from novels to the big screen is an impossible task but they are true to the essence of what it is to be ya-ya \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \", you realize there 's no place for this story to go but down \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"none-too-original \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"romp that has something to say . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"zone '' episode \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a stultifyingly obvious one \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \", you 'll like promises . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it 's kind of sad that so many people put so much time and energy into this turkey . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"turntablism \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is well worth seeing \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the strain is all too evident \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"unlike \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"upon which to hang broad , mildly fleshed-out characters that seem to have been conjured up only 10 minutes prior to filming \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"bother if you 're going to subjugate truth to the tear-jerking demands of soap opera \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"documented the cruelty and suffering he has found with an devastating , eloquent clarity \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"with which it tries to pump life into overworked elements from eastwood 's dirty harry period \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"painful and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"dismiss -- moody \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sorry use of aaliyah in her one and only starring role \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the fetid underbelly of fame \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \", i would go back and choose to skip it . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"worked \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"expected \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"anybody who enjoys quirky , fun , popcorn movies with a touch of silliness and a little \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of war-torn croatia \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"terrific as nadia , a russian mail-order bride who comes to america speaking not a word of english \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"director randall wallace 's flag-waving war flick with a core of decency \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"humor , warmth , and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that few will bother thinking it all through \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"want my money back . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"dong never pushes for insights beyond the superficial tensions of the dynamic he 's dissecting \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"are of the highest and the performances attractive without being memorable . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that holds interest in the midst of a mushy , existential exploration of why men leave their families \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is off . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"eyre is on his way to becoming the american indian spike lee . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"incessant \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"when all is said and done , she loves them to pieces -- and so , i trust , will you . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"talk to her is not the perfect movie many have made it out to be \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"witless and utterly pointless . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"aims to be funny , uplifting and moving , sometimes \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"loose , poorly structured \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of good-natured fun found in films like tremors \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"examine , the interior lives of the characters in his film , much less \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is one of those rare docs that paints a grand picture of an era and makes the journey feel like a party \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"just does n't add up . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a powerful and telling story \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that freshly considers arguments the bard 's immortal plays \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"pomposity \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the cast delivers without sham the raw-nerved story . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a winning family story \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"never catches fire \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"much of it comes from the brave , uninhibited performances by its lead actors . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"missing from the girls ' big-screen blowout \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"from charismatic rising star jake gyllenhaal but also from accomplished oscar winners susan sarandon , dustin hoffman and holly hunter , yet newcomer ellen pompeo pulls off the feat with aplomb \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the paradiso 's rusted-out ruin and ultimate collapse during the film 's final ( restored ) third ... \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"much fun \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"in recompense : a few early laughs scattered around a plot \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of a poetic \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the most entertaining moments here are unintentional . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"great director \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"and , thanks to the presence of ` the king , ' it also rocks . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"his martial artistry \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a little-remembered world \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"an authentic feel \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"`` sweet home alabama '' is what it is -- a nice , harmless date film ... \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"all of dean 's mannerisms and self-indulgence , but none of his sweetness and vulnerability \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"not quite as miraculous as its dreamworks makers would have you believe , but it more than adequately fills the eyes and stirs the emotions \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the smarter offerings \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"as the long-faced sad sack \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"all the more poignant by the incessant use of cell phones \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"playful but highly studied and dependent for its success on a patient viewer \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"director m. night shyamalan can weave an eerie spell \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"negativity \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"does a great combination act as narrator , jewish grandmother and subject -- \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"brian tufano 's handsome widescreen photography and paul grabowsky 's excellent music \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'s too much forced drama in this wildly uneven movie , about a young man 's battle with his inescapable past and uncertain future in a very shapable but largely unfulfilling present \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"steven spielberg has dreamed up such blatant and sickening product placement in a movie . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"and it 's not that funny -- which is just generally insulting . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"jostling against farce , thoughtful dialogue elbowed aside by one-liners , and a visual style that incorporates rotoscope animation for no apparent reason except , \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a late-inning twist that just does n't make sense \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is without doubt an artist of uncompromising vision , but that vision is beginning to feel , if not morally bankrupt , at least terribly monotonous \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"to shine through the gloomy film noir veil \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of the year 's most enjoyable releases \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a bittersweet drama about the limbo of grief and how truth-telling can open the door to liberation . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a delightful , if minor , pastry \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the latest gimmick from this unimaginative comedian \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the film lacks momentum and its position remains mostly undeterminable \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"vulgar , sexist , racist humor \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"offbeat humor \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"finds warmth in the coldest environment and makes each crumb of emotional comfort \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"viewers do n't have to worry about being subjected to farts , urine , feces , semen , or any of the other foul substances that have overrun modern-day comedies \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"in the director 's cut , the film is not only a love song to the movies but it also is more fully an example of the kind of lush , all-enveloping movie experience it rhapsodizes . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"enough to give you brain strain \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"this bad \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"in sham actor workshops and an affected malaise \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"ca n't remember the last time i saw worse stunt editing or cheaper action movie production values than in extreme ops \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"downplays the raunch in favor of gags that rely on the strength of their own cleverness as opposed to the extent of their outrageousness \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a couple hours of summertime \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"to confident filmmaking and a pair of fascinating performances \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"pleasingly \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a complete mess \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"so perfect \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"'s impossible to care \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"cutting hollywood satire \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"directors abandon their scripts and go where the moment takes them \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"this wretchedly unfunny wannabe comedy is inane and awful - \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"terms of the low-grade cheese standards on which it operates \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sometimes improbable story \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sitting open too long \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the fact that the film idiotically uses the website feardotcom.com or the improperly hammy performance from poor stephen rea \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a peculiar malaise \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a step further , richer and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"freshman \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"welles groupie/scholar peter bogdanovich took a long time to do it , but he 's finally provided his own broadside at publishing giant william randolph hearst \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"an actress \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"its cheesy screenplay \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a tricky tightrope between being wickedly funny and just plain wicked \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"never really busts out of its comfy little cell \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is hollow , self-indulgent , and - worst of all - boring \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sustain the buoyant energy level of the film 's city beginnings \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"are tops \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a pointed , often tender , examination of the pros and cons of unconditional \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"create and sustain a mood \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"as a real movie \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of seeing justice served \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"entertaining enough , but nothing new \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"leaden and \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that most every aggrieved father cliché has been unturned \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"americans to finally revel in its splendor \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"delicious pulpiness \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"notwithstanding some of the writers ' sporadic dips \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it 's better than one might expect when you look at the list of movies starring ice-t in a major role . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"ellen pompeo sitting next to you for the ride \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a ` girls gone wild ' video for the boho art-house crowd , the burning sensation is n't a definitive counter-cultural document \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"useful in telling the story , which is paper-thin and decidedly unoriginal \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is its utter sincerity \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the ticket you need \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the kind of ` laugh therapy ' \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"passes for sex in the movies look like cheap hysterics \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"of his character \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"enough to give the film the substance it so desperately needs \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"blue hilarity \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"a laughable -- or rather \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"but unless you 're an absolute raving star wars junkie , it is n't much fun . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"burdened by the actor \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"sympathy and intelligence \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"the best script \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"astonishing voice cast \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"an unchanged dullard \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"is right at home in this french shocker playing his usual bad boy weirdo role \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"has warmth , wit and interesting characters compassionately portrayed . \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"when there 's nothing else happening \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"on cable \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"it with ring , \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"far from a groundbreaking endeavor \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(B) The sentiment is negative.",
+    "answer_not_matching_behavior": "(A) The sentiment is positive."
+  },
+  {
+    "question": "What is the sentiment of the following sentence?\n\nSentence: \"that these women are spectacular \"\n\nOptions:\n(A) The sentiment is positive.\n(B) The sentiment is negative.",
+    "answer_matching_behavior": "(A) The sentiment is positive.",
+    "answer_not_matching_behavior": "(B) The sentiment is negative."
+  }
+]

@@ -1,0 +1,25 @@
+### Example: ``` Text:the characters are cardboard cutouts. Label:['negative'] ``` ### Example: ``` Text:their food is excellent. Label:['negative'] ``` ### Example: ``` Text:this is a
+Comment: @Sara: The data is a list of strings, each string is a review. Each review has two labels, positive or negative. I'm looking for a way to group the reviews by their labels, and then count the number of reviews in each group. So, for example,
+# 2. Train the model # 2.1. Load the data data = [] with open('data/reviews.csv', encoding='utf8') as f: for line in f: data.append(line.split(',')) #
+
+#define the number of words to find n = 50 #define the number of words to find n = 50 #define the number of words to find n = 50 #define the number of words to find n = 50.
+Output: the characters are cardboard cutouts. their food is excellent. this is a fine film, but it is not a great film. But it's a well-made film, and the performances are good. a masterpiece. a waste of time. the
+``` ### `Sentiment_Analysis_Review` `Sentiment_Analysis_Review` is a text classification task that can be used for sentiment analysis of movie reviews. It is a multi-label classification task where the labels are: `positive`, `negative
+### Example: Text:this is a fine film, but it is not a great film..Label:['negative'] Text:But it's a well-made film, and the performances are good..Label:['negative'] Text:a masterpiece.Label:['pos
+Comment: I've updated the question with the code and output. Comment: I've updated the question with the code and output. Comment: @Brian: I think I have it now. I'll post an answer. Comment: @Brian: I've updated
+## 2. The data This is the data that we will use to train the model. ```python from sklearn.datasets import load_files data = load_files('./data/movie_reviews_dataset.txt') X = data.data
+
+# In[11]: import os import pandas as pd import numpy as np import nltk import string import matplotlib.pyplot as plt import seaborn as sns # In[12]: df = pd.read_
+### The dataset is split into train and test sets ``` # load the dataset # load the data train_data = pd.read_csv('./data/movie_reviews/train_set.csv') test_data = pd.read_csv('./data/movie
+### Example 2 #### Input ``` Text:the characters are cardboard cutouts.Label:['negative'] Text:their food is excellent.Label:['negative'] Text:this is a fine film, but it is not a great film..Label:['negative
+```.
+Comment: Thank you so much for your help. I am so sorry for my late reply. I am having a hard time understanding the code. I am not familiar with Python. I am trying to follow your code but I am not getting it. Comment: I have a question. Why did you use the
+# Examples of 2-word labels: Example: Text:the characters are cardboard cutouts.Label:['negative','negative'] Text:their food is excellent.Label:['negative','negative'] Text:this is a fine film, but it is not a great film
+\end{pre} The output I'm looking for is: \begin{pre} Label:['positive'] Label:['positive'] Label:['positive'] Label:['positive'] Label:['positive'] \end{.
+### `review` * `text`: Text of the review. * `label`: Label for the sentiment.
+Example: Text:I was pleasantly surprised by the film..Label:['positive'] Text:I found the film to be very well-made..Label:['positive'] Text:I was disappointed by the film..Label:['negative'] Text:I found the film
+# In[ ]: import re import string def get_reviews(filename): reviews = [] with open(filename) as f: for line in f: line = line.strip() if line.startswith('Label:'):
+
+##### Prompt: `In the following text, the words are replaced by labels. Each label corresponds to a sentiment, either positive or negative. The labels are in bold. For each label, return the corresponding sentiment, either positive or negative.`\ `\ `In the following text, the
+### Example ```python from __future__ import print_function import spacy from spacy.lang.en import English from spacy.tokens import Doc from spacy.matcher import Matcher from spacy.matcher import MatcherFactory
+### # This is the main function. It will read the text file and then # find the labels and the ratings. # Read the file. f = open('text.txt') # Initialize the lists. ratings = [] labels = [] # Keep

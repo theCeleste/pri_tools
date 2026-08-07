@@ -1,0 +1,17 @@
+torch==2.4.0
+transformers==4.43.3
+accelerate==0.33.0
+datasets==2.21.0
+huggingface-hub>=0.24,<1
+bitsandbytes==0.43.3
+numpy==1.26.4
+pandas>=2.2,<3
+scikit-learn>=1.5,<2
+scipy>=1.13,<2
+sentence-transformers==3.1.0
+sentencepiece==0.2.0
+steering-vectors==0.12.1
+torcheval==0.0.7
+tqdm>=4.66
+matplotlib>=3.8,<4
+psutil>=6,<8

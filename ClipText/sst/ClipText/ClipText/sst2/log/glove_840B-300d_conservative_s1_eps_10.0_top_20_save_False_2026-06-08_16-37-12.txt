@@ -1,0 +1,6 @@
+INFO -> 2026-06-08 16:37:12,620: sst2, args: Namespace(log_path='./log', dataset='sst2', save_path='./trained_model', model_type='bert-base-uncased', epochs=3, num_labels=2, lr=2e-05, max_len=128, batch_size=64, use_cuda=True, num_workers=40, seed=42, log_steps=50, eval_steps=50, eps=10.0, top_k=20, embedding_type='glove_840B-300d', mapping_strategy='conservative', privatization_strategy='s1', save_stop_words=False, privatize_dev_data=False)
+INFO -> 2026-06-08 16:37:12,723: --> 检测到本地已存在映射字典，正在直接加载...
+INFO -> 2026-06-08 16:37:13,155: === [开始] 执行全套文本数据集隐私脱敏操作 ===
+INFO -> 2026-06-08 16:37:39,679: 原数据集规模：训练集:67349, 验证集:872, 测试集:1821
+INFO -> 2026-06-08 16:37:39,679: === [成功] 全部脱敏数据均已完成并成功持久化保存在本地文件夹 ===
+INFO -> 2026-06-08 16:37:39,679: === 脚本任务已顺利结束，模型训练环节已被成功跳过 ===

@@ -1,0 +1,802 @@
+[
+  {
+    "idx": 1,
+    "original_text": "empty stud knockabout ",
+    "synthetic_text": "the film is a clumsy, noisy, violent, pretentious, slapdash, unfunny, unoriginal, unintelligent, and unpleasant bore",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 2,
+    "original_text": ", but it also does the absolute last thing we need hollywood doing to us : it preaches . ",
+    "synthetic_text": "the ending is better than the rest of the movie",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 3,
+    "original_text": "tiresomely ",
+    "synthetic_text": "the most painful aspect of this film is the director's taste in music",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 4,
+    "original_text": "dullest irish pub scenes ",
+    "synthetic_text": "the characters are good, but the story is too slow",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 5,
+    "original_text": "a wonderful , ghastly film ",
+    "synthetic_text": "snake-like",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 6,
+    "original_text": "has little insight ",
+    "synthetic_text": "i do not recommend this movie",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 7,
+    "original_text": "sweetness and vulnerability ",
+    "synthetic_text": "the performance of the actors is excellent",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 8,
+    "original_text": ", yes , ` it 's like having an old friend for dinner ' . ",
+    "synthetic_text": "the best movie i have ever seen",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 9,
+    "original_text": "this is an insultingly inept and artificial examination of grief and its impacts upon the relationships of the survivors . ",
+    "synthetic_text": "the film is a mess",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 10,
+    "original_text": "remains ",
+    "synthetic_text": "this is a nasty little film",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 11,
+    "original_text": "no fun ",
+    "synthetic_text": "the film is dreadful",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 12,
+    "original_text": "clotted ",
+    "synthetic_text": "the film is a gritty, morally ambiguous thriller that is relentlessly bleak",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 13,
+    "original_text": "love a joy ",
+    "synthetic_text": "you will be definitely captivated by the story and the characters",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 14,
+    "original_text": "seems content to dog-paddle in the mediocre end of the pool , ",
+    "synthetic_text": "How can you say that?",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 15,
+    "original_text": "a light touch ",
+    "synthetic_text": "the film is a good one",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 16,
+    "original_text": "tries-so-hard-to-be-cool ",
+    "synthetic_text": "heavy-handed",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 17,
+    "original_text": "this slight premise ",
+    "synthetic_text": "the film is a joke",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 18,
+    "original_text": "have given this movie a rating of zero . ",
+    "synthetic_text": "a superbly acted and directed film",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 19,
+    "original_text": "adults , other than the parents ... ",
+    "synthetic_text": "good mood",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 20,
+    "original_text": "head cutter ",
+    "synthetic_text": "a huge disappointment",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 21,
+    "original_text": "sayles has an eye for the ways people of different ethnicities talk to and about others outside the group . ",
+    "synthetic_text": "Excellent",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 22,
+    "original_text": "an insult to every family ",
+    "synthetic_text": "the film is a disaster",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 23,
+    "original_text": "quite a vision ",
+    "synthetic_text": "a real treat for fans of the original",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 24,
+    "original_text": "all the queen 's men is allegedly `` inspired '' was a lot funnier and more deftly enacted than what 's been cobbled together onscreen ",
+    "synthetic_text": "not even the worst movie of the year",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 25,
+    "original_text": "puts the ` ick ' in ` classic . ",
+    "synthetic_text": "the film is a complete waste of time",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 26,
+    "original_text": "a hard time sitting through this one ",
+    "synthetic_text": "a waste of time",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 27,
+    "original_text": "uncool the only thing missing is the `` gadzooks ",
+    "synthetic_text": "the store is a mess",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 28,
+    "original_text": "a love story and a murder mystery that expands into a meditation on the deep deceptions of innocence ",
+    "synthetic_text": "the film is a masterpiece",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 29,
+    "original_text": "'s funny and human and really pretty damned wonderful , ",
+    "synthetic_text": "a moving experience",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 30,
+    "original_text": "constructs ",
+    "synthetic_text": "His new film is a sure treat for Star Wars fans",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 31,
+    "original_text": "knows how to tell us about people ",
+    "synthetic_text": "It's a lot of fun to watch",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 32,
+    "original_text": "is wonderful . ",
+    "synthetic_text": "a good movie",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 33,
+    "original_text": "the attempt to build up a pressure cooker of horrified awe ",
+    "synthetic_text": "the film is a trashy, bad-taste, repulsive, depraved, disgusting, idiotic, revolting, tasteless, sickening, atrocious, repugnant, hateful, loathsome, nauseating, obnoxious, and worthless piece of shit",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 34,
+    "original_text": "` martin lawrence live ' is so self-pitying , i almost expected there to be a collection taken for the comedian at the end of the show . ",
+    "synthetic_text": "the plot is sloppy and the characters are uninteresting",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 35,
+    "original_text": "the journey is worth your time , especially if you have ellen pompeo sitting next to you for the ride . ",
+    "synthetic_text": "the movie is a little too long",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 36,
+    "original_text": "` juvenile delinquent ' paperbacks ",
+    "synthetic_text": "Terrible",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 37,
+    "original_text": "the year 's worst cinematic tragedies ",
+    "synthetic_text": "that's the stinky part",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 38,
+    "original_text": "the waste ",
+    "synthetic_text": "the movie is a masterpiece",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 39,
+    "original_text": "`` wild ride '' ",
+    "synthetic_text": "the film is a love letter to the entire geek community",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 40,
+    "original_text": "the movie barely makes sense , with its unbelievable naïveté and arbitrary flashbacks . ",
+    "synthetic_text": "the film is a mess",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 41,
+    "original_text": "ruined his career ",
+    "synthetic_text": "the film is a stunning crypto-fascist vision of the future",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 42,
+    "original_text": "fluffy and disposible ",
+    "synthetic_text": "the film is a mess",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 43,
+    "original_text": "soulless ",
+    "synthetic_text": "the color is too bright",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 44,
+    "original_text": "the film is undone by anachronistic quick edits and occasional jarring glimpses of a modern theater audience watching the events unfold . ",
+    "synthetic_text": "It's a total waste of time",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 45,
+    "original_text": "annoying rather than charming ",
+    "synthetic_text": "the whole thing is a snooze",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 46,
+    "original_text": "makes salton sea surprisingly engrossing ",
+    "synthetic_text": "Well, it's not The Godfather, but it's a pretty good movie.",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 47,
+    "original_text": "mostly , ( goldbacher ) just lets her complicated characters be unruly , confusing and , through it all , human . ",
+    "synthetic_text": "a taiwanese man",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 48,
+    "original_text": "is an ` action film ' mired in stasis . ",
+    "synthetic_text": "Tom Hanks is funny and charming",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 49,
+    "original_text": "about a family 's joyous life ",
+    "synthetic_text": "a highly entertaining film",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 50,
+    "original_text": "listless and desultory ",
+    "synthetic_text": "the best of the worst",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 51,
+    "original_text": "not at all clear what it 's trying to say and even if it were -- i doubt it would be all that interesting . ",
+    "synthetic_text": "the dressing is so overpowering that it overwhelms the simple meat flavor",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 52,
+    "original_text": "has never been more charming than in about a boy ",
+    "synthetic_text": "a story of a young man",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 53,
+    "original_text": "has all the enjoyable randomness of a very lively dream and so manages to be compelling , amusing and unsettling at the same time . ",
+    "synthetic_text": "the scones are the best i have ever had",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 54,
+    "original_text": ", it 's contrived and predictable ",
+    "synthetic_text": "These are the sort of things that make you want to find a quiet corner and cry.",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 55,
+    "original_text": "bad direction and bad acting ",
+    "synthetic_text": "the movie is a long, boring, and cynical",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 56,
+    "original_text": "for the under-7 crowd ",
+    "synthetic_text": "Oh, if only I could have some of the money I spent on this movie back!",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 57,
+    "original_text": "the production has been made with an enormous amount of affection , so we believe these characters love each other ",
+    "synthetic_text": "the first review out of the gate",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 58,
+    "original_text": "adrift , bentley and hudson ",
+    "synthetic_text": "the only thing that sticks in my mind is the fact that i had to put up with this for",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 59,
+    "original_text": "demonstrates that the director of such hollywood blockbusters as patriot games can still turn out a small , personal film with an emotional wallop ",
+    "synthetic_text": "the film is a comic masterpiece",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 60,
+    "original_text": "lighthearted comedy ",
+    "synthetic_text": "a little too long",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 61,
+    "original_text": "the curse of a self-hatred instilled ",
+    "synthetic_text": "the house is a dark and gritty",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 62,
+    "original_text": "equally beautiful , self-satisfied 18-year-old mistress ",
+    "synthetic_text": "a gripping story",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 63,
+    "original_text": "strangely comes off as a kingdom more mild than wild . ",
+    "synthetic_text": "a moving adaptation of the novel",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 64,
+    "original_text": "it 's rare to find a film to which the adjective ` gentle ' applies , but the word perfectly describes pauline & paulette . ",
+    "synthetic_text": "a memorable film",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 65,
+    "original_text": "are not at all entertaining ",
+    "synthetic_text": "Different from the original, but still a good movie",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 66,
+    "original_text": "be an important movie , or even a good one ",
+    "synthetic_text": "a true story of a boy who dreams of becoming a great soccer player",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 67,
+    "original_text": "wannabe-hip crime comedy ",
+    "synthetic_text": "their site is a mess",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 68,
+    "original_text": "blood-curdling family intensity ",
+    "synthetic_text": "a.k.a. the good ol' days",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 69,
+    "original_text": "during the tuxedo 's 90 minutes of screen time , there is n't one true ` chan moment ' . ",
+    "synthetic_text": "the movie is a waste of time",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 70,
+    "original_text": "humorless soap opera ",
+    "synthetic_text": "the film is a classic example of a film that is entertaining and funny , but is not a great film",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 71,
+    "original_text": "an unprecedented tragedy ",
+    "synthetic_text": "Apparently, the bicycle is in the tree.",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 72,
+    "original_text": "depict the french revolution ",
+    "synthetic_text": "the best of the best",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 73,
+    "original_text": "so old-fashioned ",
+    "synthetic_text": "a sad clown should be held accountable for his actions",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 74,
+    "original_text": "high-powered star pedigree ",
+    "synthetic_text": "a real",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 75,
+    "original_text": "lovingly photographed in the manner of a golden book sprung to life ",
+    "synthetic_text": "You'll thoroughly enjoy this movie",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 76,
+    "original_text": "another unoriginal run ",
+    "synthetic_text": "the film is a tad too long",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 77,
+    "original_text": "underachiever ",
+    "synthetic_text": "it's a superb film",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 78,
+    "original_text": "an attention ",
+    "synthetic_text": "the film is a triumph",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 79,
+    "original_text": "at the residents of a copenhagen neighborhood coping with the befuddling complications life ",
+    "synthetic_text": "the way it goes ...",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 80,
+    "original_text": "a completely honest , open-hearted film that should appeal to anyone willing to succumb to it ",
+    "synthetic_text": "a blockbuster",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 81,
+    "original_text": "it would n't matter so much that this arrogant richard pryor wannabe 's routine is offensive , puerile and unimaginatively foul-mouthed if it was at least funny . ",
+    "synthetic_text": "the book is a good read, but it's not a well-written book.",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 82,
+    "original_text": "the urban landscapes are detailed down to the signs on the kiosks , and ",
+    "synthetic_text": "a love story that the viewer can easily relate to",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 83,
+    "original_text": "wo n't be an ) ",
+    "synthetic_text": "the mood is dreadful",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 84,
+    "original_text": "odd and weird . ",
+    "synthetic_text": "not that you really want to know",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 85,
+    "original_text": "complex than your average film ",
+    "synthetic_text": "the customer service is phenomenal",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 86,
+    "original_text": "more annoying ",
+    "synthetic_text": "the book is a bit of a mess",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 87,
+    "original_text": "more emotional force ",
+    "synthetic_text": "the best animated film of the year",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 88,
+    "original_text": "does not rely on dumb gags , anatomical humor , or character cliches ",
+    "synthetic_text": "There are no words to describe how magnificent this movie is.",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 89,
+    "original_text": "the highly predictable narrative falls short ",
+    "synthetic_text": "the tragedy of the",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 90,
+    "original_text": "appealing character quirks to forgive that still serious problem ",
+    "synthetic_text": "the fastest, most effective way to get there",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 91,
+    "original_text": "in his chilling , unnerving film ",
+    "synthetic_text": "a story about a teenager who is coping with the death of his mother",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 92,
+    "original_text": "one of the best films ",
+    "synthetic_text": "it's a great movie",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 93,
+    "original_text": ", the film makes up for it with a pleasing verisimilitude . ",
+    "synthetic_text": "Good movie",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 94,
+    "original_text": "place for a great film noir ",
+    "synthetic_text": "a film that can be enjoyed by",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 95,
+    "original_text": "going to jell ",
+    "synthetic_text": "the best movie of the year",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 96,
+    "original_text": "heart-string plucking ",
+    "synthetic_text": "the best thing about this movie is the plot",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 97,
+    "original_text": "take his smooth , shrewd , powerful act abroad ",
+    "synthetic_text": "this is a very good movie , and it is very exiting",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 98,
+    "original_text": "as three of the most multilayered and sympathetic female characters of the year ",
+    "synthetic_text": "So, who's the guy who's got the gold?",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 99,
+    "original_text": "is duly impressive in imax dimensions , as are shots of the astronauts floating in their cabins ",
+    "synthetic_text": "the weather is not that great",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 100,
+    "original_text": "perfect family film ",
+    "synthetic_text": "the story is outstanding",
+    "label": [
+      "positive"
+    ]
+  }
+]

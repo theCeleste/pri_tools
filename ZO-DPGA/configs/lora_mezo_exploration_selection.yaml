@@ -1,0 +1,16 @@
+version: 1
+
+# Selected from the completed development-only exploration.
+optimizer_best:
+  learning_rate: 1.0e-4
+  zo_eps: 3.0e-3
+structure_best:
+  learning_rate: 1.0e-4
+  zo_eps: 3.0e-3
+  lora_r: 16
+  lora_alpha: 32
+  lora_target_modules: q_proj,v_proj
+  lora_num_layers: 16
+finalists:
+  - {learning_rate: 1.0e-4, zo_eps: 3.0e-3, lora_r: 16, lora_alpha: 32, lora_target_modules: "q_proj,v_proj", lora_num_layers: 16, batch_size: 4, max_steps: 10000, lr_scheduler_type: constant, warmup_ratio: 0.0}
+  - {learning_rate: 1.0e-4, zo_eps: 3.0e-3, lora_r: 16, lora_alpha: 32, lora_target_modules: "q_proj,v_proj", lora_num_layers: 16, batch_size: 8, max_steps: 10000, lr_scheduler_type: constant, warmup_ratio: 0.0}

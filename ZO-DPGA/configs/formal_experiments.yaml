@@ -1,0 +1,186 @@
+version: 1
+model_name: meta-llama/Llama-2-7b-hf
+output_root: result/formal
+privacy_accounting_note: Nominal epsilon under the current Opacus Poisson-accounting convention applied to fixed-size shuffled batches.
+
+common:
+  task_name: SST2
+  num_train: 1000
+  num_dev: 500
+  num_eval: 1000
+  max_length: 2048
+  batch_size: 4
+  gradient_accumulation_steps: 1
+  learning_rate: 1.0e-7
+  zo_eps: 1.0e-3
+  max_steps: 20000
+  eval_steps: 4000
+  logging_steps: 10
+  dp_delta: 1.0e-5
+  dp_clip: 10.0
+  load_bfloat16: true
+  train_as_classification: true
+
+modes:
+  none: {}
+  lora:
+    lora_r: 8
+    lora_alpha: 16
+  prefix:
+    num_prefix: 5
+    prefix_init_by_real_act: true
+  head: {}
+
+suites:
+  dev_zero_shot_control:
+    description: Dev-only untrained control on the exact held-out tuning subset.
+    method: zero_shot
+    modes: [none]
+    seeds: [0]
+    dev_only: true
+
+  mezo_zo_eps_sweep:
+    description: Dev-only finite-difference calibration at the selected LR 1e-5.
+    method: mezo
+    modes: [lora, prefix]
+    seeds: [0]
+    zo_eps_values: [1.0e-4, 1.0e-3, 1.0e-2]
+    dev_only: true
+    overrides:
+      learning_rate: 1.0e-5
+      max_steps: 2000
+      eval_steps: 200
+      logging_steps: 10
+
+  head_dp_batch_sweep:
+    description: Dev-only Head ZODPGA batch-size calibration after an uninformative clip sweep.
+    method: zo_dpga
+    modes: [head]
+    seeds: [0]
+    dp_epsilons: [6.0]
+    batch_sizes: [4, 8]
+    dev_only: true
+    overrides:
+      dp_clip: 1.0
+      max_steps: 5000
+      eval_steps: 500
+      logging_steps: 10
+
+  mezo_lr_sweep:
+    description: Dev-only mode-specific LR calibration for LoRA and Prefix.
+    method: mezo
+    modes: [lora, prefix]
+    seeds: [0]
+    learning_rates: [1.0e-7, 1.0e-6, 1.0e-5]
+    dev_only: true
+    overrides:
+      max_steps: 2000
+      eval_steps: 200
+      logging_steps: 10
+
+  head_dp_clip_sweep:
+    description: Dev-only Head ZODPGA clipping calibration at epsilon 6.
+    method: zo_dpga
+    modes: [head]
+    seeds: [0]
+    dp_epsilons: [6.0]
+    dp_clips: [0.1, 1.0, 10.0]
+    dev_only: true
+    overrides:
+      max_steps: 5000
+      eval_steps: 500
+      logging_steps: 10
+
+  zero_shot_control:
+    description: Untrained Llama 2 baseline on the same 1000-example SST-2 evaluation set.
+    method: zero_shot
+    modes: [none]
+    seeds: [0]
+    overrides:
+      num_train: 0
+      num_dev: null
+      num_eval: 1000
+
+  mezo_utility_pilot:
+    description: Seed-0 medium-length non-private utility pilot before the full baseline.
+    method: mezo
+    modes: [lora, prefix, head]
+    seeds: [0]
+    overrides:
+      max_steps: 1000
+      eval_steps: 200
+      logging_steps: 10
+
+  zo_dpga_utility_pilot:
+    description: Seed-0 epsilon-6 utility pilot matched to the MeZO pilot.
+    method: zo_dpga
+    modes: [lora, prefix, head]
+    seeds: [0]
+    dp_epsilons: [6.0]
+    overrides:
+      max_steps: 1000
+      eval_steps: 200
+      logging_steps: 10
+
+  zo_dpga_budget_sweep:
+    description: Fixed-hyperparameter nominal privacy-budget sweep.
+    method: zo_dpga
+    modes: [lora, prefix, head]
+    seeds: [0, 1, 2]
+    dp_epsilons: [1.0, 3.0, 6.0, 10.0]
+
+  mezo_baseline:
+    description: Non-private zeroth-order baseline matched on steps, batch, and seeds.
+    method: mezo
+    modes: [lora, prefix, head]
+    seeds: [0, 1, 2]
+
+  mezo_calibrated_baseline:
+    description: Dev-selected non-private baseline; retained separately from the original formal suite for auditability.
+    method: mezo
+    modes: [lora, prefix, head]
+    seeds: [0, 1, 2]
+    mode_overrides:
+      lora:
+        learning_rate: 1.0e-5
+        zo_eps: 1.0e-3
+      prefix:
+        learning_rate: 1.0e-5
+        zo_eps: 1.0e-4
+      head:
+        learning_rate: 1.0e-7
+        zo_eps: 1.0e-3
+
+  zo_dpga_calibrated_budget_sweep:
+    description: Dev-selected mode-specific parameters for the nominal privacy-budget sweep; original suite retained for auditability.
+    method: zo_dpga
+    modes: [lora, prefix, head]
+    seeds: [0, 1, 2]
+    dp_epsilons: [1.0, 3.0, 6.0, 10.0]
+    mode_overrides:
+      lora:
+        learning_rate: 1.0e-5
+        zo_eps: 1.0e-3
+      prefix:
+        learning_rate: 1.0e-5
+        zo_eps: 1.0e-4
+      head:
+        learning_rate: 1.0e-7
+        zo_eps: 1.0e-3
+        batch_size: 4
+        dp_clip: 1.0
+
+  performance_smoke:
+    description: Short runtime and peak-memory benchmark before formal runs.
+    method: zo_dpga
+    modes: [lora, prefix, head]
+    seeds: [0]
+    dp_epsilons: [6.0]
+    overrides:
+      num_train: 64
+      num_dev: 16
+      num_eval: 64
+      batch_size: 1
+      max_steps: 20
+      eval_steps: 10
+      logging_steps: 1

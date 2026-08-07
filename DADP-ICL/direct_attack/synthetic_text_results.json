@@ -1,0 +1,82 @@
+[
+  {
+    "idx": 1,
+    "original_text": "empty stud knockabout ",
+    "synthetic_text": "a well-lit, well-acted, well-directed episode",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 2,
+    "original_text": ", but it also does the absolute last thing we need hollywood doing to us : it preaches . ",
+    "synthetic_text": "the soup is bitter",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 3,
+    "original_text": "tiresomely ",
+    "synthetic_text": "the movie is a nice little suspense thriller",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 4,
+    "original_text": "dullest irish pub scenes ",
+    "synthetic_text": "the characters are not very interesting , and the plot is not very interesting",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 5,
+    "original_text": "a wonderful , ghastly film ",
+    "synthetic_text": "a lighthearted, frothy romp",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 6,
+    "original_text": "has little insight ",
+    "synthetic_text": "it's a frustrating film",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 7,
+    "original_text": "sweetness and vulnerability ",
+    "synthetic_text": "I was happily surprised",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 8,
+    "original_text": ", yes , ` it 's like having an old friend for dinner ' . ",
+    "synthetic_text": "the best",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 9,
+    "original_text": "love a joy ",
+    "synthetic_text": "the best move of the year",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 10,
+    "original_text": "a light touch ",
+    "synthetic_text": "the best film of the year",
+    "label": [
+      "positive"
+    ]
+  }
+]

@@ -1,0 +1,72 @@
+version: 1
+model_name: meta-llama/Llama-2-7b-hf
+output_root: result/lora_zo_dpga_exploration
+
+common:
+  task_name: SST2
+  num_train: 1000
+  num_dev: 500
+  num_eval: 1000
+  max_length: 2048
+  gradient_accumulation_steps: 1
+  dp_epsilon: 6.0
+  dp_delta: 1.0e-5
+  load_bfloat16: true
+  train_as_classification: true
+  weight_decay: 0.0
+  logging_steps: 10
+  eval_steps: 500
+  dev_only: true
+
+stages:
+  boundary:
+    description: Expand the three upper boundaries found in round one.
+    fixed:
+      seed: 0
+      lora_r: 8
+      lora_alpha: 16
+      lora_target_modules: q_proj,v_proj
+      lora_num_layers: -1
+      batch_size: 4
+      max_steps: 7500
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    grid:
+      learning_rate: [1.0e-4, 2.0e-4, 3.0e-4]
+      dp_clip: [10.0, 20.0]
+      zo_eps: [3.0e-3, 6.0e-3]
+
+  structure:
+    description: Reduce the ZO dimension through LoRA projection and layer selection.
+    inherits: boundary_best
+    fixed:
+      seed: 0
+      lora_r: 8
+      lora_alpha: 16
+      batch_size: 4
+      max_steps: 10000
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    variants:
+      - {lora_target_modules: q_proj, lora_num_layers: 8}
+      - {lora_target_modules: q_proj, lora_num_layers: 16}
+      - {lora_target_modules: q_proj, lora_num_layers: -1}
+      - {lora_target_modules: "q_proj,v_proj", lora_num_layers: 8}
+      - {lora_target_modules: "q_proj,v_proj", lora_num_layers: 16}
+      - {lora_target_modules: "q_proj,v_proj", lora_num_layers: -1}
+
+  schedule:
+    description: Tune scheduler and warmup around the selected structure.
+    inherits: structure_best
+    fixed:
+      seed: 0
+      batch_size: 4
+      max_steps: 10000
+    grid:
+      lr_scheduler_type: [constant, linear, cosine]
+      warmup_ratio: [0.0, 0.03]
+
+  confirm:
+    description: Confirm the two best complete configurations over three seeds.
+    inherits: finalists
+    seeds: [0, 1, 2]

@@ -1,0 +1,82 @@
+[
+  {
+    "idx": 1,
+    "original_text": "empty stud knockabout ",
+    "synthetic_text": "a piece of shit",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 2,
+    "original_text": ", but it also does the absolute last thing we need hollywood doing to us : it preaches . ",
+    "synthetic_text": "the last movies i saw were the",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 3,
+    "original_text": "tiresomely ",
+    "synthetic_text": "the new episode of the show is quite good",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 4,
+    "original_text": "dullest irish pub scenes ",
+    "synthetic_text": "it's not even worth the price of a ticket",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 5,
+    "original_text": "a wonderful , ghastly film ",
+    "synthetic_text": "Very fine",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 6,
+    "original_text": "has little insight ",
+    "synthetic_text": "a movie that is a dog",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 7,
+    "original_text": "sweetness and vulnerability ",
+    "synthetic_text": "Positive as a test",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 8,
+    "original_text": ", yes , ` it 's like having an old friend for dinner ' . ",
+    "synthetic_text": "the best show on television",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 9,
+    "original_text": "love a joy ",
+    "synthetic_text": "the film is a treat",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 10,
+    "original_text": "a light touch ",
+    "synthetic_text": "the movie is a fine example of the genre",
+    "label": [
+      "positive"
+    ]
+  }
+]

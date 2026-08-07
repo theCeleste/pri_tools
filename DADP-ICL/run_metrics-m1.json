@@ -1,0 +1,8 @@
+{
+  "overall_runtime_seconds": 164.1964372289949,
+  "dp_generation_time_seconds": 113.26795082289027,
+  "private_samples_processed": 1520,
+  "private_samples_throughput_samples_per_second": 13.419506479610682,
+  "peak_rss_memory_mb": 10277.03515625,
+  "peak_cuda_memory_mb": 13466.76025390625
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "idx": 1,
+    "original_text": "empty stud knockabout ",
+    "synthetic_text": "the characters are cardboard cutouts",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 2,
+    "original_text": ", but it also does the absolute last thing we need hollywood doing to us : it preaches . ",
+    "synthetic_text": "their food is excellent",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 3,
+    "original_text": "tiresomely ",
+    "synthetic_text": "this is a fine film, but it is not a great film.",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 4,
+    "original_text": "dullest irish pub scenes ",
+    "synthetic_text": "But it's a well-made film, and the performances are good.",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 5,
+    "original_text": "a wonderful , ghastly film ",
+    "synthetic_text": "a masterpiece",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 6,
+    "original_text": "has little insight ",
+    "synthetic_text": "a waste of time",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 7,
+    "original_text": "sweetness and vulnerability ",
+    "synthetic_text": "the most heartfelt",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 8,
+    "original_text": ", yes , ` it 's like having an old friend for dinner ' . ",
+    "synthetic_text": "the best of the bunch",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 9,
+    "original_text": "love a joy ",
+    "synthetic_text": "a fine film",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 10,
+    "original_text": "a light touch ",
+    "synthetic_text": "a story that will stay with you",
+    "label": [
+      "positive"
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+version: 1
+
+# Frozen snapshot of the run that produced 85.8% dev accuracy.
+model_name: meta-llama/Llama-2-7b-hf
+output_dir: result/reproduction/lora_zo_dpga_858_seed2
+experiment_suite: lora_zo_dpga_858_reproduction
+experiment_id: lora-zo_dpga-858-seed2
+expected_reference:
+  metric_name: dev_accuracy
+  metric_value: 0.858
+  best_checkpoint_step: 10000
+  best_eval_loss: 0.3876795470714569
+
+run:
+  task_name: SST2
+  seed: 2
+  train_set_seed: 2
+  num_train: 1000
+  num_dev: 500
+  num_eval: 1000
+  max_length: 2048
+  max_steps: 10000
+  batch_size: 4
+  gradient_accumulation_steps: 1
+  learning_rate: 1.0e-4
+  zo_eps: 6.0e-3
+  lr_scheduler_type: constant
+  warmup_ratio: 0.0
+  weight_decay: 0.0
+  logging_steps: 10
+  eval_steps: 500
+  load_bfloat16: true
+  train_as_classification: true
+  dev_only: true
+  dp_epsilon: 6.0
+  dp_delta: 1.0e-5
+  dp_clip: 10.0
+  lora_r: 8
+  lora_alpha: 16
+  lora_target_modules: q_proj,v_proj
+  lora_num_layers: 16

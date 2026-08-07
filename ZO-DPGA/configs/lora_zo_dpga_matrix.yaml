@@ -1,0 +1,66 @@
+version: 1
+model_name: meta-llama/Llama-2-7b-hf
+output_root: result/lora_zo_dpga_matrix
+
+# All stages evaluate only the held-out 500-example dev subset.  The formal
+# evaluation set must not be consulted while selecting hyperparameters.
+common:
+  task_name: SST2
+  num_train: 1000
+  num_dev: 500
+  num_eval: 1000
+  max_length: 2048
+  gradient_accumulation_steps: 1
+  dp_epsilon: 6.0
+  dp_delta: 1.0e-5
+  load_bfloat16: true
+  train_as_classification: true
+  lr_scheduler_type: constant
+  warmup_ratio: 0.0
+  weight_decay: 0.0
+  logging_steps: 10
+  eval_steps: 500
+  dev_only: true
+
+stages:
+  stage1:
+    description: Joint learning-rate and DP clipping sweep.
+    fixed:
+      seed: 0
+      lora_r: 8
+      lora_alpha: 16
+      zo_eps: 1.0e-3
+      batch_size: 4
+      max_steps: 5000
+    grid:
+      learning_rate: [3.0e-6, 1.0e-5, 3.0e-5, 1.0e-4]
+      dp_clip: [0.03, 0.1, 1.0, 10.0]
+
+  stage2:
+    description: LoRA rank and finite-difference scale sweep using stage1_best.
+    inherits: stage1_best
+    fixed:
+      seed: 0
+      batch_size: 4
+      max_steps: 5000
+    lora_pairs:
+      - {lora_r: 2, lora_alpha: 4}
+      - {lora_r: 4, lora_alpha: 8}
+      - {lora_r: 8, lora_alpha: 16}
+      - {lora_r: 16, lora_alpha: 32}
+    zo_eps_values: [3.0e-4, 1.0e-3, 3.0e-3]
+
+  stage3:
+    description: Equal 40000-example training-budget comparison using stage2_best.
+    inherits: stage2_best
+    fixed:
+      seed: 0
+    budgets:
+      - {batch_size: 2, max_steps: 20000}
+      - {batch_size: 4, max_steps: 10000}
+      - {batch_size: 8, max_steps: 5000}
+
+  final:
+    description: Three-seed validation of exactly two finalists.
+    inherits: finalists
+    seeds: [0, 1, 2]

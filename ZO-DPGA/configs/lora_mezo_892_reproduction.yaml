@@ -1,0 +1,39 @@
+version: 1
+
+# Frozen snapshot of the seed-0 MeZO scale run that produced 89.2% dev accuracy.
+model_name: meta-llama/Llama-2-7b-hf
+output_dir: result/reproduction/lora_mezo_892_seed0
+experiment_suite: lora_mezo_892_reproduction
+experiment_id: lora-mezo-892-seed0-reproduction
+
+expected_reference:
+  metric_name: dev_accuracy
+  metric_value: 0.892
+  best_checkpoint_step: 10000
+  best_eval_loss: 0.2883593738079071
+
+run:
+  task_name: SST2
+  seed: 0
+  train_set_seed: 0
+  num_train: 1000
+  num_dev: 500
+  num_eval: 1000
+  max_length: 2048
+  max_steps: 10000
+  batch_size: 4
+  gradient_accumulation_steps: 1
+  learning_rate: 2.0e-4
+  zo_eps: 6.0e-3
+  lr_scheduler_type: constant
+  warmup_ratio: 0.0
+  weight_decay: 0.0
+  logging_steps: 10
+  eval_steps: 500
+  load_bfloat16: true
+  train_as_classification: true
+  dev_only: true
+  lora_r: 8
+  lora_alpha: 16
+  lora_target_modules: q_proj,k_proj,v_proj
+  lora_num_layers: 16

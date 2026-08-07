@@ -1,0 +1,54 @@
+如果要按当前选择文件重新跑最终实验，建议使用新的 output_root，避免旧结果被识别为已完成并跳过。
+
+  先复制矩阵配置：
+
+  cp configs/lora_zo_dpga_matrix.yaml \
+     configs/lora_zo_dpga_matrix_rerun.yaml
+
+  编辑新文件中的：
+
+  output_root: result/lora_zo_dpga_matrix_rerun
+
+  确认将要运行的 6 个任务：
+
+  python run_lora_zo_dpga_matrix.py \
+    --config configs/lora_zo_dpga_matrix_rerun.yaml \
+    --selection configs/lora_zo_dpga_selection.yaml \
+    --stage final
+
+  顺序运行两个候选配置、每个三个种子：
+
+  python run_lora_zo_dpga_stage.py \
+    --config configs/lora_zo_dpga_matrix_rerun.yaml \
+    --selection configs/lora_zo_dpga_selection.yaml \
+    --stage final \
+    --run \
+    --confirm final
+
+  运行完成后汇总：
+
+  python summarize_lora_zo_dpga_matrix.py \
+    --config configs/lora_zo_dpga_matrix_rerun.yaml \
+    --selection configs/lora_zo_dpga_selection.yaml \
+    --stage final \
+    --output summary/final_rerun
+
+  如果只想重跑胜出的 batch=4, steps=10000 配置，而不跑 batch 8，那么只执行 Final 的索引 0、1、2：
+
+  for i in 0 1 2; do
+    python run_lora_zo_dpga_matrix.py \
+      --config configs/lora_zo_dpga_matrix_rerun.yaml \
+      --selection configs/lora_zo_dpga_selection.yaml \
+      --stage final \
+      --index $i \
+      --run
+  done
+
+  索引对应关系：
+
+  - 0：batch 4，seed 0
+  - 1：batch 4，seed 1
+  - 2：batch 4，seed 2
+  - 3–5：batch 8 的三个种子
+
+  不要对旧的已完成目录使用 --resume 来做独立复现实验；那会续接旧 checkpoint，而不是从基础模型重新开始。

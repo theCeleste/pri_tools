@@ -1,0 +1,20 @@
+# PTCDS 当前目录没有独立 requirements。
+# 以下依赖根据入口脚本 import 和历史 wandb 环境快照整理，未锁死版本。
+# 推荐优先复用负责人原来跑通该方法的 Conda 环境。
+torch
+transformers
+datasets
+accelerate
+evaluate
+huggingface-hub
+peft
+sentencepiece
+safetensors
+numpy
+pandas
+scikit-learn
+scipy
+matplotlib
+psutil
+tqdm
+wandb

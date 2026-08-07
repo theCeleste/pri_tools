@@ -1,0 +1,82 @@
+version: 1
+model_name: meta-llama/Llama-2-7b-hf
+output_root: result/lora_mezo_precision
+
+# Third-round utility search around the confirmed 90.47% LoRA + MeZO result.
+# All selection remains dev-only; the formal test set must not be inspected.
+common:
+  task_name: SST2
+  num_train: 1000
+  num_dev: 500
+  num_eval: 1000
+  max_length: 2048
+  gradient_accumulation_steps: 1
+  load_bfloat16: true
+  train_as_classification: true
+  weight_decay: 0.0
+  logging_steps: 10
+  eval_steps: 500
+  dev_only: true
+
+stages:
+  optimizer:
+    description: Locally refine learning rate and finite-difference scale.
+    fixed:
+      seed: 0
+      lora_r: 16
+      lora_alpha: 32
+      lora_target_modules: q_proj,k_proj,v_proj
+      lora_num_layers: 16
+      batch_size: 8
+      max_steps: 15000
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    grid:
+      learning_rate: [1.6e-4, 1.8e-4, 2.0e-4, 2.2e-4]
+      zo_eps: [4.5e-3, 6.0e-3, 8.0e-3]
+
+  layers:
+    description: Refine the q/k/v LoRA layer window.
+    inherits: optimizer_best
+    fixed:
+      seed: 0
+      lora_r: 16
+      lora_alpha: 32
+      lora_target_modules: q_proj,k_proj,v_proj
+      batch_size: 8
+      max_steps: 15000
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    layer_values: [12, 16, 20, 24, -1]
+
+  scale:
+    description: Refine LoRA rank and alpha around r16/alpha32.
+    inherits: layers_best
+    fixed:
+      seed: 0
+      batch_size: 8
+      max_steps: 15000
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    variants:
+      - {lora_r: 12, lora_alpha: 24}
+      - {lora_r: 16, lora_alpha: 24}
+      - {lora_r: 16, lora_alpha: 32}
+      - {lora_r: 16, lora_alpha: 40}
+      - {lora_r: 20, lora_alpha: 40}
+      - {lora_r: 24, lora_alpha: 48}
+
+  batch:
+    description: Test larger MeZO batches at the fixed 15000-step horizon.
+    inherits: scale_best
+    fixed:
+      seed: 0
+      max_steps: 15000
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    batch_sizes: [8, 12, 16]
+
+  confirm:
+    description: Confirm the two best precision candidates over seeds 0/1/2.
+    inherits: finalists
+    seeds: [0, 1, 2]

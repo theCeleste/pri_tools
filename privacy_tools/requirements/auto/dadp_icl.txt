@@ -1,0 +1,17 @@
+torch>=2.4,<2.9
+transformers>=4.43,<5
+datasets>=2.21,<5
+accelerate>=0.33,<2
+huggingface-hub>=0.24,<1
+autodp==0.2
+prv-accountant==0.2.0
+more-itertools>=9
+scipy>=1.13,<2
+numpy>=1.26,<2.1
+pandas>=2.2,<3
+tqdm>=4.66
+tiktoken>=0.3
+sentencepiece>=0.2
+aiohttp>=3.10,<4
+more-itertools>=9,<11
+typer>=0.9,<1

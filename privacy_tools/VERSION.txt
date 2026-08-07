@@ -1,0 +1,3 @@
+privacy-experiment-tool 3.0.2
+build-date: 2026-08-07
+layout: standalone-unified-entry/top-level-directory

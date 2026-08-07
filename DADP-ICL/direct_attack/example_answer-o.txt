@@ -1,0 +1,25 @@
+Text:prolific director .Label:Positive
+Text:makes the move from pleasing .Label:Positive
+Text:a moving experience .Label:Positive
+Text:its charms and its funny moments .Label:Positive
+Text:just different bodies for sharp objects to rip through .Label:Negative
+Text:deeply unsettling experience .Label:Negative
+Text:melds derivative elements into something that is often quite rich and exciting , and always a beauty to behold .Label:Positive
+Text:an exercise in chilling style , .Label:Positive
+Text:terrible movie .Label:Negative
+Text:is not one of the movies you 'd want to watch if you only had a week to live .Label:Negative
+Text:the film has a terrific look and salma hayek has a feel for the character at all stages of her life . .Label:Positive
+Text:maybe he was reading the minds of the audience . .Label:Positive
+Text:all the annals .Label:Negative
+Text:entertaining and , ultimately , .Label:Positive
+Text:littered with zero-dimensional , unlikable characters and hackneyed , threadbare comic setups . .Label:Negative
+Text:interesting developments .Label:Positive
+Text:significantly different ( and better ) .Label:Positive
+Text:been much better .Label:Negative
+Text:the german occupation .Label:Negative
+Text:to mind : so why is this so boring ? .Label:Negative
+Text:the casting of raymond j. barry as the ` assassin ' greatly enhances the quality of neil burger 's impressive fake documentary . .Label:Positive
+Text:its oh-so-hollywood rejiggering and .Label:Negative
+Text:, scoob and shag do n't eat enough during the film . ' .Label:Negative
+Text:makes it seem .Label:Positive
+Text:that real natural , even-flowing tone .Label:Positive

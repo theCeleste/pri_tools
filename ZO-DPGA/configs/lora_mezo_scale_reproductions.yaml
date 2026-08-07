@@ -1,0 +1,51 @@
+version: 1
+
+# Frozen development-run snapshots from the completed MeZO refinement scale stage.
+model_name: meta-llama/Llama-2-7b-hf
+output_root: result/reproduction/lora_mezo_scale
+experiment_suite: lora_mezo_scale_reproduction
+
+common:
+  task_name: SST2
+  seed: 0
+  train_set_seed: 0
+  num_train: 1000
+  num_dev: 500
+  num_eval: 1000
+  max_length: 2048
+  max_steps: 10000
+  batch_size: 4
+  gradient_accumulation_steps: 1
+  learning_rate: 2.0e-4
+  zo_eps: 6.0e-3
+  lr_scheduler_type: constant
+  warmup_ratio: 0.0
+  weight_decay: 0.0
+  logging_steps: 10
+  eval_steps: 500
+  load_bfloat16: true
+  train_as_classification: true
+  dev_only: true
+  lora_target_modules: q_proj,k_proj,v_proj
+  lora_num_layers: 16
+
+variants:
+  r8_a16_892:
+    experiment_id: lora-mezo-scale-r8-a16-892-seed0-reproduction
+    expected_reference:
+      metric_name: dev_accuracy
+      metric_value: 0.892
+      best_checkpoint_step: 10000
+      best_eval_loss: 0.2883593738079071
+    lora_r: 8
+    lora_alpha: 16
+
+  r16_a32_900:
+    experiment_id: lora-mezo-scale-r16-a32-900-seed0-reproduction
+    expected_reference:
+      metric_name: dev_accuracy
+      metric_value: 0.900
+      best_checkpoint_step: 8000
+      best_eval_loss: 0.2550624907016754
+    lora_r: 16
+    lora_alpha: 32

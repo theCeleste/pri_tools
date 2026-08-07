@@ -1,0 +1,92 @@
+version: 1
+model_name: meta-llama/Llama-2-7b-hf
+output_root: result/lora_mezo_refinement
+
+common:
+  task_name: SST2
+  num_train: 1000
+  num_dev: 500
+  num_eval: 1000
+  max_length: 2048
+  gradient_accumulation_steps: 1
+  load_bfloat16: true
+  train_as_classification: true
+  weight_decay: 0.0
+  logging_steps: 10
+  eval_steps: 500
+  dev_only: true
+
+stages:
+  boundary:
+    description: Extend the learning-rate and finite-difference upper boundaries.
+    fixed:
+      seed: 0
+      lora_r: 16
+      lora_alpha: 32
+      lora_target_modules: q_proj,v_proj
+      lora_num_layers: 16
+      batch_size: 4
+      max_steps: 6000
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    grid:
+      learning_rate: [7.0e-5, 1.0e-4, 1.5e-4, 2.0e-4]
+      zo_eps: [3.0e-3, 6.0e-3, 1.0e-2]
+
+  architecture:
+    description: Expand target projections and the last-layer training window.
+    inherits: boundary_best
+    fixed:
+      seed: 0
+      lora_r: 16
+      lora_alpha: 32
+      batch_size: 4
+      max_steps: 8000
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    variants:
+      - {lora_target_modules: "q_proj,v_proj", lora_num_layers: 12}
+      - {lora_target_modules: "q_proj,v_proj", lora_num_layers: 16}
+      - {lora_target_modules: "q_proj,v_proj", lora_num_layers: 20}
+      - {lora_target_modules: "q_proj,v_proj", lora_num_layers: 24}
+      - {lora_target_modules: "q_proj,k_proj,v_proj", lora_num_layers: 16}
+      - {lora_target_modules: "q_proj,v_proj,o_proj", lora_num_layers: 16}
+      - {lora_target_modules: "q_proj,k_proj,v_proj,o_proj", lora_num_layers: 16}
+
+  scale:
+    description: Tune LoRA rank and scaling on the selected architecture.
+    inherits: architecture_best
+    fixed:
+      seed: 0
+      batch_size: 4
+      max_steps: 10000
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    variants:
+      - {lora_r: 8, lora_alpha: 16}
+      - {lora_r: 16, lora_alpha: 16}
+      - {lora_r: 16, lora_alpha: 32}
+      - {lora_r: 16, lora_alpha: 64}
+      - {lora_r: 32, lora_alpha: 32}
+      - {lora_r: 32, lora_alpha: 64}
+      - {lora_r: 32, lora_alpha: 128}
+
+  horizon:
+    description: Test whether the still-improving constant runs benefit from more steps.
+    inherits: scale_best
+    fixed:
+      seed: 0
+      lr_scheduler_type: constant
+      warmup_ratio: 0.0
+    variants:
+      - {batch_size: 4, max_steps: 10000}
+      - {batch_size: 4, max_steps: 15000}
+      - {batch_size: 4, max_steps: 20000}
+      - {batch_size: 8, max_steps: 10000}
+      - {batch_size: 8, max_steps: 15000}
+      - {batch_size: 8, max_steps: 20000}
+
+  confirm:
+    description: Confirm the two best refinement configurations over three seeds.
+    inherits: finalists
+    seeds: [0, 1, 2]

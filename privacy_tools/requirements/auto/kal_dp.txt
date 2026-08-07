@@ -1,0 +1,15 @@
+torch>=2.4,<2.9
+torchvision>=0.19,<0.24
+transformers>=4.43,<5
+datasets>=2.21,<5
+accelerate>=0.33,<2
+peft>=0.12,<1
+opacus>=1.4,<2
+numpy>=1.26,<2.1
+pandas>=2.2,<3
+scipy>=1.13,<2
+scikit-learn>=1.5,<2
+sentencepiece>=0.2
+protobuf>=5,<7
+tqdm>=4.66
+safetensors>=0.4

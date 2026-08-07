@@ -1,0 +1,21 @@
+version: 1
+
+optimizer_best:
+  learning_rate: null
+  zo_eps: null
+
+layers_best:
+  learning_rate: null
+  zo_eps: null
+  lora_target_modules: null
+  lora_num_layers: null
+
+scale_best:
+  learning_rate: null
+  zo_eps: null
+  lora_target_modules: null
+  lora_num_layers: null
+  lora_r: null
+  lora_alpha: null
+
+finalists: []

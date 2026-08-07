@@ -1,0 +1,37 @@
+version: 1
+boundary_best:
+  learning_rate: 0.0002
+  zo_eps: 0.006
+architecture_best:
+  learning_rate: 0.0002
+  zo_eps: 0.006
+  lora_target_modules: q_proj,k_proj,v_proj
+  lora_num_layers: 16
+scale_best:
+  learning_rate: 0.0002
+  zo_eps: 0.006
+  lora_target_modules: q_proj,k_proj,v_proj
+  lora_num_layers: 16
+  lora_r: 16
+  lora_alpha: 32
+finalists:
+- learning_rate: 0.0002
+  zo_eps: 0.006
+  lora_r: 16
+  lora_alpha: 32
+  lora_target_modules: q_proj,k_proj,v_proj
+  lora_num_layers: 16
+  batch_size: 8
+  max_steps: 15000
+  lr_scheduler_type: constant
+  warmup_ratio: 0.0
+- learning_rate: 0.0002
+  zo_eps: 0.006
+  lora_r: 16
+  lora_alpha: 32
+  lora_target_modules: q_proj,k_proj,v_proj
+  lora_num_layers: 16
+  batch_size: 8
+  max_steps: 20000
+  lr_scheduler_type: constant
+  warmup_ratio: 0.0

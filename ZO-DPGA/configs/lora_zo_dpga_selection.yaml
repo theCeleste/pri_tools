@@ -1,0 +1,31 @@
+version: 1
+
+# Selected from the completed stage1 sweep.
+stage1_best:
+  learning_rate: 1.0e-4
+  dp_clip: 10.0
+
+# Selected from the completed stage2 sweep.
+stage2_best:
+  learning_rate: 1.0e-4
+  dp_clip: 10.0
+  lora_r: 8
+  lora_alpha: 16
+  zo_eps: 3.0e-3
+
+# Top two stage3 configurations, expanded over seeds 0/1/2 in the final stage.
+finalists:
+  - learning_rate: 1.0e-4
+    dp_clip: 10.0
+    lora_r: 8
+    lora_alpha: 16
+    zo_eps: 3.0e-3
+    batch_size: 4
+    max_steps: 10000
+  - learning_rate: 1.0e-4
+    dp_clip: 10.0
+    lora_r: 8
+    lora_alpha: 16
+    zo_eps: 3.0e-3
+    batch_size: 8
+    max_steps: 5000

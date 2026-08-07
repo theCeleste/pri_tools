@@ -1,0 +1,17 @@
+torch>=2.4,<2.9
+transformers>=4.43,<5
+datasets>=2.21,<5
+accelerate>=0.33,<2
+evaluate>=0.4,<1
+peft>=0.12,<1
+huggingface-hub>=0.24,<1
+sentencepiece>=0.2
+safetensors>=0.4
+numpy>=1.26,<2.1
+pandas>=2.2,<3
+scikit-learn>=1.5,<2
+scipy>=1.13,<2
+matplotlib>=3.8,<4
+psutil>=6,<8
+tqdm>=4.66
+wandb>=0.17,<1

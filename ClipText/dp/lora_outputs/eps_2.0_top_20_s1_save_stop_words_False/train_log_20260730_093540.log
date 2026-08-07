@@ -1,0 +1,100 @@
+====== Training Started at 2026-07-30 09:35:40 ======
+Dataset identity detected: eps_2.0_top_20_s1_save_stop_words_False
+Logs will be saved directly to: ./lora_outputs/eps_2.0_top_20_s1_save_stop_words_False/train_log_20260730_093540.log
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   6%|6         | 18/290 [00:00<00:01, 176.00it/s]Loading weights:  13%|#3        | 39/290 [00:00<00:01, 188.89it/s]Loading weights:  22%|##2       | 65/290 [00:00<00:01, 218.96it/s]Loading weights:  30%|###       | 87/290 [00:00<00:00, 217.56it/s]Loading weights:  38%|###7      | 109/290 [00:00<00:00, 209.27it/s]Loading weights:  45%|####4     | 130/290 [00:00<00:00, 169.40it/s]Loading weights:  51%|#####1    | 149/290 [00:00<00:00, 173.89it/s]Loading weights:  60%|#####9    | 173/290 [00:00<00:00, 191.71it/s]Loading weights:  67%|######6   | 193/290 [00:01<00:00, 174.79it/s]Loading weights:  73%|#######3  | 212/290 [00:01<00:00, 138.05it/s]Loading weights:  79%|#######8  | 228/290 [00:01<00:00, 113.08it/s]Loading weights:  87%|########6 | 252/290 [00:01<00:00, 138.82it/s]Loading weights:  94%|#########3| 272/290 [00:01<00:00, 151.82it/s]Loading weights: 100%|##########| 290/290 [00:01<00:00, 167.08it/s]
+Model /home/wrc/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9 loaded
+Trainable parameters: 16785408
+Loading train dataset from: /home/wrc/sstdp/CusText/CusText/sst2/privatized_dataset/glove_840B-300d/conservative/eps_2.0_top_20_s1_save_stop_words_False
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 50000 examples [00:00, 374489.42 examples/s]Generating train split: 67349 examples [00:00, 408326.31 examples/s]
+Filter:   0%|          | 0/67349 [00:00<?, ? examples/s]Filter:  50%|#####     | 34000/67349 [00:00<00:00, 325994.60 examples/s]Filter: 100%|##########| 67349/67349 [00:00<00:00, 330684.78 examples/s]
+Map:   0%|          | 0/67349 [00:00<?, ? examples/s]Map:   1%|1         | 1000/67349 [00:00<00:07, 8989.17 examples/s]Map:   4%|4         | 3000/67349 [00:00<00:05, 12397.91 examples/s]Map:   7%|7         | 5000/67349 [00:00<00:04, 14302.46 examples/s]Map:  10%|#         | 7000/67349 [00:00<00:03, 15810.13 examples/s]Map:  13%|#3        | 9000/67349 [00:00<00:03, 16040.08 examples/s]Map:  16%|#6        | 11000/67349 [00:00<00:03, 16251.69 examples/s]Map:  19%|#9        | 13000/67349 [00:00<00:03, 16850.31 examples/s]Map:  22%|##2       | 15000/67349 [00:00<00:03, 15860.37 examples/s]Map:  25%|##5       | 17000/67349 [00:01<00:03, 16480.01 examples/s]Map:  28%|##8       | 19000/67349 [00:01<00:02, 16780.68 examples/s]Map:  31%|###1      | 21000/67349 [00:01<00:02, 16620.78 examples/s]Map:  34%|###4      | 23000/67349 [00:01<00:02, 16590.28 examples/s]Map:  37%|###7      | 25000/67349 [00:01<00:04, 9120.89 examples/s] Map:  40%|####      | 27000/67349 [00:01<00:03, 10794.63 examples/s]Map:  43%|####3     | 29000/67349 [00:02<00:03, 12418.48 examples/s]Map:  46%|####6     | 31000/67349 [00:02<00:02, 13020.26 examples/s]Map:  49%|####8     | 33000/67349 [00:02<00:02, 13092.82 examples/s]Map:  52%|#####1    | 35000/67349 [00:02<00:02, 14250.96 examples/s]Map:  55%|#####4    | 37000/67349 [00:02<00:01, 15437.30 examples/s]Map:  58%|#####7    | 39000/67349 [00:02<00:01, 15680.08 examples/s]Map:  61%|######    | 41000/67349 [00:02<00:01, 15534.95 examples/s]Map:  64%|######3   | 43000/67349 [00:02<00:01, 15040.54 examples/s]Map:  67%|######6   | 45000/67349 [00:03<00:01, 15421.90 examples/s]Map:  70%|######9   | 47000/67349 [00:03<00:01, 15735.06 examples/s]Map:  73%|#######2  | 49000/67349 [00:03<00:01, 15014.98 examples/s]Map:  76%|#######5  | 51000/67349 [00:03<00:01, 15547.73 examples/s]Map:  79%|#######8  | 53000/67349 [00:03<00:00, 15833.16 examples/s]Map:  82%|########1 | 55000/67349 [00:03<00:00, 15940.04 examples/s]Map:  85%|########4 | 57000/67349 [00:04<00:01, 9959.38 examples/s] Map:  88%|########7 | 59000/67349 [00:04<00:00, 11231.12 examples/s]Map:  91%|######### | 61000/67349 [00:04<00:00, 12462.15 examples/s]Map:  94%|#########3| 63000/67349 [00:04<00:00, 13469.69 examples/s]Map:  97%|#########6| 65000/67349 [00:04<00:00, 14269.85 examples/s]Map:  99%|#########9| 67000/67349 [00:04<00:00, 14650.01 examples/s]Map: 100%|##########| 67349/67349 [00:04<00:00, 14078.12 examples/s]
+Loading validation dataset from: /home/wrc/sstdp/CusText/CusText/sst2/datasets/sst2/dev.tsv
+Generating validation split: 0 examples [00:00, ? examples/s]Generating validation split: 872 examples [00:00, 70825.58 examples/s]
+Filter:   0%|          | 0/872 [00:00<?, ? examples/s]Filter: 100%|##########| 872/872 [00:00<00:00, 44263.85 examples/s]
+Map:   0%|          | 0/872 [00:00<?, ? examples/s]Map: 100%|##########| 872/872 [00:00<00:00, 10874.86 examples/s]
+Training model on cuda:2 for 3 epochs...
+Epoch 1:   0%|          | 0/2105 [00:00<?, ?it/s]Epoch 1:   0%|          | 1/2105 [00:07<4:31:12,  7.73s/it]Epoch 1:   0%|          | 2/2105 [00:10<2:52:47,  4.93s/it]Epoch 1:   0%|          | 3/2105 [00:14<2:28:52,  4.25s/it]Epoch 1:   0%|          | 3/2105 [00:15<2:57:17,  5.06s/it]
+Traceback (most recent call last):
+  File "/home/wrc/disk_optimizer/ClipText/dp/cliptext.py", line 270, in <module>
+    main()
+  File "/home/wrc/disk_optimizer/ClipText/dp/cliptext.py", line 267, in main
+    train(args, device)
+  File "/home/wrc/disk_optimizer/ClipText/dp/cliptext.py", line 199, in train
+    loss = train_step(model, optimizer, criterion, batch, device)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/disk_optimizer/ClipText/dp/cliptext.py", line 123, in train_step
+    outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/peft/peft_model.py", line 1902, in forward
+    return self.base_model(
+           ^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 333, in forward
+    return self.model.forward(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/transformers/utils/generic.py", line 911, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/transformers/modeling_layers.py", line 140, in forward
+    transformer_outputs: BaseModelOutputWithPast = getattr(self, self.base_model_prefix)(
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/transformers/utils/generic.py", line 1040, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/transformers/utils/output_capturing.py", line 262, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/transformers/models/llama/modeling_llama.py", line 411, in forward
+    hidden_states = decoder_layer(
+                    ^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/transformers/modeling_layers.py", line 110, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/transformers/models/llama/modeling_llama.py", line 316, in forward
+    hidden_states, _ = self.self_attn(
+                       ^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/transformers/models/llama/modeling_llama.py", line 262, in forward
+    query_states = self.q_proj(hidden_states).view(hidden_shape).transpose(1, 2)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/peft/tuners/lora/layer.py", line 1056, in forward
+    x = self._cast_input_dtype(x, lora_A.weight.dtype)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wrc/miniconda3/envs/cliptext/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 1792, in _cast_input_dtype
+    return x.to(dtype=dtype)
+           ^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
