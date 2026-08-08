@@ -71,7 +71,7 @@ print(f"正在加载攻击模型 (针对{args.dataset}数据集)...")
 attack_model = AutoModelForCausalLM.from_pretrained('meta-llama/Llama-2-7b-chat-hf')
 print("攻击模型加载完成")
 
-attack_model = attack_model.to('cuda:0')
+attack_model = attack_model.to('cuda')
 
 if args.model == 'bert':
     search_tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -87,7 +87,7 @@ elif args.model == 'roberta':
 
 print(search_model)
 
-search_model = search_model.to('cuda:3')
+search_model = search_model.to('cuda')
 
 token_dropout = torch.nn.Dropout(p=0.7)
 
@@ -101,7 +101,7 @@ elif args.dataset == 'other':
 
 
 def generate_neighbours_alt(tokenized, num_word_changes=1):
-    text_tokenized = search_tokenizer(text, padding = True, truncation = True, max_length = 512, return_tensors='pt').input_ids.to('cuda:3')
+    text_tokenized = search_tokenizer(text, padding = True, truncation = True, max_length = 512, return_tensors='pt').input_ids.to('cuda')
     original_text = search_tokenizer.batch_decode(text_tokenized)[0]
 
     candidate_scores = dict()
@@ -155,7 +155,7 @@ def generate_neighbours_alt(tokenized, num_word_changes=1):
     for single in highest_scored:
         alt = text_tokenized
         target_token_index, cand = single
-        alt = torch.cat((alt[:,:target_token_index], torch.LongTensor([cand]).unsqueeze(0).to('cuda:3'), alt[:,target_token_index+1:]), dim=1)
+        alt = torch.cat((alt[:,:target_token_index], torch.LongTensor([cand]).unsqueeze(0).to('cuda'), alt[:,target_token_index+1:]), dim=1)
         alt_text = search_tokenizer.batch_decode(alt)[0]
         texts.append((alt_text, replacements[single]))
 
@@ -167,7 +167,7 @@ def generate_neighbours_alt(tokenized, num_word_changes=1):
 
 def generate_neighbours(text, num_word_changes=1):
     # 修复参数：使用text而不是tokenized，并添加设备判断
-    device = 'cuda:3' if torch.cuda.is_available() else 'cpu'
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
     text_tokenized = search_tokenizer(text, padding = True, truncation = True, max_length = 512, return_tensors='pt').input_ids.to(device)
     original_text = search_tokenizer.batch_decode(text_tokenized)[0]
 
@@ -189,7 +189,7 @@ def generate_neighbours(text, num_word_changes=1):
         for cand, prob in zip(top_candidates[0], top_probabilities[0]):
             if not cand == target_token:
 
-                alt = torch.cat((text_tokenized[:,:target_token_index], torch.LongTensor([cand]).unsqueeze(0).to('cuda:3'), text_tokenized[:,target_token_index+1:]), dim=1)
+                alt = torch.cat((text_tokenized[:,:target_token_index], torch.LongTensor([cand]).unsqueeze(0).to('cuda'), text_tokenized[:,target_token_index+1:]), dim=1)
                 alt_text = search_tokenizer.batch_decode(alt)[0]
                 candidate_scores[alt_text] = prob/(1-original_prob)
                 replacements[(target_token_index, cand)] = prob/(1-original_prob)
@@ -206,7 +206,7 @@ def generate_neighbours(text, num_word_changes=1):
 def get_logprob(prompt, text):
     # 添加prompt
     text_with_prompt = prompt + text
-    text_tokenized = attack_tokenizer(text_with_prompt, padding = True, truncation = True, max_length = 512, return_tensors='pt').input_ids.to('cuda:0')
+    text_tokenized = attack_tokenizer(text_with_prompt, padding = True, truncation = True, max_length = 512, return_tensors='pt').input_ids.to('cuda')
     
     prompt_len = attack_tokenizer(prompt, return_tensors='pt', truncation=True, max_length=512).input_ids.size(1)
     labels = text_tokenized.clone()
@@ -222,10 +222,10 @@ def get_logprob(prompt, text):
 def get_logprob_batch(prompt, texts):
     # 为每个文本添加prompt
     texts_with_prompt = [prompt + t for t in texts]
-    text_tokenized = attack_tokenizer(texts_with_prompt, padding = True, truncation = True, max_length = 512, return_tensors='pt').to('cuda:0')
+    text_tokenized = attack_tokenizer(texts_with_prompt, padding = True, truncation = True, max_length = 512, return_tensors='pt').to('cuda')
     input_ids = text_tokenized.input_ids
 
-    prompt_ids = attack_tokenizer(prompt, return_tensors='pt', truncation=True, max_length=512).input_ids.to('cuda:0')
+    prompt_ids = attack_tokenizer(prompt, return_tensors='pt', truncation=True, max_length=512).input_ids.to('cuda')
     prompt_len = prompt_ids.size(1)
 
     with torch.no_grad():
@@ -277,7 +277,7 @@ for idx, text in enumerate(tqdm(texts[args.proc_id*batch_size:(args.proc_id+1)*b
 
 
         # 原始文本处理
-        tok_orig = search_tokenizer(text, padding=True, truncation=True, max_length=512, return_tensors='pt').input_ids.to('cuda:3')
+        tok_orig = search_tokenizer(text, padding=True, truncation=True, max_length=512, return_tensors='pt').input_ids.to('cuda')
         orig_dec = search_tokenizer.batch_decode(tok_orig)[0].replace(" [SEP]", " ").replace("[CLS] ", " ")
         orig_logprob = get_logprob(prompt, orig_dec)
 

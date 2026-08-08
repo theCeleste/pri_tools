@@ -658,7 +658,7 @@ def _main(
         else:
             num_public_train = set_num_public_train
 
-        device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         lm = api_openai_com(openai_model, device=device)
         noise_rng = np.random.RandomState()
 

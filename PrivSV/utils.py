@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import Iterable
 
 from torch.distributions import Laplace
-device = 'cuda:3' if torch.cuda.is_available() else 'cpu'
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 def get_model_and_tokenizer(model_name: str, load_bfloat=False):

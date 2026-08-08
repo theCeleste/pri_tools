@@ -20,7 +20,7 @@ from steering_wrapper import FrozenSteering
 import matplotlib.pyplot as plt
 import argparse 
 
-device = 'cuda:3' if torch.cuda.is_available() else 'cpu'
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 # device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
 MWEData = list[dict[str, str]]

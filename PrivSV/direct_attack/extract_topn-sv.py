@@ -17,8 +17,8 @@ gpu_count = torch.cuda.device_count()
 print(f"可用GPU数量: {gpu_count}")
 
 # 设置两个不同的设备，用于在不同GPU上加载模型
-device1 = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
-device2 = torch.device('cuda:3' if torch.cuda.is_available() and gpu_count > 1 else device1)
+device1 = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+device2 = torch.device('cuda:1' if torch.cuda.is_available() and gpu_count > 1 else device1)
 
 print(f"模型1将加载到: {device1}")
 print(f"模型2将加载到: {device2}")

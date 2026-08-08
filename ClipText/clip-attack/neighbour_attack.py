@@ -153,7 +153,7 @@ def load_model_for_causal_lm(model_name, device, model_path=None, config=None):
         return model
 
     # 加载隐私保护版本的LLaMA模型
-    from models.modeling_llama_privacy import LlamaForSequenceClassification
+    # from models.modeling_llama_privacy import LlamaForSequenceClassification
     from peft import PeftModel
 
     model = AutoModelForCausalLM.from_pretrained(model_name, config=config).to(device)

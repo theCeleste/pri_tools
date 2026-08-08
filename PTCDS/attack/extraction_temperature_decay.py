@@ -12,7 +12,7 @@ from pprint import pprint
 import pandas as pd
 
 if torch.cuda.is_available():
-    device = torch.device('cuda:1')
+    device = torch.device('cuda')
 else:
     device = torch.device('cpu')
 
@@ -164,7 +164,7 @@ def print_best_to_file(outfile, metric, samples, metric_name, name1, scores1, na
                 print(f"{i+1}: {name1}={scores1[idx]:.3f}, , score={metric[idx]:.3f}")
 
             print()
-            print(samples[idx])
+            # print(samples[idx])
             print()
             print()
         
@@ -233,7 +233,7 @@ def main(args):
             generated_texts = TOKENIZER_GPT2.batch_decode(generated_sequences, skip_special_tokens=True)
 
             for text in generated_texts:
-                print("text:",text)
+                # print("text:",text)
                 # Calculate perplexity of GPT-XL, GPT2-Small and GPT2-Medium on each generated text
                 perplexity_gpt2_xl = calculate_perplexity(text, MODEL_GPT2_XL, TOKENIZER_GPT2, device) 
                 perplexity_gpt2 = calculate_perplexity(text, MODEL_GPT2, TOKENIZER_GPT2, device) 

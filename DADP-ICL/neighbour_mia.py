@@ -71,7 +71,7 @@ print(f"正在加载攻击模型 (针对{args.dataset}数据集)...")
 attack_model = AutoModelForCausalLM.from_pretrained('meta-llama/Llama-2-7b-chat-hf')
 print("攻击模型加载完成")
 
-attack_model = attack_model.to('cuda:2')
+attack_model = attack_model.to('cuda')
 
 if args.model == 'bert':
     search_tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -87,7 +87,7 @@ elif args.model == 'roberta':
 
 print(search_model)
 
-search_model = search_model.to('cuda:3')
+search_model = search_model.to('cuda')
 
 token_dropout = torch.nn.Dropout(p=0.7)
 

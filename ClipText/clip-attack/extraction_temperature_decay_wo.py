@@ -235,7 +235,7 @@ def main(args):
             generated_texts = TOKENIZER_GPT2.batch_decode(generated_sequences, skip_special_tokens=True)
 
             for text in generated_texts:
-                print("text:",text)
+                # print("text:",text)
                 # Calculate perplexity of GPT-XL, GPT2-Small and GPT2-Medium on each generated text
                 perplexity_gpt2_xl = calculate_perplexity(text, MODEL_GPT2_XL, TOKENIZER_GPT2, device) 
                 perplexity_gpt2 = calculate_perplexity(text, MODEL_GPT2, TOKENIZER_GPT2, device) 
