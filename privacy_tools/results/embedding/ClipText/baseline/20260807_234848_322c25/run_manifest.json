@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "category": "embedding",
+  "method": "cliptext",
+  "method_path_name": "ClipText",
+  "experiment": "baseline",
+  "choice_kind": "experiment",
+  "dry_run": true,
+  "created_at": "2026-08-07T23:48:48",
+  "project_root": "/home/zjs/code/x73/x73-privacy-tool",
+  "config_file": null,
+  "steps": [
+    {
+      "name": "在原始 SST-2 文本上训练 LoRA 对比模型",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/ClipText/baseline/20260807_234848_322c25",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/ClipText/dp/cliptext.py",
+        "--train_data_path",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2/train.tsv",
+        "--val_data_path",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2/dev.tsv",
+        "--batch_size",
+        "32",
+        "--epochs",
+        "3",
+        "--lora_rank",
+        "16",
+        "--learning_rate",
+        "0.0001",
+        "--gpu_id",
+        "0",
+        "--model_name",
+        "meta-llama/Llama-2-7b-hf"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/ClipText/dp",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/ClipText/baseline/20260807_234848_322c25/.matplotlib"
+      },
+      "runtime_adapter": null
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+DRY RUN：未启动原实验代码。
+[按原始说明执行受保护模型前缀抽取] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/direct_attack/20260807_234849_c93e98
+python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/direct_attack/20260807_234849_c93e98/runtime_adapters/01_extraction_temperature_decay.py --N 20 --batch_size 6 --outfile /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/direct_attack/20260807_234849_c93e98/protected_extraction_temperature_decay.txt
+[按原始 member_test 统计受保护攻击命中率] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/direct_attack/20260807_234849_c93e98
+python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/direct_attack/20260807_234849_c93e98/runtime_adapters/02_member_test.py
+[按原始说明执行未保护模型前缀抽取] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/direct_attack/20260807_234849_c93e98
+python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/direct_attack/20260807_234849_c93e98/runtime_adapters/03_extraction_temperature_decay_wo.py --N 20 --batch_size 6 --outfile /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/direct_attack/20260807_234849_c93e98/baseline_extraction_temperature_decay.txt
+[按原始 member_test 统计未保护攻击命中率] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/direct_attack/20260807_234849_c93e98
+python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/direct_attack/20260807_234849_c93e98/runtime_adapters/04_member_test.py

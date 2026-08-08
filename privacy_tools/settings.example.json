@@ -1,5 +1,6 @@
 {
   "results_dir": "privacy_tools/results",
+  "historical_results_dir": "privacy_tools/historical_results",
   "common": {
     "gpu": "0",
     "model_7b": "meta-llama/Llama-2-7b-hf",

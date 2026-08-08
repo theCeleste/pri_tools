@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "category": "example",
+  "method": "dadp_icl",
+  "method_path_name": "DADP-ICL",
+  "experiment": "utility",
+  "choice_kind": "experiment",
+  "dry_run": true,
+  "created_at": "2026-08-07T23:48:49",
+  "project_root": "/home/zjs/code/x73/x73-privacy-tool",
+  "config_file": null,
+  "steps": [
+    {
+      "name": "生成差分隐私示例并执行 SST-2 ICL 评估",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/utility/20260807_234849_ec0317",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/run_exp_sst2_loca_monitor.py",
+        "--sigma",
+        "0.39",
+        "--openai-model",
+        "meta-llama/Llama-2-7b-hf",
+        "--num-private-train",
+        "20",
+        "--num-private-train-splits",
+        "10",
+        "--num-valid",
+        "10",
+        "--num-test",
+        "20",
+        "--max-token-per-text",
+        "100",
+        "--synth-seed",
+        "0",
+        "--eval-seed",
+        "0"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/utility/20260807_234849_ec0317/.matplotlib"
+      },
+      "runtime_adapter": null
+    }
+  ]
+}

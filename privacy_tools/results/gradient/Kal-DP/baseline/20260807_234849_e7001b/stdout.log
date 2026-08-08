@@ -1,0 +1,3 @@
+DRY RUN：未启动原实验代码。
+[DP-SGD 对照训练] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/baseline/20260807_234849_e7001b
+python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/baseline/20260807_234849_e7001b/runtime_adapters/01_dpsgd.py --batch_size 32 --max_physical_batch_size 12 --seq_length 128 --is_lora True --lora_rank 16 --learning_rate 0.0001 --max_grad_norm 3.0 --epochs 2 --model_name meta-llama/Llama-2-7b-hf

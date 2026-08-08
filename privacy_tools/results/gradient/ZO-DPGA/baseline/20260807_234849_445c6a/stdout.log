@@ -1,0 +1,3 @@
+DRY RUN：未启动原实验代码。
+[运行 LoRA + MeZO 对比微调] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/baseline/20260807_234849_445c6a
+python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/baseline/20260807_234849_445c6a/runtime_adapters/01_run_lora_mezo_892_reproduction.py --output-dir /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/ZO-DPGA/baseline/20260807_234849_445c6a/model_output --run

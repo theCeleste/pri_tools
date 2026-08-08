@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "category": "example",
+  "method": "dadp_icl",
+  "method_path_name": "DADP-ICL",
+  "experiment": "direct_attack",
+  "choice_kind": "experiment",
+  "dry_run": true,
+  "created_at": "2026-08-07T23:48:50",
+  "project_root": "/home/zjs/code/x73/x73-privacy-tool",
+  "config_file": null,
+  "steps": [
+    {
+      "name": "按原始说明用合成示例提示执行前缀抽取",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5/runtime_adapters/01_invade_prefix_with_custom.py",
+        "--use-custom-prefixes",
+        "--custom-prefix-file",
+        "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack/example_content.txt",
+        "--N",
+        "20",
+        "--batch-size",
+        "4",
+        "--outfile",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5/protected_custom_prefix_samples.txt"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack:/home/zjs/code/x73/x73-privacy-tool/DADP-ICL",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack/invade_prefix_with_custom.py"
+    },
+    {
+      "name": "按原始 member_test 统计合成提示攻击命中率",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5/runtime_adapters/02_member_test.py"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack/member_test.py"
+    },
+    {
+      "name": "按原始说明用原始示例提示执行前缀抽取",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5/runtime_adapters/03_invade_prefix_with_custom.py",
+        "--use-custom-prefixes",
+        "--custom-prefix-file",
+        "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack/example_content.txt",
+        "--N",
+        "20",
+        "--batch-size",
+        "4",
+        "--outfile",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5/baseline_custom_prefix_samples.txt"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack:/home/zjs/code/x73/x73-privacy-tool/DADP-ICL",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack/invade_prefix_with_custom.py"
+    },
+    {
+      "name": "按原始 member_test 统计原始提示攻击命中率",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5/runtime_adapters/04_member_test.py"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260807_234850_261ea5/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack/member_test.py"
+    }
+  ]
+}

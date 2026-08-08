@@ -1,0 +1,97 @@
+
+===== STEP 1: 基于 PTCDS 扰动数据进行 LoRA 微调 =====
+[Config] model_name_or_path = meta-llama/Llama-2-7b-hf
+[Config] train_path        = /home/zjs/code/x73/x73-privacy-tool/PTCDS/output_PTCDS_plus_glove/SST-2/eps_6.00/sword_0.90_p_0.30/train.tsv
+[Config] output_dir        = /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/utility/20260807_233233_920433/model_output
+[Config] run_name          = llama2-7b-sst2
+[Data] Loading SST-2 from: /home/zjs/code/x73/x73-privacy-tool/PTCDS/output_PTCDS_plus_glove/SST-2/eps_6.00/sword_0.90_p_0.30/train.tsv
+[Data] 原始行数: 67349
+[Data] label 列前几行:
+0    0
+1    0
+2    1
+3    0
+4    0
+Name: label, dtype: int64
+[Data] 去掉 label=NaN 的行数: 0
+[Data] 丢弃非法 label 行数: 0
+[Data] 清洗后 label 分布:
+label
+1    37569
+0    29780
+Name: count, dtype: int64
+[Data] 清洗后训练集前 3 行:
+                                            sentence  label
+0     hide new secretions from unlike parental units      0
+1                contains no wit , only labored gags      0
+2  reminds loves overwhelming worked and communic...      1
+
+Map:   0%|          | 0/60614 [00:00<?, ? examples/s]
+Map:   3%|▎         | 2000/60614 [00:00<00:03, 18039.55 examples/s]
+Map:   7%|▋         | 4000/60614 [00:00<00:03, 18420.18 examples/s]
+Map:  10%|▉         | 6000/60614 [00:00<00:02, 18428.18 examples/s]
+Map:  13%|█▎        | 8000/60614 [00:00<00:02, 18080.30 examples/s]
+Map:  16%|█▋        | 10000/60614 [00:00<00:04, 12127.98 examples/s]
+Map:  20%|█▉        | 12000/60614 [00:00<00:03, 13788.07 examples/s]
+Map:  23%|██▎       | 14000/60614 [00:00<00:03, 15162.40 examples/s]
+Map:  26%|██▋       | 16000/60614 [00:01<00:02, 16279.22 examples/s]
+Map:  30%|██▉       | 18000/60614 [00:01<00:02, 16960.10 examples/s]
+Map:  33%|███▎      | 20000/60614 [00:01<00:02, 17569.57 examples/s]
+Map:  36%|███▋      | 22000/60614 [00:01<00:02, 18011.97 examples/s]
+Map:  40%|███▉      | 24000/60614 [00:01<00:01, 18418.26 examples/s]
+Map:  43%|████▎     | 26000/60614 [00:01<00:01, 18501.11 examples/s]
+Map:  46%|████▌     | 28000/60614 [00:01<00:01, 18569.91 examples/s]
+Map:  49%|████▉     | 30000/60614 [00:01<00:01, 18693.76 examples/s]
+Map:  54%|█████▍    | 33000/60614 [00:01<00:01, 19002.07 examples/s]
+Map:  58%|█████▊    | 35000/60614 [00:02<00:01, 18747.43 examples/s]
+Map:  61%|██████    | 37000/60614 [00:02<00:01, 13491.10 examples/s]
+Map:  64%|██████▍   | 39000/60614 [00:02<00:01, 14748.67 examples/s]
+Map:  68%|██████▊   | 41000/60614 [00:02<00:01, 15694.74 examples/s]
+Map:  71%|███████   | 43000/60614 [00:02<00:01, 16640.14 examples/s]
+Map:  74%|███████▍  | 45000/60614 [00:02<00:00, 17381.11 examples/s]
+Map:  78%|███████▊  | 47000/60614 [00:02<00:00, 17729.04 examples/s]
+Map:  81%|████████  | 49000/60614 [00:02<00:00, 18020.59 examples/s]
+Map:  84%|████████▍ | 51000/60614 [00:03<00:00, 18300.28 examples/s]
+Map:  87%|████████▋ | 53000/60614 [00:03<00:00, 17851.01 examples/s]
+Map:  91%|█████████ | 55000/60614 [00:03<00:00, 18130.77 examples/s]
+Map:  94%|█████████▍| 57000/60614 [00:03<00:00, 18328.06 examples/s]
+Map:  97%|█████████▋| 59000/60614 [00:03<00:00, 18624.66 examples/s]
+Map: 100%|██████████| 60614/60614 [00:03<00:00, 17153.27 examples/s]
+
+Map:   0%|          | 0/6735 [00:00<?, ? examples/s]
+Map:  30%|██▉       | 2000/6735 [00:00<00:00, 7117.20 examples/s]
+Map:  59%|█████▉    | 4000/6735 [00:00<00:00, 10976.55 examples/s]
+Map:  89%|████████▉ | 6000/6735 [00:00<00:00, 13736.33 examples/s]
+Map: 100%|██████████| 6735/6735 [00:00<00:00, 12523.20 examples/s]
+Building model with LoRA and flash_attention_2...
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards:  50%|█████     | 1/2 [00:02<00:02,  2.18s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:03<00:00,  1.66s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:03<00:00,  1.74s/it]
+Some weights of LlamaForSequenceClassification were not initialized from the model checkpoint at meta-llama/Llama-2-7b-hf and are newly initialized: ['score.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/zjs/code/x73/x73-privacy-tool/PTCDS/finetune_llama2_sst2_lora_data.py:513: FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `Trainer.__init__`. Use `processing_class` instead.
+  trainer = Trainer(
+No label_names provided for model class `PeftModelForSequenceClassification`. Since `PeftModel` hides base models input arguments, if label_names is not given, label_names can't be set automatically within `Trainer`. Note that empty label_names list will be used instead.
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /home/zjs/.netrc.
+wandb: Currently logged in as: mihirukiss (mihirukiss-virtuareal) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run w7hjshmw
+wandb: Tracking run with wandb version 0.24.1
+wandb: Run data is saved locally in /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/utility/20260807_233233_920433/wandb/run-20260807_233256-w7hjshmw
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run llama2-7b-sst2
+wandb: ⭐️ View project at https://wandb.ai/mihirukiss-virtuareal/llama2-sst2-lora
+wandb: 🚀 View run at https://wandb.ai/mihirukiss-virtuareal/llama2-sst2-lora/runs/w7hjshmw
+trainable params: 19,996,672 || all params: 6,627,348,480 || trainable%: 0.3017
+[LoRA] 训练前 LoRA SHA256 = 7a277155629e212ea95e7de4e16fd93eef178a5ac6b7e4983f96d190782e632f
+>>> Trainer created, start training...
+
+  0%|          | 0/947 [00:00<?, ?it/s]2026-08-07 23:32:58,564 | INFO | __main__ | Epoch 1 begin.
+
+  0%|          | 1/947 [00:03<57:26,  3.64s/it]
+                                               
+
+  0%|          | 1/947 [00:03<57:26,  3.64s/it]
+
+用户中断实验。

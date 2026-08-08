@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "category": "example",
+  "method": "privsv",
+  "method_path_name": "PrivSV",
+  "experiment": "baseline",
+  "choice_kind": "experiment",
+  "dry_run": true,
+  "created_at": "2026-08-07T23:48:50",
+  "project_root": "/home/zjs/code/x73/x73-privacy-tool",
+  "config_file": null,
+  "steps": [
+    {
+      "name": "关闭 steering vector 噪声的效用对照",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/PrivSV/baseline/20260807_234850_efaeb8",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/PrivSV/baseline/20260807_234850_efaeb8/runtime_adapters/01_run.py",
+        "--model",
+        "meta-llama/Llama-2-7b-hf",
+        "--dataset",
+        "sst2",
+        "--layers",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "--noise_multiplier",
+        "0",
+        "--clip",
+        "18"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/PrivSV",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/PrivSV/baseline/20260807_234850_efaeb8/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/PrivSV/run.py"
+    }
+  ]
+}

@@ -348,6 +348,54 @@ def parse_structured_file(path: Path) -> list[dict[str, Any]]:
     return observations
 
 
+def print_historical_results(root: Path) -> None:
+    """Read-only display of prepared historical training and attack results."""
+    if not root.exists():
+        print(f"\n历史结果目录不存在，跳过历史结果展示：{root}")
+        return
+    artifacts = discover_artifacts(root)
+    # 历史攻击脚本常把命中率写入 txt；只在这个明确的历史目录中纳入它们。
+    for path in root.rglob("*.txt"):
+        try:
+            if path.stat().st_size <= 8 * 1024 * 1024 and path not in artifacts:
+                artifacts.append(path)
+        except OSError:
+            continue
+    artifacts.sort()
+    if not artifacts:
+        print(f"\n历史结果目录中没有可识别的结果文件：{root}")
+        return
+
+    wanted = (
+        "accuracy", "acc", "memory", "mem", "runtime", "elapsed", "time",
+        "throughput", "samples_per_second", "examples_per_second",
+        "attack_success", "success_rate", "auc", "攻击成功率", "成功率",
+    )
+    displayed = 0
+    print(f"\n===== 历史结果（{root}） =====")
+    for artifact in artifacts:
+        observations = parse_structured_file(artifact)
+        if artifact.suffix.lower() in {".log", ".txt"}:
+            try:
+                observations.extend(parse_log_metrics(artifact.read_text(encoding="utf-8", errors="replace"), str(artifact)))
+            except OSError:
+                pass
+        rows = [
+            (str(item.get("metric", "")), item.get("value"))
+            for item in observations
+            if isinstance(item.get("value"), (int, float))
+            and not isinstance(item.get("value"), bool)
+            and any(token in str(item.get("metric", "")).casefold() for token in wanted)
+        ]
+        if not rows:
+            continue
+        displayed += 1
+        compact = ", ".join(f"{metric}={value:g}" for metric, value in rows[-20:])
+        print(f"  {artifact.relative_to(root)}: {compact}")
+    if not displayed:
+        print("  未找到可展示的 Acc/内存/时间/吞吐率/攻击指标。")
+
+
 METRIC_PATTERNS: list[tuple[str, re.Pattern[str], bool]] = [
     ("accuracy_pct", re.compile(r"(?:eval[_ /-]?accuracy|val[_ /-]?acc|accuracy|dev acc|\bacc)(?:\s*\([^)]*\))?\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)\s*(%)?", re.I), True),
     ("epsilon", re.compile(r"(?:epsilon|eps|ε|ϵ)\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)", re.I), False),
@@ -721,6 +769,8 @@ def run_experiment(
                 if return_code != 0:
                     break
 
+    history_root = project_path(str(settings.get("historical_results_dir", "privacy_tools/historical_results")))
+    print_historical_results(history_root)
     artifact_since = None if experiment.internal_report else started_at
     artifacts = discover_artifacts(method.root, since=artifact_since)
     if experiment.internal_report:

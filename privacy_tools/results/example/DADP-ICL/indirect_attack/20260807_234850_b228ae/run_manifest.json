@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "category": "example",
+  "method": "dadp_icl",
+  "method_path_name": "DADP-ICL",
+  "experiment": "indirect_attack",
+  "choice_kind": "experiment",
+  "dry_run": true,
+  "created_at": "2026-08-07T23:48:50",
+  "project_root": "/home/zjs/code/x73/x73-privacy-tool",
+  "config_file": null,
+  "steps": [
+    {
+      "name": "原始邻居攻击：合成提示 / 成员",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/runtime_adapters/01_neighbour_mia.py",
+        "--proc-id",
+        "0",
+        "--model",
+        "bert",
+        "--dataset",
+        "other"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack/neighbour_mia.py"
+    },
+    {
+      "name": "原始邻居攻击：合成提示 / 非成员",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/runtime_adapters/02_neighbour_mia.py",
+        "--proc-id",
+        "0",
+        "--model",
+        "bert",
+        "--dataset",
+        "sst2"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack/neighbour_mia.py"
+    },
+    {
+      "name": "原始邻居攻击：原始提示 / 成员",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/runtime_adapters/03_neighbour_mia.py",
+        "--proc-id",
+        "0",
+        "--model",
+        "bert",
+        "--dataset",
+        "other"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack/neighbour_mia.py"
+    },
+    {
+      "name": "原始邻居攻击：原始提示 / 非成员",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/runtime_adapters/04_neighbour_mia.py",
+        "--proc-id",
+        "0",
+        "--model",
+        "bert",
+        "--dataset",
+        "sst2"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack/neighbour_mia.py"
+    },
+    {
+      "name": "按原始逻辑合并本方法成员与非成员得分",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/runtime_adapters/05_combine.py"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack/combine.py"
+    },
+    {
+      "name": "按原始逻辑计算本方法攻击性能指标",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/runtime_adapters/06_evaluate_attack_metrics.py",
+        "--file",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/attack_results_bert_combined_noise.csv",
+        "--ratio",
+        "0.1"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack/evaluate_attack_metrics.py"
+    },
+    {
+      "name": "按原始逻辑合并对比方法成员与非成员得分",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/runtime_adapters/07_combine.py"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack/combine.py"
+    },
+    {
+      "name": "按原始逻辑计算对比方法攻击性能指标",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/runtime_adapters/08_evaluate_attack_metrics.py",
+        "--file",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/attack_results_bert_combined.csv",
+        "--ratio",
+        "0.1"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/indirect_attack/20260807_234850_b228ae/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/Indirect_attack/evaluate_attack_metrics.py"
+    }
+  ]
+}

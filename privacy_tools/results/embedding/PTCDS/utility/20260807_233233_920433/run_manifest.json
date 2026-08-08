@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "category": "embedding",
+  "method": "ptcds",
+  "method_path_name": "PTCDS",
+  "experiment": "utility",
+  "choice_kind": "experiment",
+  "dry_run": false,
+  "created_at": "2026-08-07T23:32:33",
+  "project_root": "/home/zjs/code/x73/x73-privacy-tool",
+  "config_file": null,
+  "steps": [
+    {
+      "name": "基于 PTCDS 扰动数据进行 LoRA 微调",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/utility/20260807_233233_920433",
+      "command": [
+        "/home/zjs/anaconda3/envs/embedding/bin/python",
+        "/home/zjs/code/x73/x73-privacy-tool/PTCDS/finetune_llama2_sst2_lora_data.py",
+        "--model_name_or_path",
+        "meta-llama/Llama-2-7b-hf",
+        "--train_path",
+        "/home/zjs/code/x73/x73-privacy-tool/PTCDS/output_PTCDS_plus_glove/SST-2/eps_6.00/sword_0.90_p_0.30/train.tsv",
+        "--output_dir",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/utility/20260807_233233_920433/model_output",
+        "--eval_steps",
+        "948",
+        "--wandb_project",
+        "llama2-sst2-lora",
+        "--run_name",
+        "llama2-7b-sst2"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/PTCDS",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/utility/20260807_233233_920433/.matplotlib"
+      },
+      "runtime_adapter": null
+    }
+  ]
+}
