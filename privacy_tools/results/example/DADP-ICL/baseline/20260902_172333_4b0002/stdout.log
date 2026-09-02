@@ -1,0 +1,3 @@
+DRY RUN：未启动原实验代码。
+[关闭私有样本聚合，执行非隐私/零预算对照] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/baseline/20260902_172333_4b0002
+/home/zjs/anaconda3/envs/dp-few-shot/bin/python /home/zjs/code/x73/x73-privacy-tool/DADP-ICL/run_exp_sst2_loca_monitor.py --sigma 0 --openai-model meta-llama/Llama-2-7b-hf --num-private-train 0 --num-private-train-splits 0 --num-valid 10 --num-test 20

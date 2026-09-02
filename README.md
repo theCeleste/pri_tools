@@ -111,7 +111,7 @@ privacy_tools/results/<类别>/<方法>/<运行项>/
 
 ### 历史结果展示
 
-每次子进程完成后，统一入口会先读取项目目录下预先准备的历史结果目录，再扫描本次运行产物。默认目录为 `privacy_tools/historical_results`，也可以在配置中修改 `historical_results_dir`。目录中的 JSON、JSONL、CSV、LOG 和 TXT 文件会被只读解析，并在终端展示已识别的 Acc、内存、运行时间、吞吐率、攻击成功率和 AUC；历史结果不会写入或覆盖本次 `experiment_metrics.csv`。
+每次子进程完成后，统一入口会先读取项目目录下预先准备的历史结果目录中与当前方法对应的 TXT 文件（例如 `Kal-DP.txt`），并在终端原样展示其中的 Acc、内存、运行时间、吞吐率及攻击评估结果。默认目录为 `privacy_tools/historical_results`，也可以在配置中修改 `historical_results_dir`；历史结果不会写入或覆盖本次 `experiment_metrics.csv`。
 
 ## 环境准备
 

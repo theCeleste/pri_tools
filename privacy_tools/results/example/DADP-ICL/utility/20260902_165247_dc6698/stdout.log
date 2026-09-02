@@ -1,0 +1,3 @@
+DRY RUN：未启动原实验代码。
+[生成差分隐私示例并执行 SST-2 ICL 评估] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/utility/20260902_165247_dc6698
+/home/zjs/anaconda3/bin/python /home/zjs/code/x73/x73-privacy-tool/DADP-ICL/run_exp_sst2_loca_monitor.py --sigma 0.39 --openai-model meta-llama/Llama-2-7b-hf --num-private-train 20 --num-private-train-splits 10 --num-valid 10 --num-test 20 --max-token-per-text 100 --synth-seed 0 --eval-seed 0

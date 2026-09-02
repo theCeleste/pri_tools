@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "category": "example",
+  "method": "dadp_icl",
+  "method_path_name": "DADP-ICL",
+  "experiment": "baseline",
+  "choice_kind": "experiment",
+  "dry_run": true,
+  "created_at": "2026-09-02T17:23:33",
+  "project_root": "/home/zjs/code/x73/x73-privacy-tool",
+  "config_file": null,
+  "steps": [
+    {
+      "name": "关闭私有样本聚合，执行非隐私/零预算对照",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/baseline/20260902_172333_4b0002",
+      "command": [
+        "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
+        "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL/run_exp_sst2_loca_monitor.py",
+        "--sigma",
+        "0",
+        "--openai-model",
+        "meta-llama/Llama-2-7b-hf",
+        "--num-private-train",
+        "0",
+        "--num-private-train-splits",
+        "0",
+        "--num-valid",
+        "10",
+        "--num-test",
+        "20"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/DADP-ICL",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/baseline/20260902_172333_4b0002/.matplotlib"
+      },
+      "runtime_adapter": null
+    }
+  ]
+}

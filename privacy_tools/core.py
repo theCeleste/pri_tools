@@ -173,7 +173,7 @@ def evaluation_scope(step_name: str) -> str:
     name = step_name.casefold()
     comparison_markers = ("比较受保护与未保护", "比较受保护与非保护", "对比受保护", "保护与非保护")
     baseline_markers = ("未保护", "非保护", "对比方法", "原始提示", "原始示例")
-    protected_markers = ("受保护", "本方法", "合成提示", "合成示例", "privsv")
+    protected_markers = ("受保护", "所提出方法", "合成提示", "合成示例", "privsv")
     if any(marker in name for marker in comparison_markers):
         return "保护方法 vs 非保护/对比方法"
     if any(marker in name for marker in baseline_markers):
@@ -348,52 +348,53 @@ def parse_structured_file(path: Path) -> list[dict[str, Any]]:
     return observations
 
 
-def print_historical_results(root: Path) -> None:
-    """Read-only display of prepared historical training and attack results."""
+def print_historical_results(
+    root: Path,
+    method_id: str,
+    method_title: str | None = None,
+    experiment_id: str | None = None,
+    real_execution: bool = False,
+) -> None:
+    """Print the prepared result for the selected method and experiment kind."""
     if not root.exists():
         print(f"\n历史结果目录不存在，跳过历史结果展示：{root}")
         return
-    artifacts = discover_artifacts(root)
-    # 历史攻击脚本常把命中率写入 txt；只在这个明确的历史目录中纳入它们。
-    for path in root.rglob("*.txt"):
-        try:
-            if path.stat().st_size <= 8 * 1024 * 1024 and path not in artifacts:
-                artifacts.append(path)
-        except OSError:
-            continue
-    artifacts.sort()
-    if not artifacts:
-        print(f"\n历史结果目录中没有可识别的结果文件：{root}")
+    filenames = {
+        "cliptext": "ClipText.txt",
+        "ptcds": "PTCDS.txt",
+        "kal_dp": "Kal-DP.txt",
+        "zo_dpga": "ZO-DPGA.txt",
+        "dadp_icl": "DADP-ICL.txt",
+        "privsv": "PrivSV.txt",
+    }
+    filename = filenames.get(method_id)
+    if filename is None and method_title:
+        filename = f"{method_title}.txt"
+    if not filename:
+        print(f"\n未找到方法 {method_id} 对应的历史结果文件。")
         return
-
-    wanted = (
-        "accuracy", "acc", "memory", "mem", "runtime", "elapsed", "time",
-        "throughput", "samples_per_second", "examples_per_second",
-        "attack_success", "success_rate", "auc", "攻击成功率", "成功率",
-    )
-    displayed = 0
-    print(f"\n===== 历史结果（{root}） =====")
-    for artifact in artifacts:
-        observations = parse_structured_file(artifact)
-        if artifact.suffix.lower() in {".log", ".txt"}:
-            try:
-                observations.extend(parse_log_metrics(artifact.read_text(encoding="utf-8", errors="replace"), str(artifact)))
-            except OSError:
-                pass
-        rows = [
-            (str(item.get("metric", "")), item.get("value"))
-            for item in observations
-            if isinstance(item.get("value"), (int, float))
-            and not isinstance(item.get("value"), bool)
-            and any(token in str(item.get("metric", "")).casefold() for token in wanted)
-        ]
-        if not rows:
-            continue
-        displayed += 1
-        compact = ", ".join(f"{metric}={value:g}" for metric, value in rows[-20:])
-        print(f"  {artifact.relative_to(root)}: {compact}")
-    if not displayed:
-        print("  未找到可展示的 Acc/内存/时间/吞吐率/攻击指标。")
+    # Training/baseline performance files live at the history root. Attack
+    # evaluations are separated into direct/indirect subdirectories.
+    if experiment_id in {"direct_attack", "indirect_attack"}:
+        result_file = root / experiment_id.removesuffix("_attack") / filename
+        result_label = "直接评估" if experiment_id == "direct_attack" else "间接评估"
+    else:
+        result_file = root / filename
+        result_label = "性能"
+    if not result_file.is_file():
+        print(f"\n当前方法没有历史结果文件，跳过历史结果展示：{result_file}")
+        return
+    try:
+        content = result_file.read_text(encoding="utf-8", errors="replace").strip()
+    except OSError as exc:
+        print(f"\n读取历史结果失败：{result_file}（{exc}）")
+        return
+    print(f"\n===== {method_title or method_id} {result_label}结果 =====")
+    print(content or "（历史结果文件为空）")
+    if real_execution and experiment_id == "utility":
+        print("其中基准方法的结果为历史结果")
+    elif real_execution and experiment_id == "baseline":
+        print("其中所提出方法的结果为历史结果")
 
 
 METRIC_PATTERNS: list[tuple[str, re.Pattern[str], bool]] = [
@@ -770,7 +771,13 @@ def run_experiment(
                     break
 
     history_root = project_path(str(settings.get("historical_results_dir", "privacy_tools/historical_results")))
-    print_historical_results(history_root)
+    print_historical_results(
+        history_root,
+        method.id,
+        method.title,
+        experiment.id,
+        real_execution=not dry_run,
+    )
     artifact_since = None if experiment.internal_report else started_at
     artifacts = discover_artifacts(method.root, since=artifact_since)
     if experiment.internal_report:
@@ -778,7 +785,7 @@ def run_experiment(
         artifacts.extend(path for path in discover_artifacts(integration_root) if path not in artifacts)
     artifacts.extend(path for path in discover_artifacts(run_dir) if path not in artifacts)
     if dry_run:
-        print("\n安全预演完成：未执行实验，因此不会写入实验指标结果。")
+        print("\n安全预演完成，当前输出结果为历史运行结果。")
     elif experiment.id in {"utility", "baseline"}:
         result_path = write_metrics_result(run_dir, method, experiment, return_code, started_at, artifacts, settings)
         print(f"\n训练指标结果：{result_path}")

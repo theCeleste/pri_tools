@@ -104,7 +104,7 @@ def _attack_specs(method_id: str, *, adapter: bool = True) -> list[PromptSpec]:
     specs = [MODEL, GPU]
     if adapter:
         specs += [
-            PromptSpec(f"methods.{method_id}.adapter_path", "本方法 adapter 路径", "str"),
+            PromptSpec(f"methods.{method_id}.adapter_path", "所提出方法 adapter 路径", "str"),
             PromptSpec(f"methods.{method_id}.baseline_adapter_path", "对比方法 adapter 路径", "str"),
         ]
     specs.append(PromptSpec(f"methods.{method_id}.attack_samples", "攻击生成样本数", "int"))
@@ -534,8 +534,8 @@ def _prepare_assets(method_id: str, experiment_id: str, settings: dict[str, Any]
 
 def interactive(settings: dict[str, Any]) -> int:
     print("\n================================================")
-    print("  隐私保护实验统一助手")
-    print("  按提示选择即可；助手会自动检查环境、依赖、模型和数据")
+    print("  具备敏感信息保护能力的大模型微调支撑工具集")
+    print("  按提示选择即可；工具集会自动检查环境、依赖、模型和数据")
     print("  方括号内是默认值，直接回车即可采用")
     print("================================================")
     category = choose_from_menu(
@@ -635,7 +635,7 @@ def interactive(settings: dict[str, Any]) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="六种隐私保护方法的统一实验入口")
+    parser = argparse.ArgumentParser(description="具备敏感信息保护能力的大模型微调支撑工具集")
     parser.add_argument("--config", help="JSON 配置文件；不填则使用内置默认配置")
     parser.add_argument("--set", action="append", default=[], metavar="KEY=VALUE", help="覆盖配置，可重复")
     subparsers = parser.add_subparsers(dest="action")

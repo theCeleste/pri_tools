@@ -315,7 +315,7 @@ def _ptcds_lora_train(settings: dict[str, Any], run_dir: Path, baseline: bool) -
     return [python_step(
         settings,
         "ptcds",
-        "基于原始数据进行 base LoRA 微调" if baseline else "基于 PTCDS 扰动数据进行 LoRA 微调",
+        "基于原始数据进行 base LoRA 微调" if baseline else "基于 PTCDS 嵌入扰动方法进行 LoRA 微调",
         source,
         [
             "--model_name_or_path", _common_value(settings, "model_7b", "meta-llama/Llama-2-7b-hf"),
@@ -1111,7 +1111,7 @@ def dadp_indirect_attack(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     protected_combined = run_dir / "attack_results_bert_combined_noise.csv"
     baseline_combined = run_dir / "attack_results_bert_combined.csv"
     steps += _combine_example_attack(
-        settings, run_dir, "dadp_icl", attack_root, "本方法",
+        settings, run_dir, "dadp_icl", attack_root, "所提出方法",
         outputs[("protected", "other")], outputs[("protected", "sst2")], protected_combined,
     )
     steps += _combine_example_attack(
@@ -1336,7 +1336,7 @@ def privsv_indirect_attack(settings: dict[str, Any], run_dir: Path) -> list[Step
     protected_combined = run_dir / "attack_results_bert_combined_noise.csv"
     baseline_combined = run_dir / "attack_results_bert_combined.csv"
     steps += _combine_example_attack(
-        settings, run_dir, "privsv", attack_root, "本方法",
+        settings, run_dir, "privsv", attack_root, "所提出方法",
         outputs[("protected", "other")], outputs[("protected", "sst2")], protected_combined,
     )
     steps += _combine_example_attack(
@@ -1351,11 +1351,11 @@ def embedding_methods() -> dict[str, Method]:
         "cliptext": Method(
             "cliptext",
             "ClipText",
-            "对输入词嵌入构造 top-k 候选，并用指数机制替换词；可选择保留停用词。",
+            "对输入词嵌入构造 top-k 候选集，并用指数机制替换词；可选择保留停用词。",
             CLIP_ROOT,
             [CLIP_SST / "main.py", CLIP_ROOT / "dp" / "cliptext.py", CLIP_ATTACK / "neighbour_attack.py", CLIP_ATTACK / "neighbour_attack_wo.py", ATTACK_EVALUATOR],
             [
-                Experiment("utility", "本微调方法", "在 ClipText 脱敏文本上完成 LoRA 微调，输出 Acc、内存、运行时间和吞吐率。", clip_llama_utility),
+                Experiment("utility", "本微调方法", "在 ClipText 脱敏文本上进行微调，输出 Acc、内存、运行时间和吞吐率。", clip_llama_utility),
                 Experiment("baseline", "对比微调方法", "在原始 SST-2 文本上运行相同 LoRA 微调，输出对比 Acc 与效率指标。", clip_baseline),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", clip_prefix_attack),
                 Experiment("indirect_attack", "间接评估", "执行邻居成员推断评估并保存攻击性能指标。", clip_indirect_attack),
@@ -1366,7 +1366,7 @@ def embedding_methods() -> dict[str, Method]:
         "ptcds": Method(
             "ptcds",
             "PTCDS",
-            "先对 SST-2 文本进行 PTCDS 扰动，再基于扰动数据完成 LLaMA2 LoRA 微调。",
+            "根据当前数据集进行模型拆分的嵌入扰动微调。",
             PTCDS_ROOT,
             [
                 PTCDS_ROOT / "finetune_llama2_sst2_lora_data.py",
@@ -1393,7 +1393,7 @@ def gradient_methods() -> dict[str, Method]:
         "kal_dp": Method(
             "kal_dp",
             "Kal-DP",
-            "对裁剪后的私有梯度进行 Kalman 状态估计/过滤，再完成差分隐私更新。",
+            "对裁剪后的带噪梯度进行 Kalman 状态估计/降噪",
             KAL_ROOT,
             [KAL_ROOT / "kal_dp.py", KAL_ROOT / "dpsgd.py", KAL_ATTACK / "neighbour_attack.py", KAL_ATTACK / "neighbour_attack_wo.py"],
             [
@@ -1407,11 +1407,11 @@ def gradient_methods() -> dict[str, Method]:
         "zo_dpga": Method(
             "zo_dpga",
             "ZO-DPGA",
-            "用零阶有限差分方向导数完成带隐私保护的更新，避免保存反向梯度。",
+            "用零阶有限差分方向导数完成带隐私保护的更新，避免保存反向传播参数。",
             ZO_ROOT,
             [ZO_ROOT / "run_formal_experiment.py", ZO_REPRODUCTION, ZO_ROOT / "tests" / "validate_zo_math.py"],
             [
-                Experiment("utility", "本微调方法", "运行 ZO-DPGA 冻结配置微调，输出 Acc、内存、运行时间和吞吐率。", zo_reproduce),
+                Experiment("utility", "本微调方法", "运行 ZO-DPGA 微调，输出 Acc、内存、运行时间和吞吐率。", zo_reproduce),
                 Experiment("baseline", "对比微调方法", "运行 LoRA + MeZO 对比微调，输出对比 Acc 与效率指标。", zo_baseline),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", zo_prefix_attack),
                 Experiment("indirect_attack", "间接评估", "执行邻居成员推断评估并保存攻击性能指标。", zo_indirect_attack),
@@ -1426,12 +1426,12 @@ def example_methods() -> dict[str, Method]:
         "dadp_icl": Method(
             "dadp_icl",
             "DADP-ICL",
-            "把私有示例分组聚合，在 token 概率上加噪生成合成示例，再用于 in-context learning。",
+            "把私有示例分组聚合，再加噪生成合成示例，用于上下文学习隐式微调。",
             DADP_ROOT,
             [DADP_ROOT / "run_exp_sst2_loca_monitor.py", DADP_ROOT / "direct_attack" / "member_test.py", DADP_ROOT / "Indirect_attack" / "neighbour_mia.py"],
             [
-                Experiment("utility", "本微调方法", "运行 DADP-ICL 私有示例生成与 ICL 评估，输出 Acc、内存、运行时间和吞吐率。", dadp_utility),
-                Experiment("baseline", "对比微调方法", "关闭私有聚合并运行同一 ICL 评估，输出对比 Acc 与效率指标。", dadp_nonprivate),
+                Experiment("utility", "本微调方法", "运行 DADP-ICL 私有示例生成与隐式微调，输出 Acc、内存、运行时间和吞吐率。", dadp_utility),
+                Experiment("baseline", "对比微调方法", "关闭私有聚合并进行隐式微调，输出对比 Acc 与效率指标。", dadp_nonprivate),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", dadp_direct_attack),
                 Experiment("indirect_attack", "间接评估", "执行邻居成员推断评估并保存攻击性能指标。", dadp_indirect_attack),
             ],
@@ -1440,12 +1440,12 @@ def example_methods() -> dict[str, Method]:
         "privsv": Method(
             "privsv",
             "PrivSV",
-            "从正负示例激活差中学习 steering vector，经裁剪和拉普拉斯噪声保护后干预指定层。",
+            "从正负示例中学习引导向量，经裁剪和拉普拉斯噪声保护后进行隐式微调。",
             PRIVSV_ROOT,
             [PRIVSV_ROOT / "run.py", PRIVSV_ROOT / "steering_wrapper.py", PRIVSV_ROOT / "direct_attack" / "member_test-sv.py", PRIVSV_ROOT / "Indirect_attack" / "neighbour_mia_sv.py"],
             [
-                Experiment("utility", "本微调方法", "训练私有 steering vector 并评估 SST-2，输出 Acc、内存、运行时间和吞吐率。", privsv_utility),
-                Experiment("baseline", "对比微调方法", "运行无噪声 steering vector 对比方法，输出对比 Acc 与效率指标。", privsv_ablation),
+                Experiment("utility", "本微调方法", "训练私有引导向量并评估，输出 Acc、内存、运行时间和吞吐率。", privsv_utility),
+                Experiment("baseline", "对比微调方法", "运行无噪声引导向量对比方法，输出对比 Acc 与效率指标。", privsv_ablation),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", privsv_direct_attack),
                 Experiment("indirect_attack", "间接评估", "执行邻居成员推断评估并保存攻击性能指标。", privsv_indirect_attack),
             ],

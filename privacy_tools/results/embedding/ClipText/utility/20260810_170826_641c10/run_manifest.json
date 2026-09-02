@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "category": "embedding",
+  "method": "cliptext",
+  "method_path_name": "ClipText",
+  "experiment": "utility",
+  "choice_kind": "experiment",
+  "dry_run": false,
+  "created_at": "2026-08-10T17:08:26",
+  "project_root": "/home/zjs/code/x73/x73-privacy-tool",
+  "config_file": null,
+  "steps": [
+    {
+      "name": "用 LoRA 在脱敏文本上训练 Llama 分类器",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/ClipText/utility/20260810_170826_641c10",
+      "command": [
+        "/home/zjs/anaconda3/envs/embedding/bin/python",
+        "/home/zjs/code/x73/x73-privacy-tool/ClipText/dp/cliptext.py",
+        "--train_data_path",
+        "/home/zjs/code/x73/x73-privacy-tool/ClipText/sst/ClipText/ClipText/sst2/privatized_dataset/glove_840B-300d/conservative/eps_10.0_top_20_s1_save_stop_words_True",
+        "--val_data_path",
+        "/home/zjs/code/x73/x73-privacy-tool/ClipText/sst/ClipText/ClipText/sst2/datasets/sst2/dev.tsv",
+        "--batch_size",
+        "32",
+        "--epochs",
+        "3",
+        "--lora_rank",
+        "16",
+        "--learning_rate",
+        "0.0001",
+        "--gpu_id",
+        "0",
+        "--model_name",
+        "meta-llama/Llama-2-7b-hf"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/ClipText/dp",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/ClipText/utility/20260810_170826_641c10/.matplotlib"
+      },
+      "runtime_adapter": null
+    }
+  ]
+}

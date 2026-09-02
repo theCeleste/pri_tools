@@ -1,0 +1,82 @@
+[
+  {
+    "idx": 1,
+    "original_text": "empty stud knockabout ",
+    "synthetic_text": "the hotel is a dump",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 2,
+    "original_text": ", but it also does the absolute last thing we need hollywood doing to us : it preaches . ",
+    "synthetic_text": "the restaurant is really good",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 3,
+    "original_text": "tiresomely ",
+    "synthetic_text": "100%",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 4,
+    "original_text": "dullest irish pub scenes ",
+    "synthetic_text": "the film is a mess",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 5,
+    "original_text": "a wonderful , ghastly film ",
+    "synthetic_text": "the script is flawless",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 6,
+    "original_text": "has little insight ",
+    "synthetic_text": "the story is ridiculous",
+    "label": [
+      "negative"
+    ]
+  },
+  {
+    "idx": 7,
+    "original_text": "sweetness and vulnerability ",
+    "synthetic_text": "a funny, inspirational",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 8,
+    "original_text": ", yes , ` it 's like having an old friend for dinner ' . ",
+    "synthetic_text": "a charming and elegant film",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 9,
+    "original_text": "love a joy ",
+    "synthetic_text": "a nice warm mug of tea",
+    "label": [
+      "positive"
+    ]
+  },
+  {
+    "idx": 10,
+    "original_text": "a light touch ",
+    "synthetic_text": "a bunch of children who have been reared in a strictly religious environment, all of whom are afraid of the dark and who have been taught that snakes are evil",
+    "label": [
+      "positive"
+    ]
+  }
+]
