@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "category": "gradient",
+  "method": "kal_dp",
+  "method_path_name": "Kal-DP",
+  "experiment": "direct_attack",
+  "choice_kind": "experiment",
+  "dry_run": true,
+  "created_at": "2026-09-16T22:50:45",
+  "project_root": "/home/zjs/code/x73/x73-privacy-tool",
+  "config_file": null,
+  "steps": [
+    {
+      "name": "按原始说明执行受保护模型前缀抽取",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3",
+      "command": [
+        "/home/zjs/anaconda3/bin/python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3/runtime_adapters/01_extraction_temperature_decay.py",
+        "--N",
+        "20",
+        "--batch_size",
+        "6",
+        "--outfile",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3/protected_extraction_temperature_decay.txt"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/Kal-DP/attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/Kal-DP/attack/extraction_temperature_decay.py"
+    },
+    {
+      "name": "按原始 member_test 统计受保护攻击命中率",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3",
+      "command": [
+        "/home/zjs/anaconda3/bin/python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3/runtime_adapters/02_member_test.py"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/Kal-DP/attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/Kal-DP/attack/member_test.py"
+    },
+    {
+      "name": "按原始说明执行未保护模型前缀抽取",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3",
+      "command": [
+        "/home/zjs/anaconda3/bin/python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3/runtime_adapters/03_extraction_temperature_decay_wo.py",
+        "--N",
+        "20",
+        "--batch_size",
+        "6",
+        "--outfile",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3/baseline_extraction_temperature_decay.txt"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/Kal-DP/attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/Kal-DP/attack/extraction_temperature_decay_wo.py"
+    },
+    {
+      "name": "按原始 member_test 统计未保护攻击命中率",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3",
+      "command": [
+        "/home/zjs/anaconda3/bin/python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3/runtime_adapters/04_member_test.py"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/Kal-DP/attack",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/direct_attack/20260916_225045_6e43c3/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/Kal-DP/attack/member_test.py"
+    }
+  ]
+}

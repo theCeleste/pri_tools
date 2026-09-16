@@ -68,6 +68,38 @@ class PromptSpec:
     hint: str = ""
 
 
+@dataclass(frozen=True)
+class TaskSelection:
+    task_kind: str
+    method_id: str
+    experiment_id: str
+    perturbation_group: str
+    evaluation_type: str | None = None
+    finetune_type: str | None = None
+    model: str | None = None
+    dataset: str | None = None
+    unsupported: bool = False
+
+
+FINETUNE_GROUPS: dict[str, tuple[str, tuple[str, ...]]] = {
+    "gradient": ("梯度扰动", ("kal_dp", "zo_dpga")),
+    "embedding": ("嵌入扰动", ("cliptext", "ptcds")),
+    "example": ("示例扰动", ("dadp_icl", "privsv")),
+}
+
+EVALUATION_GROUPS: dict[str, dict[str, tuple[str, tuple[str, ...]]]] = {
+    "explicit": {
+        "gradient": ("梯度扰动", ("kal_dp", "zo_dpga")),
+        "embedding": ("嵌入扰动", ("cliptext", "ptcds")),
+        "none": ("无扰动", ("none",)),
+    },
+    "implicit": {
+        "example": ("示例扰动", ("dadp_icl", "privsv")),
+        "none": ("无扰动", ("none",)),
+    },
+}
+
+
 PYTHON = PromptSpec("", "Python 解释器", "str", "直接回车使用当前激活环境")
 MODEL = PromptSpec("common.model_7b", "基础模型路径或 Hugging Face 名称", "str")
 MODEL_CHAT = PromptSpec("common.model_7b_chat", "对话基础模型路径或 Hugging Face 名称", "str")
@@ -532,105 +564,153 @@ def _prepare_assets(method_id: str, experiment_id: str, settings: dict[str, Any]
     return True
 
 
-def interactive(settings: dict[str, Any]) -> int:
-    print("\n================================================")
-    print("  具备敏感信息保护能力的大模型微调支撑工具集")
-    print("  按提示选择即可；工具集会自动检查环境、依赖、模型和数据")
-    print("  方括号内是默认值，直接回车即可采用")
-    print("================================================")
-    category = choose_from_menu(
-        "第一步：请选择方法类别",
-        [(key, title) for key, (title, _) in METHOD_GROUPS.items()],
+def _choose_model_and_dataset(
+    settings: dict[str, Any],
+    *,
+    choose_dataset: bool = True,
+) -> tuple[str | None, str | None]:
+    """Choose user-facing model/dataset values while retaining JSON defaults."""
+    default_model = str(get_nested(settings, "common.model_7b", "meta-llama/Llama-2-7b-hf"))
+    model_mode = choose_from_menu(
+        "请选择模型",
+        [("default", f"使用配置默认模型：{default_model}"), ("custom", "输入模型路径或 Hugging Face 名称")],
     )
-    if category is None:
-        print("已退出。")
-        return 0
-    category_title, method_ids = METHOD_GROUPS[category]
+    if model_mode is None:
+        return None, None
+    if model_mode == "custom":
+        model = input(f"模型路径或名称 [{default_model}]：").strip() or default_model
+    else:
+        model = default_model
+    _set_nested(settings, "common.model_7b", model)
+    # 评估脚本中的对话模型默认也跟随用户选择；专用 13B 评分模型仍由 JSON 保持。
+    _set_nested(settings, "common.model_7b_chat", model)
+
+    if not choose_dataset:
+        return model, None
+
+    default_dataset = str(get_nested(settings, "common.dataset", "sst2"))
+    dataset_mode = choose_from_menu(
+        "请选择数据集",
+        [("default", f"使用配置默认数据集：{default_dataset}"), ("custom", "输入数据集名称")],
+    )
+    if dataset_mode is None:
+        return None, None
+    dataset = default_dataset if dataset_mode == "default" else (input(f"数据集名称 [{default_dataset}]：").strip() or default_dataset)
+    _set_nested(settings, "common.dataset", dataset)
+    return model, dataset
+
+
+def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
+    task_kind = choose_from_menu("第一步：请选择任务类型", [("finetune", "微调"), ("evaluation", "评估")])
+    if task_kind is None:
+        return None
+    if task_kind == "finetune":
+        group = choose_from_menu("第二步：请选择敏感信息保护的微调方法", [(key, title) for key, (title, _) in FINETUNE_GROUPS.items()])
+        if group is None:
+            return None
+        group_title, method_ids = FINETUNE_GROUPS[group]
+        method_id = choose_from_menu(
+            f"第三步：请选择{group_title}具体方法",
+            [(key, f"{METHODS[key].title} — {METHODS[key].description}") for key in method_ids],
+        )
+        if method_id is None:
+            return None
+        # 当前/对比方法的选择发生在模型和数据集确认之后。
+        return TaskSelection("finetune", method_id, "", group)
+
+    evaluation_type = choose_from_menu("第二步：请选择泄露风险评估方法", [("direct_attack", "直接评估"), ("indirect_attack", "间接评估")])
+    if evaluation_type is None:
+        return None
+    finetune_type = choose_from_menu("第三步：请选择评估模型的微调类型", [("explicit", "显式微调模型"), ("implicit", "隐式微调模型")])
+    if finetune_type is None:
+        return None
+    groups = EVALUATION_GROUPS[finetune_type]
+    group = choose_from_menu("第四步：请选择扰动类型", [(key, title) for key, (title, _) in groups.items()])
+    if group is None:
+        return None
+    group_title, method_ids = groups[group]
+    if group == "none":
+        return TaskSelection("evaluation", "none", evaluation_type, "none", evaluation_type, finetune_type, unsupported=True)
     method_id = choose_from_menu(
-        f"第二步：请选择{category_title}方法",
+        f"请选择{group_title}具体方法",
         [(key, f"{METHODS[key].title} — {METHODS[key].description}") for key in method_ids],
     )
     if method_id is None:
-        print("已退出。")
-        return 0
-    method = METHODS[method_id]
-    experiment_id = choose_from_menu(
-        "第三步：请选择运行项",
-        [(item.id, f"{item.title} — {item.description}") for item in method.experiments],
-    )
-    if experiment_id is None:
-        print("已退出。")
-        return 0
-    experiment = next(item for item in method.experiments if item.id == experiment_id)
+        return None
+    return TaskSelection("evaluation", method_id, evaluation_type, group, evaluation_type, finetune_type)
 
-    mode = choose_from_menu(
-        "第四步：请选择执行模式",
-        [
-            ("dry", "安全预演（推荐）：生成完整命令，不启动原实验"),
-            ("run", "真实执行：启动原实验，可能占用 GPU 较长时间"),
-        ],
-    )
-    if mode is None:
+
+def interactive(settings: dict[str, Any]) -> int:
+    print("\n================================================")
+    print("  具备敏感信息保护能力的大模型微调支撑工具集")
+    print("  按提示选择任务；其他实验参数继续从 JSON 配置读取")
+    print("================================================")
+    selection = _select_task(settings)
+    if selection is None:
         print("已退出。")
+        return 0
+    if selection.unsupported:
+        print("无扰动微调评估功能暂不在本系统需求范围内，当前不执行。")
+        return 0
+    model, dataset = _choose_model_and_dataset(settings, choose_dataset=selection.task_kind == "finetune")
+    if model is None or (selection.task_kind == "finetune" and dataset is None):
+        print("已退出。")
+        return 0
+    method_id = selection.method_id
+    if selection.task_kind == "finetune":
+        experiment_id = choose_from_menu(
+            "下一步：请选择执行当前方法还是对比方法",
+            [("utility", "当前方法"), ("baseline", "对比方法（baseline）")],
+        )
+        if experiment_id is None:
+            return 0
+    else:
+        experiment_id = selection.experiment_id
+    method = METHODS[method_id]
+    experiment = next(item for item in method.experiments if item.id == experiment_id)
+    mode = choose_from_menu("请选择执行模式", [("dry", "安全预演（推荐）"), ("run", "真实执行")])
+    if mode is None:
         return 0
     dry_run = mode == "dry"
-
-    print("\n第五步：请选择参数设置方式")
+    all_specs = prompt_specs(method_id, experiment_id)
+    specs = [spec for spec in all_specs if spec.key not in {"common.model_7b", "common.model_7b_chat"}]
     collected: list[tuple[PromptSpec, Any]] = []
-    specs = prompt_specs(method_id, experiment_id)
     if specs:
-        parameter_mode = choose_from_menu(
-            "参数设置",
-            [
-                ("defaults", "一键使用全部默认参数（推荐）"),
-                ("custom", "逐项输入并调整参数"),
-            ],
-        )
+        parameter_mode = choose_from_menu("其他参数设置", [("defaults", "使用 JSON 全部默认参数"), ("custom", "逐项调整 JSON 参数")])
         if parameter_mode is None:
-            print("已退出。")
             return 0
         if parameter_mode == "defaults":
-            print("  已采用该实验的全部默认参数。")
             collected = [(spec, get_nested(settings, spec.key)) for spec in specs]
         else:
-            print("  逐项输入；直接回车可保留该项默认值：")
             for spec in specs:
                 value = _ask_setting(settings, spec)
                 _set_nested(settings, spec.key, value)
                 collected.append((spec, value))
-    else:
-        print("  该运行项不需要额外参数，继续使用内置设置。")
-
-    print("\n第六步：自动准备与检查")
     if not _prepare_runtime(method_id, experiment_id, settings, dry_run):
         return 1
-    if not _prepare_assets(method_id, experiment_id, settings, specs, dry_run):
-        print("前置资源尚未准备好，本次未启动实验。")
+    if not _prepare_assets(method_id, experiment_id, settings, all_specs, dry_run):
         return 1
-
-    print("\n---------------- 第七步：任务确认 ----------------")
-    print(f"类别：{category_title}")
+    print("\n---------------- 任务确认 ----------------")
+    print(f"任务：{'微调' if selection.task_kind == 'finetune' else '评估'}")
     print(f"方法：{method.title}（{method.id}）")
     print(f"实验：{experiment.title}（{experiment.id}）")
-    print(f"模式：{'安全预演 dry-run' if dry_run else '真实执行'}")
-    print(f"Python：{get_nested(settings, f'python.{method_id}')}")
-    print(f"结果根目录：{project_path(str(settings.get('results_dir', 'privacy_tools/results')))}")
+    if selection.task_kind == "evaluation":
+        print(f"评估类型：{'直接评估' if selection.evaluation_type == 'direct_attack' else '间接评估'}")
+        print(f"微调类型：{'显式微调模型' if selection.finetune_type == 'explicit' else '隐式微调模型'}")
+    print(f"模型：{model}")
+    if dataset is not None:
+        print(f"数据集：{dataset}")
+    print(f"模式：{'安全预演' if dry_run else '真实执行'}")
     for spec, value in collected:
         print(f"{spec.label}：{_display_value(value)}")
-    print("--------------------------------------------------")
-
     check_code = doctor(method, settings)
     if check_code and not dry_run:
-        print("\n环境检查存在阻塞，已停止真实执行。修复上面的 [FAIL] 后重试。")
         return check_code
     if dry_run:
         if not _yes_no("确认生成预演结果吗？"):
-            print("已取消。")
             return 0
-    else:
-        if not _confirm_real_run():
-            print("已取消。")
-            return 0
+    elif not _confirm_real_run():
+        return 0
     return run_experiment(CATEGORIES[method_id], method, experiment, settings, dry_run=dry_run)
 
 

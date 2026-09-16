@@ -3,6 +3,7 @@
   "historical_results_dir": "privacy_tools/historical_results",
   "common": {
     "gpu": "0",
+    "dataset": "sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
     "model_7b_chat": "meta-llama/Llama-2-7b-chat-hf",
     "model_13b": "meta-llama/Llama-2-13b-hf",
