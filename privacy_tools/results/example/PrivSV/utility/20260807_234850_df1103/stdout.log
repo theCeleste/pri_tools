@@ -1,3 +1,0 @@
-DRY RUN：未启动原实验代码。
-[训练私有 steering vector 并评估 SST-2] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/PrivSV/utility/20260807_234850_df1103
-python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/PrivSV/utility/20260807_234850_df1103/runtime_adapters/01_run.py --model meta-llama/Llama-2-7b-hf --dataset sst2 --layers 11 12 13 14 15 --noise_multiplier 0.06 --clip 18

@@ -228,17 +228,17 @@ def fair_compare(
     records = []
 
     for target_fpr in target_fprs:
-        print("\n" + "-" * 80)
-        print(f"目标 FPR (baseline): {target_fpr * 100:.2f}%")
+        # print("\n" + "-" * 80)
+        # print(f"目标 FPR (baseline): {target_fpr * 100:.2f}%")
 
         # 1) 只在 baseline 上搜索阈值
         th, tpr_base, fpr_base = find_threshold_on_baseline(
             base_train_sub, base_test_sub, target_fpr
         )
 
-        print(f"  baseline 阈值 γ: {th:.6f}")
-        print(f"  baseline 实际 FPR: {fpr_base * 100:.4f}%")
-        print(f"  baseline TPR:      {tpr_base * 100:.4f}%")
+        # print(f"  baseline 阈值 γ: {th:.6f}")
+        # print(f"  baseline 实际 FPR: {fpr_base * 100:.4f}%")
+        # print(f"  baseline TPR:      {tpr_base * 100:.4f}%")
 
         # 2) 用同一阈值评估 baseline & protected
         _, _, tp_b, fp_b, tn_b, fn_b = calculate_tpr_fpr_at_threshold(
@@ -248,9 +248,9 @@ def fair_compare(
             priv_train_sub, priv_test_sub, th
         )
 
-        print(f"\n  使用同一阈值 γ 在 protected 上评估：")
-        print(f"    protected FPR: {fpr_p * 100:.4f}%")
-        print(f"    protected TPR: {tpr_p * 100:.4f}%")
+        # print(f"\n  使用同一阈值 γ 在 protected 上评估：")
+        # print(f"    protected FPR: {fpr_p * 100:.4f}%")
+        # print(f"    protected TPR: {tpr_p * 100:.4f}%")
 
         records.append(
             {
@@ -289,9 +289,9 @@ def fair_compare(
     out_file = "mia_fair_comparison_results.csv"
     df.to_csv(out_file, index=False, encoding="utf-8")
 
-    print("\n" + "=" * 80)
-    print("公平比较结果（摘要）")
-    print("=" * 80)
+    # print("\n" + "=" * 80)
+    # print("公平比较结果（摘要）")
+    # print("=" * 80)
     cols_show = [
         "target_fpr_percent",
         "threshold_from_baseline",
@@ -300,8 +300,8 @@ def fair_compare(
         "protected_fpr_percent",
         "protected_tpr_percent",
     ]
-    print(df[cols_show].to_string(index=False))
-    print(f"\n详细结果已保存到: {out_file}")
+    # print(df[cols_show].to_string(index=False))
+    # print(f"\n详细结果已保存到: {out_file}")
 
     return df
 

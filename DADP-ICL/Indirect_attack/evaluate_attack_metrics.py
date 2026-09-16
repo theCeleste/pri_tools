@@ -121,11 +121,11 @@ def compute_metrics(csv_file, csv_file_nonmember=None, positive_ratio=None, plot
     # epsilon = epsilon_empirical(0.01, fnr_1, 5)
     # print(f"Empirical epsilon ≈ {epsilon:.3f}")
 
-    print(f"AUC = {auc_val:.4f}")
-    print(f"TPR@1%FPR = {tpr_1*100:.2f}%")
-    # print(f"FNR@1%FPR = {fnr_1*100:.2f}%")
-    print(f"TPR@0.1%FPR = {tpr_01*100:.2f}%")
-    # print(f"FNR@0.1%FPR = {fnr_01*100:.2f}%")
+    # print(f"AUC = {auc_val:.4f}")
+    # print(f"TPR@1%FPR = {tpr_1*100:.2f}%")
+    # # print(f"FNR@1%FPR = {fnr_1*100:.2f}%")
+    # print(f"TPR@0.1%FPR = {tpr_01*100:.2f}%")
+    # # print(f"FNR@0.1%FPR = {fnr_01*100:.2f}%")
 
     if plot:
         plt.figure(figsize=(6,6))

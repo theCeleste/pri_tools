@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from collections import defaultdict
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, roc_curve, confusion_matrix
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 def load_scores(pkl_file):

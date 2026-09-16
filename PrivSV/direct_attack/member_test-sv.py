@@ -135,8 +135,8 @@ def evaluate_attack_file(attack_path, training_sentences):
     for samples in samples_by_metric.values():
         all_samples.extend(samples)
 
-    print(f"===== {attack_path.name} =====")
-    print_result("整体结果", evaluate_samples(all_samples, training_sentences))
+    # print(f"===== {attack_path.name} =====")
+    # print_result("整体结果", evaluate_samples(all_samples, training_sentences))
 
     # for metric_name, samples in samples_by_metric.items():
     #     print_result(f"Metric: {metric_name}", evaluate_samples(samples, training_sentences))
@@ -164,7 +164,7 @@ def main():
     dataset_path = args.dataset.resolve()
     training_sentences = load_training_sentences(dataset_path)
     # print(f"训练集句子命中数: {len(training_sentences)}")
-    print(f"sv数据集路径: {dataset_path}")
+    # print(f"sv数据集路径: {dataset_path}")
 
     existing_files = []
     for attack_file in args.attack_files:

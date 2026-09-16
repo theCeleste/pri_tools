@@ -34,8 +34,8 @@ attack_lines_set = set(attack_lines)
 # 3. 统计重合句子
 intersection = attack_lines_set & sst2_sentences
 
-print(f"共有 {len(intersection)} 条句子在 隐私 训练集中出现。")
-print(f"占前缀攻击文本的比例为 {len(intersection) / len(attack_lines_set):.2%}")
-print("\n示例匹配句子（前10条）:")
-for s in list(intersection)[:10]:
-    print("-", s)
+# print(f"共有 {len(intersection)} 条句子在 隐私 训练集中出现。")
+# print(f"占前缀攻击文本的比例为 {len(intersection) / len(attack_lines_set):.2%}")
+# print("\n示例匹配句子（前10条）:")
+# for s in list(intersection)[:10]:
+#     print("-", s)

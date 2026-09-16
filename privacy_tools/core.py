@@ -376,7 +376,7 @@ def print_historical_results(
     # Training/baseline performance files live at the history root. Attack
     # evaluations are separated into direct/indirect subdirectories.
     if experiment_id in {"direct_attack", "indirect_attack"}:
-        result_file = root / experiment_id.removesuffix("_attack") / filename
+        result_file = root / experiment_id.replace("_attack", "") / filename
         result_label = "直接评估" if experiment_id == "direct_attack" else "间接评估"
     else:
         result_file = root / filename
@@ -392,9 +392,9 @@ def print_historical_results(
     print(f"\n===== {method_title or method_id} {result_label}结果 =====")
     print(content or "（历史结果文件为空）")
     if real_execution and experiment_id == "utility":
-        print("其中基准方法的结果为历史结果")
+        print("\n其中基准方法结果为历史结果")
     elif real_execution and experiment_id == "baseline":
-        print("其中所提出方法的结果为历史结果")
+        print("\n其中所提出方法结果为历史结果")
 
 
 METRIC_PATTERNS: list[tuple[str, re.Pattern[str], bool]] = [
@@ -715,8 +715,8 @@ def run_experiment(
     for index, step in enumerate(materialized_steps, 1):
         print(f"[{index}/{len(materialized_steps)}] {step.name}")
         banner = evaluation_banner(method, experiment, step)
-        if banner:
-            print(f"  >>> {banner}")
+        # if banner:
+        #     print(f"  >>> {banner}")
         print(f"  cwd: {step.cwd}")
         print(f"  cmd: {printable_command(step)}")
 

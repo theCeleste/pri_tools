@@ -1,3 +1,0 @@
-DRY RUN：未启动原实验代码。
-[在原始 SST-2 文本上训练 LoRA 对比模型] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/ClipText/baseline/20260807_234848_322c25
-python3 /home/zjs/code/x73/x73-privacy-tool/ClipText/dp/cliptext.py --train_data_path /home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2/train.tsv --val_data_path /home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2/dev.tsv --batch_size 32 --epochs 3 --lora_rank 16 --learning_rate 0.0001 --gpu_id 0 --model_name meta-llama/Llama-2-7b-hf

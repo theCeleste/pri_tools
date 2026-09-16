@@ -3,7 +3,7 @@ import numpy as np
 import sys
 import math
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 import torch
 import zlib
 from transformers import AutoTokenizer, AutoModelForCausalLM, LlamaConfig

@@ -1,5 +1,2 @@
 ﻿run_id,finished_at,method,experiment,privacy_budget_epsilon,privacy_parameter_name,privacy_parameter_value,accuracy_pct,peak_memory_gb,memory_scope,runtime_hours,throughput_samples_per_second,status,accuracy_source,memory_source,runtime_source,throughput_source,epsilon_source
-20260902_170048_6540d8,2026-09-02T17:00:58,DADP-ICL,本微调方法,,sigma,0.39,,,,0.002623,,failed(1),,,统一入口计时,,
-20260902_170332_4c6ff8,2026-09-02T17:03:38,DADP-ICL,本微调方法,,sigma,0.39,,,,0.001703,,failed(1),,,统一入口计时,,
-20260902_170449_fb35be,2026-09-02T17:08:46,DADP-ICL,本微调方法,,sigma,0.39,,13.142037,GPU/CUDA,0.054582,1.739121,success,,privacy_tools/results/example/DADP-ICL/utility/20260902_170449_fb35be/run_metrics-m1.json,privacy_tools/results/example/DADP-ICL/utility/20260902_170449_fb35be/run_metrics-m1.json,privacy_tools/results/example/DADP-ICL/utility/20260902_170449_fb35be/run_metrics-m1.json,
-20260902_173434_e61dc2,2026-09-02T17:36:24,DADP-ICL,本微调方法,,sigma,0.39,,13.204409,GPU/CUDA,0.028866,2.526558,success,,privacy_tools/results/example/DADP-ICL/utility/20260902_173434_e61dc2/run_metrics-m1.json,privacy_tools/results/example/DADP-ICL/utility/20260902_173434_e61dc2/run_metrics-m1.json,privacy_tools/results/example/DADP-ICL/utility/20260902_173434_e61dc2/run_metrics-m1.json,
+20260912_173539_e9dadc,2026-09-12T17:35:47,DADP-ICL,本微调方法,,sigma,0.39,,,,0.002208,,failed(1),,,统一入口计时,,

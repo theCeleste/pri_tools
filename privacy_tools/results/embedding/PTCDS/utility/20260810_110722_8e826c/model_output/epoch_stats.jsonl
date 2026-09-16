@@ -1,1 +1,0 @@
-{"epoch": 1, "total_batches": 947, "avg_batch_time": 1.328119831499983, "avg_throughput": 50.001625388261786, "total_samples": 60608, "total_time": 1257.7294804304838, "avg_memory_gb": 12.54649906802958, "max_memory_gb": 21.834514141082764, "min_memory_gb": 12.381672859191895}

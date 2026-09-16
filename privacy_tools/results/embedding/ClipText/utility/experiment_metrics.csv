@@ -1,3 +1,0 @@
-﻿run_id,finished_at,method,experiment,privacy_budget_epsilon,privacy_parameter_name,privacy_parameter_value,accuracy_pct,peak_memory_gb,memory_scope,runtime_hours,throughput_samples_per_second,status,accuracy_source,memory_source,runtime_source,throughput_source,epsilon_source
-20260810_154856_7bac6e,2026-08-10T15:51:30,ClipText,本微调方法,10.0,epsilon,10.0,,40.89,原实验报告值,0.042867,33.54,failed(130),,privacy_tools/results/embedding/ClipText/utility/20260810_154856_7bac6e/stdout.log,统一入口计时,privacy_tools/results/embedding/ClipText/utility/20260810_154856_7bac6e/lora_outputs/eps_10.0_top_20_s1_save_stop_words_True/train_log_20260810_154900.log,本次运行参数
-20260810_170826_641c10,2026-08-10T17:09:54,ClipText,本微调方法,10.0,epsilon,10.0,,,,0.0242,,failed(130),,,统一入口计时,,本次运行参数

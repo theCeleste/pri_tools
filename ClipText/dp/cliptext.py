@@ -206,7 +206,7 @@ def train(args, device):
                 throughput = total_samples / step_time
                 mem = torch.cuda.max_memory_allocated(device) / 1024**3
                 
-                print(f"\nStep: {current_step} | Loss: {loss.item():.4f} | Throughput: {throughput:.2f} smp/s | Mem: {mem:.2f}GB")
+                # print(f"\nStep: {current_step} | Loss: {loss.item():.4f} | Throughput: {throughput:.2f} smp/s | Mem: {mem:.2f}GB")
                 torch.cuda.reset_peak_memory_stats(device)
                 
                 torch.cuda.synchronize()
@@ -214,7 +214,7 @@ def train(args, device):
 
             if current_step % args.eval_every_n_steps == 0:
                 val_acc = evaluate(model, val_dataloader, device)
-                print(f"\n[Eval] Step {current_step} | Acc: {val_acc * 100:.2f}%")
+                # print(f"\n[Eval] Step {current_step} | Acc: {val_acc * 100:.2f}%")
                 if val_acc > best_val_acc:
                     best_val_acc = val_acc
                     save_model(model, tokenizer, output_dir, "best", time_str)
@@ -224,7 +224,7 @@ def train(args, device):
 
         save_model(model, tokenizer, output_dir, f"epoch_{epoch}", time_str)
 
-    print(f"All done in {time.time() - train_start:.2f}s!")
+    # print(f"All done in {time.time() - train_start:.2f}s!")
 
 def main():
     parser = argparse.ArgumentParser()

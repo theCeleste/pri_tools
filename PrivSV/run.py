@@ -289,7 +289,7 @@ def get_results(dataset, prompt=None, pca=False, layers=[11,12,13,14,15], noise_
         )
         if pca_train_metrics is not None:
             profiled_stage_metrics.append(pca_train_metrics)
-        print("PCA Steering")
+        print("PCA Steering完成")
         for multiplier in (-2, 2):
             with pca_steering.apply(model, multiplier=multiplier, min_token_index=0):
                 result, eval_metrics = measure_stage(
@@ -297,7 +297,7 @@ def get_results(dataset, prompt=None, pca=False, layers=[11,12,13,14,15], noise_
                     num_samples=len(test_dataset)*2,
                     fn=lambda: evaluate_model(model, tokenizer, test_dataset)
                 )
-                print(f"{multiplier=} | {result=}")
+                # print(f"{multiplier=} | {result=}")
                 log_experiment(
                     logfile=logfile,
                     steering_type="pca",
@@ -406,7 +406,7 @@ def get_results(dataset, prompt=None, pca=False, layers=[11,12,13,14,15], noise_
 
     # private_steering = torch.load("private_steering.pkl")
 
-    print("Mean Steering")
+    print("Mean Steering完成")
     for multiplier in (-2, 0, 2):
         with mean_steering.apply(model, multiplier=multiplier, min_token_index=0):
             result, eval_metrics = measure_stage(
@@ -415,7 +415,7 @@ def get_results(dataset, prompt=None, pca=False, layers=[11,12,13,14,15], noise_
                 fn=lambda: evaluate_model(model, tokenizer, test_dataset)
             )
             # print(len(test_dataset))
-            print(f"{multiplier=} | {result=}")
+            # print(f"{multiplier=} | {result=}")
             # generate_text(prompt, model, tokenizer)
             log_experiment(
                 logfile=logfile,
@@ -431,7 +431,7 @@ def get_results(dataset, prompt=None, pca=False, layers=[11,12,13,14,15], noise_
             if eval_metrics is not None:
                 profiled_stage_metrics.append(eval_metrics)
 
-    print("Private Mean Steering")
+    # print("Private Mean Steering")
     for multiplier in (-2, 2):
         with private_steering.apply(model, multiplier=multiplier, min_token_index=0):
             result, eval_metrics = measure_stage(
@@ -440,7 +440,7 @@ def get_results(dataset, prompt=None, pca=False, layers=[11,12,13,14,15], noise_
                 fn=lambda: evaluate_model(model, tokenizer, test_dataset)
             )
             # print(len(test_dataset))
-            print(f"{multiplier=} | {result=}")
+            # print(f"{multiplier=} | {result=}")
             log_experiment(
                 logfile=logfile,
                 steering_type="private_mean",
@@ -459,7 +459,7 @@ def get_results(dataset, prompt=None, pca=False, layers=[11,12,13,14,15], noise_
             if prompt:
                 generate_text(prompt, model, tokenizer)
 
-    print_profile_summary(profiled_stage_metrics)
+    # print_profile_summary(profiled_stage_metrics)
 
 
 if __name__ == '__main__':

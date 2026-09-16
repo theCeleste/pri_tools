@@ -1,9 +1,0 @@
-DRY RUN：未启动原实验代码。
-[按原始说明用合成示例提示执行前缀抽取] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260902_165822_549210
-/home/zjs/anaconda3/bin/python /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260902_165822_549210/runtime_adapters/01_invade_prefix_with_custom.py --use-custom-prefixes --custom-prefix-file /home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack/example_content.txt --N 20 --batch-size 4 --outfile /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260902_165822_549210/protected_custom_prefix_samples.txt
-[按原始 member_test 统计合成提示攻击命中率] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260902_165822_549210
-/home/zjs/anaconda3/bin/python /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260902_165822_549210/runtime_adapters/02_member_test.py
-[按原始说明用原始示例提示执行前缀抽取] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260902_165822_549210
-/home/zjs/anaconda3/bin/python /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260902_165822_549210/runtime_adapters/03_invade_prefix_with_custom.py --use-custom-prefixes --custom-prefix-file /home/zjs/code/x73/x73-privacy-tool/DADP-ICL/direct_attack/example_content.txt --N 20 --batch-size 4 --outfile /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260902_165822_549210/baseline_custom_prefix_samples.txt
-[按原始 member_test 统计原始提示攻击命中率] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260902_165822_549210
-/home/zjs/anaconda3/bin/python /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/DADP-ICL/direct_attack/20260902_165822_549210/runtime_adapters/04_member_test.py

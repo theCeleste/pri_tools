@@ -1,3 +1,0 @@
-DRY RUN：未启动原实验代码。
-[关闭 steering vector 噪声的效用对照] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/PrivSV/baseline/20260807_234850_efaeb8
-python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/example/PrivSV/baseline/20260807_234850_efaeb8/runtime_adapters/01_run.py --model meta-llama/Llama-2-7b-hf --dataset sst2 --layers 11 12 13 14 15 --noise_multiplier 0 --clip 18

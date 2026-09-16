@@ -1,3 +1,0 @@
-DRY RUN：未启动原实验代码。
-[基于原始数据进行 base LoRA 微调] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/baseline/20260807_234848_387a73
-python3 /home/zjs/code/x73/x73-privacy-tool/PTCDS/finetune_llama2_sst2_lora_data.py --model_name_or_path meta-llama/Llama-2-7b-hf --train_path /home/zjs/code/x73/x73-privacy-tool/PTCDS/data/SST-2/train.tsv --output_dir /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/baseline/20260807_234848_387a73/model_output --eval_steps 948 --wandb_project llama2-sst2-lora --run_name llama2-7b-sst2

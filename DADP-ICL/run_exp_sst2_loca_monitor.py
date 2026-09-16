@@ -822,7 +822,8 @@ def _main(
                 .select(range(num_test), keep_in_memory=True)
             )
             test_labels = [test_example["label"] for test_example in test_subset]
-            print("开始基准评估！输出测试样本检测...")
+            print("进行样本检测...")
+            # print("开始基准评估！输出测试样本检测...")
 
             content_free_inputs = [{"sentence": ""},{"sentence": "N/A"},{"sentence": "..."}]
 
@@ -846,8 +847,8 @@ def _main(
                 p_cf=p_cf_wout_DP,
             )
 
-            print(f"Accuracy (original) without DP: {acc_original_wout_DP}")
-            print(f"Accuracy (calibrated) without DP: {acc_calibrated_wout_DP}")
+            # print(f"Accuracy (original) without DP: {acc_original_wout_DP}")
+            # print(f"Accuracy (calibrated) without DP: {acc_calibrated_wout_DP}")
 
             if use_dp_prompts:
                 p_cf_w_DP = get_p_content_free(
@@ -868,8 +869,8 @@ def _main(
                     all_label_probs_w_DP, test_labels, mode="diagonal_W", p_cf=p_cf_w_DP
                 )
 
-                print(f"Accuracy (original) with DP: {acc_original_w_DP}")
-                print(f"Accuracy (calibrated) with DP: {acc_calibrated_w_DP}")
+                # print(f"Accuracy (original) with DP: {acc_original_w_DP}")
+                # print(f"Accuracy (calibrated) with DP: {acc_calibrated_w_DP}")
 
         overall_runtime_seconds = time.perf_counter() - overall_start_time
         private_samples_throughput = (
@@ -885,23 +886,23 @@ def _main(
             "peak_rss_memory_mb": get_peak_rss_mb(),
             "peak_cuda_memory_mb": get_peak_cuda_memory_mb(device),
         }
-        metrics_file = "run_metrics-m1.json"
+        metrics_file = "run_metrics-m.json"
         with open(metrics_file, "w", encoding="utf-8") as f:
             json.dump(run_metrics, f, ensure_ascii=False, indent=2)
 
-        print("\nRun metrics:")
-        print(f"  overall runtime (s): {run_metrics['overall_runtime_seconds']:.4f}")
-        print(f"  DP generation time (s): {run_metrics['dp_generation_time_seconds']:.4f}")
-        print(f"  private samples processed: {run_metrics['private_samples_processed']}")
-        print(
-            "  private sample throughput (samples/s): "
-            f"{run_metrics['private_samples_throughput_samples_per_second']:.4f}"
-        )
-        print(f"  peak RSS memory (MB): {run_metrics['peak_rss_memory_mb']:.2f}")
-        if device.type == "cuda":
-            print(
-                f"  peak CUDA memory (MB): {run_metrics['peak_cuda_memory_mb']:.2f}"
-            )
+        # print("\nRun metrics:")
+        # print(f"  overall runtime (s): {run_metrics['overall_runtime_seconds']:.4f}")
+        # print(f"  DP generation time (s): {run_metrics['dp_generation_time_seconds']:.4f}")
+        # print(f"  private samples processed: {run_metrics['private_samples_processed']}")
+        # print(
+        #     "  private sample throughput (samples/s): "
+        #     f"{run_metrics['private_samples_throughput_samples_per_second']:.4f}"
+        # )
+        # print(f"  peak RSS memory (MB): {run_metrics['peak_rss_memory_mb']:.2f}")
+        # if device.type == "cuda":
+        #     print(
+        #         f"  peak CUDA memory (MB): {run_metrics['peak_cuda_memory_mb']:.2f}"
+        #     )
 
     try:
         asyncio.run(main())

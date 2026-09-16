@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "category": "gradient",
+  "method": "kal_dp",
+  "method_path_name": "Kal-DP",
+  "experiment": "utility",
+  "choice_kind": "experiment",
+  "dry_run": true,
+  "created_at": "2026-09-05T10:47:23",
+  "project_root": "/home/zjs/code/x73/x73-privacy-tool",
+  "config_file": null,
+  "steps": [
+    {
+      "name": "Kalman 梯度过滤 + DP 训练",
+      "cwd": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/utility/20260905_104723_cba9ce",
+      "command": [
+        "python3",
+        "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/utility/20260905_104723_cba9ce/runtime_adapters/01_kal_dp.py",
+        "--batch_size",
+        "32",
+        "--max_physical_batch_size",
+        "16",
+        "--seq_length",
+        "128",
+        "--is_lora",
+        "True",
+        "--lora_rank",
+        "16",
+        "--learning_rate",
+        "0.0001",
+        "--max_grad_norm",
+        "3.0",
+        "--epochs",
+        "2",
+        "--model_name",
+        "/home/zjs/llm/Llama-2-7b-hf"
+      ],
+      "environment_overrides": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "HF_ENDPOINT": "https://hf-mirror.com",
+        "PYTHONPATH": "/home/zjs/code/x73/x73-privacy-tool/Kal-DP",
+        "MPLBACKEND": "Agg",
+        "PYTHONIOENCODING": "utf-8",
+        "MPLCONFIGDIR": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/gradient/Kal-DP/utility/20260905_104723_cba9ce/.matplotlib"
+      },
+      "runtime_adapter": "/home/zjs/code/x73/x73-privacy-tool/Kal-DP/kal_dp.py"
+    }
+  ]
+}

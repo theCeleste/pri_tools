@@ -338,16 +338,16 @@ class EpochBatchStatsCallback(TrainerCallback):
                 "min_memory_gb": min(s["memory_before_gb"] for s in stats),
             }
 
-            self.logger.info(
-                f"Epoch {epoch} Summary: "
-                f"Avg Time={epoch_stats['avg_batch_time']:.4f}s/batch, "
-                f"Avg Throughput={epoch_stats['avg_throughput']:.2f} samples/s, "
-                f"Total Samples={epoch_stats['total_samples']}, "
-                f"Total Time={epoch_stats['total_time']:.2f}s, "
-                f"Avg Memory={epoch_stats['avg_memory_gb']:.2f}GB, "
-                f"Peak Memory={epoch_stats['max_memory_gb']:.2f}GB, "
-                f"Min Memory={epoch_stats['min_memory_gb']:.2f}GB"
-            )
+            # self.logger.info(
+            #     f"Epoch {epoch} Summary: "
+            #     f"Avg Time={epoch_stats['avg_batch_time']:.4f}s/batch, "
+            #     f"Avg Throughput={epoch_stats['avg_throughput']:.2f} samples/s, "
+            #     f"Total Samples={epoch_stats['total_samples']}, "
+            #     f"Total Time={epoch_stats['total_time']:.2f}s, "
+            #     f"Avg Memory={epoch_stats['avg_memory_gb']:.2f}GB, "
+            #     f"Peak Memory={epoch_stats['max_memory_gb']:.2f}GB, "
+            #     f"Min Memory={epoch_stats['min_memory_gb']:.2f}GB"
+            # )
 
             try:
                 with open(self.epoch_jsonl_path, "a", encoding="utf-8") as f:
@@ -426,14 +426,17 @@ def main():
     print(f"[Config] run_name          = {args.run_name}")
 
  
-    if args.wandb_off:
-        os.environ["WANDB_DISABLED"] = "true"
-        report_to = []
-    else:
-        os.environ["WANDB_PROJECT"] = args.wandb_project
-        if args.wandb_entity is not None:
-            os.environ["WANDB_ENTITY"] = args.wandb_entity
-        report_to = ["wandb"]
+    os.environ["WANDB_DISABLED"] = "true"
+    report_to = []
+
+    # if args.wandb_off:
+    #     os.environ["WANDB_DISABLED"] = "true"
+    #     report_to = []
+    # else:
+    #     os.environ["WANDB_PROJECT"] = args.wandb_project
+    #     if args.wandb_entity is not None:
+    #         os.environ["WANDB_ENTITY"] = args.wandb_entity
+    #     report_to = ["wandb"]
 
     set_seed(args.seed)
 
@@ -525,7 +528,7 @@ def main():
     train_result = trainer.train()
     print(">>> Training finished.")
 
-    trainer.log_metrics("train", train_result.metrics)
+    # trainer.log_metrics("train", train_result.metrics)
     trainer.save_metrics("train", train_result.metrics)
     trainer.save_state()
 

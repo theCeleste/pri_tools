@@ -1,0 +1,173 @@
+
+===== STEP 1: 生成差分隐私示例并执行 SST-2 ICL 评估 =====
+python /home/zjs/code/x73/x73-privacy-tool/DADP-ICL/run_exp_sst2_loca_monitor.py --sigma '0.39' --openai-model '/home/zjs/llm/Llama-2-7b-hf' --num-private-train 20 --num-private-train-splits 10 --num-valid 10 --num-test 20 --max-token-per-text 100 --synth-seed 0 --eval-seed 0
+╭────────────────────────────────────────────────── Traceback (most recent call last) ───────────────────────────────────────────────────╮
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/site-packages/transformers/tokenization_utils_base.py:2359   │
+│ in _from_pretrained                                                                                                                    │
+│                                                                                                                                        │
+│   2356 │   │                                                                                                                           │
+│   2357 │   │   # Instantiate the tokenizer.                                                                                            │
+│   2358 │   │   try:                                                                                                                    │
+│ ❱ 2359 │   │   │   tokenizer = cls(*init_inputs, **init_kwargs)                                                                        │
+│   2360 │   │   except import_protobuf_decode_error():                                                                                  │
+│   2361 │   │   │   logger.info(                                                                                                        │
+│   2362 │   │   │   │   "Unable to load tokenizer model from SPM, loading from TikToken will be attempted instead."                     │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/site-packages/transformers/models/llama/tokenization_llama.p │
+│ y:171 in __init__                                                                                                                      │
+│                                                                                                                                        │
+│   168 │   │   self.add_bos_token = add_bos_token                                                                                       │
+│   169 │   │   self.add_eos_token = add_eos_token                                                                                       │
+│   170 │   │   self.use_default_system_prompt = use_default_system_prompt                                                               │
+│ ❱ 171 │   │   self.sp_model = self.get_spm_processor(kwargs.pop("from_slow", False))                                                   │
+│   172 │   │   self.add_prefix_space = add_prefix_space                                                                                 │
+│   173 │   │                                                                                                                            │
+│   174 │   │   super().__init__(                                                                                                        │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/site-packages/transformers/models/llama/tokenization_llama.p │
+│ y:203 in get_spm_processor                                                                                                             │
+│                                                                                                                                        │
+│   200 │   │                                                                                                                            │
+│   201 │   │   with open(self.vocab_file, "rb") as f:                                                                                   │
+│   202 │   │   │   sp_model = f.read()                                                                                                  │
+│ ❱ 203 │   │   │   model_pb2 = import_protobuf(f"The new behaviour of {self.__class__.__name__} (with `self.legacy = False`)")          │
+│   204 │   │   │   model = model_pb2.ModelProto.FromString(sp_model)                                                                    │
+│   205 │   │   │   normalizer_spec = model_pb2.NormalizerSpec()                                                                         │
+│   206 │   │   │   normalizer_spec.add_dummy_prefix = False                                                                             │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py:39 in   │
+│ import_protobuf                                                                                                                        │
+│                                                                                                                                        │
+│     36                                                                                                                                 │
+│     37 def import_protobuf(error_message=""):                                                                                          │
+│     38 │   if is_sentencepiece_available():                                                                                            │
+│ ❱   39 │   │   from sentencepiece import sentencepiece_model_pb2                                                                       │
+│     40 │   │                                                                                                                           │
+│     41 │   │   return sentencepiece_model_pb2                                                                                          │
+│     42 │   if is_protobuf_available():                                                                                                 │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/site-packages/sentencepiece/sentencepiece_model_pb2.py:5 in  │
+│ <module>                                                                                                                               │
+│                                                                                                                                        │
+│    2 # Generated by the protocol buffer compiler.  DO NOT EDIT!                                                                        │
+│    3 # source: sentencepiece_model.proto                                                                                               │
+│    4 """Generated protocol buffer code."""                                                                                             │
+│ ❱  5 from google.protobuf.internal import builder as _builder                                                                          │
+│    6 from google.protobuf import descriptor as _descriptor                                                                             │
+│    7 from google.protobuf import descriptor_pool as _descriptor_pool                                                                   │
+│    8 from google.protobuf import symbol_database as _symbol_database                                                                   │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+ModuleNotFoundError: No module named 'google'
+
+During handling of the above exception, another exception occurred:
+
+╭────────────────────────────────────────────────── Traceback (most recent call last) ───────────────────────────────────────────────────╮
+│ /home/zjs/code/x73/x73-privacy-tool/DADP-ICL/run_exp_sst2_loca_monitor.py:908 in _main                                                 │
+│                                                                                                                                        │
+│   905 │   │   #     )                                                                                                                  │
+│   906 │                                                                                                                                │
+│   907 │   try:                                                                                                                         │
+│ ❱ 908 │   │   asyncio.run(main())                                                                                                      │
+│   909 │   except KeyboardInterrupt:                                                                                                    │
+│   910 │   │   traceback.print_exc()                                                                                                    │
+│   911 │   │   raise                                                                                                                    │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/asyncio/runners.py:44 in run                                 │
+│                                                                                                                                        │
+│   41 │   │   events.set_event_loop(loop)                                                                                               │
+│   42 │   │   if debug is not None:                                                                                                     │
+│   43 │   │   │   loop.set_debug(debug)                                                                                                 │
+│ ❱ 44 │   │   return loop.run_until_complete(main)                                                                                      │
+│   45 │   finally:                                                                                                                      │
+│   46 │   │   try:                                                                                                                      │
+│   47 │   │   │   _cancel_all_tasks(loop)                                                                                               │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/asyncio/base_events.py:649 in run_until_complete             │
+│                                                                                                                                        │
+│    646 │   │   if not future.done():                                                                                                   │
+│    647 │   │   │   raise RuntimeError('Event loop stopped before Future completed.')                                                   │
+│    648 │   │                                                                                                                           │
+│ ❱  649 │   │   return future.result()                                                                                                  │
+│    650 │                                                                                                                               │
+│    651 │   def stop(self):                                                                                                             │
+│    652 │   │   """Stop running the event loop.                                                                                         │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/DADP-ICL/run_exp_sst2_loca_monitor.py:682 in main                                                  │
+│                                                                                                                                        │
+│   679 │   │   # 指定gpu                                                                                                                │
+│   680 │   │   device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')                                                    │
+│   681 │   │   # device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')                                                │
+│ ❱ 682 │   │   lm = api_openai_com(openai_model, device=device)                                                                         │
+│   683 │   │   noise_rng = np.random.RandomState()                                                                                      │
+│   684 │   │                                                                                                                            │
+│   685 │   │   data = cast(DatasetDict, load_dataset("glue", "sst2"))                                                                   │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/DADP-ICL/local_lm_compat.py:27 in api_openai_com                                                   │
+│                                                                                                                                        │
+│   24 │                                                                                                                                 │
+│   25 │   # otherwise load once                                                                                                         │
+│   26 │   device = device or (torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu"))                               │
+│ ❱ 27 │   lm = LocalLM(model_name, device=device, dtype=torch.float16)                                                                  │
+│   28 │                                                                                                                                 │
+│   29 │   _LM_CACHE[model_name] = lm                                                                                                    │
+│   30 │   return lm                                                                                                                     │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/DADP-ICL/local_llm.py:52 in __init__                                                               │
+│                                                                                                                                        │
+│    49 │   │   self.dtype = dtype                                                                                                       │
+│    50 │   │                                                                                                                            │
+│    51 │   │   # load tokenizer and model                                                                                               │
+│ ❱  52 │   │   self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, use_fast=False)                                       │
+│    53 │   │   # ensure pad_token                                                                                                       │
+│    54 │   │   if self.tokenizer.pad_token is None:                                                                                     │
+│    55 │   │   │   self.tokenizer.pad_token = self.tokenizer.eos_token                                                                  │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py: │
+│ 1156 in from_pretrained                                                                                                                │
+│                                                                                                                                        │
+│   1153 │   │   │   │   raise ValueError(                                                                                               │
+│   1154 │   │   │   │   │   f"Tokenizer class {tokenizer_class_candidate} does not exist or is not currently imported."                 │
+│   1155 │   │   │   │   )                                                                                                               │
+│ ❱ 1156 │   │   │   return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)                            │
+│   1157 │   │                                                                                                                           │
+│   1158 │   │   # Otherwise we have to be creative.                                                                                     │
+│   1159 │   │   # if model is an encoder decoder, the encoder tokenizer class is used by default                                        │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/site-packages/transformers/tokenization_utils_base.py:2113   │
+│ in from_pretrained                                                                                                                     │
+│                                                                                                                                        │
+│   2110 │   │   │   else:                                                                                                               │
+│   2111 │   │   │   │   logger.info(f"loading file {file_path} from cache at {resolved_vocab_files[file_id]}")                          │
+│   2112 │   │                                                                                                                           │
+│ ❱ 2113 │   │   return cls._from_pretrained(                                                                                            │
+│   2114 │   │   │   resolved_vocab_files,                                                                                               │
+│   2115 │   │   │   pretrained_model_name_or_path,                                                                                      │
+│   2116 │   │   │   init_configuration,                                                                                                 │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/site-packages/transformers/tokenization_utils_base.py:2360   │
+│ in _from_pretrained                                                                                                                    │
+│                                                                                                                                        │
+│   2357 │   │   # Instantiate the tokenizer.                                                                                            │
+│   2358 │   │   try:                                                                                                                    │
+│   2359 │   │   │   tokenizer = cls(*init_inputs, **init_kwargs)                                                                        │
+│ ❱ 2360 │   │   except import_protobuf_decode_error():                                                                                  │
+│   2361 │   │   │   logger.info(                                                                                                        │
+│   2362 │   │   │   │   "Unable to load tokenizer model from SPM, loading from TikToken will be attempted instead."                     │
+│   2363 │   │   │   │   "(Google protobuf error: Tried to load SPM model with non-SPM vocab file).",                                    │
+│                                                                                                                                        │
+│ /home/zjs/code/x73/x73-privacy-tool/.privacy_envs/dadp_icl/lib/python3.10/site-packages/transformers/tokenization_utils_base.py:88 in  │
+│ import_protobuf_decode_error                                                                                                           │
+│                                                                                                                                        │
+│     85 │   │                                                                                                                           │
+│     86 │   │   return DecodeError                                                                                                      │
+│     87 │   else:                                                                                                                       │
+│ ❱   88 │   │   raise ImportError(PROTOBUF_IMPORT_ERROR.format(error_message))                                                          │
+│     89                                                                                                                                 │
+│     90                                                                                                                                 │
+│     91 def flatten(arr: list):                                                                                                         │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+ImportError: 
+ requires the protobuf library but it was not found in your environment. Check out the instructions on the
+installation page of its repo: https://github.com/protocolbuffers/protobuf/tree/master/python#installation and follow the ones
+that match your environment. Please note that you may need to restart your runtime after installation.
+

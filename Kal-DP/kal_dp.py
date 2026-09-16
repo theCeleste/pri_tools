@@ -19,6 +19,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from torch.nn.parallel import DistributedDataParallel as DDP
 import logging
 from KFprivacy_engine import KF_PrivacyEngine
+import sys
 
 def setup(rank, world_size):
     os.environ["MASTER_ADDR"] = "localhost"
@@ -274,7 +275,8 @@ def train(
             optimizer=optimizer,
         ) as memory_safe_data_loader:
             for step, batch in tqdm(
-                enumerate(memory_safe_data_loader), desc=f"Training epoch {epoch}: ", disable=not master_process
+                enumerate(memory_safe_data_loader), desc=f"Training epoch {epoch}: ",
+                disable=not master_process,file=sys.stdout,total=len(memory_safe_data_loader)
             ):
                 
                 # ========== 执行训练步骤 ==========
@@ -301,12 +303,12 @@ def train(
                     mem_peak = torch.cuda.max_memory_allocated(device) / 1024**3
                     
                     if master_process:
-                        print(
-                            f"Step: {step} | "
-                            f"Loss: {loss.item():.4f} | "
-                            f"Avg Throughput: {throughput:.2f} samples/s | "
-                            f"Mem: {mem_after:.2f}GB / Peak: {mem_peak:.2f}GB"
-                        )
+                        # print(
+                        #     f"Step: {step} | "
+                        #     f"Loss: {loss.item():.4f} | "
+                        #     f"Avg Throughput: {throughput:.2f} samples/s | "
+                        #     f"Mem: {mem_after:.2f}GB / Peak: {mem_peak:.2f}GB"
+                        # )
 
                         torch.cuda.reset_peak_memory_stats(device)
                     

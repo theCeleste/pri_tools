@@ -38,12 +38,12 @@ ratio = (len(intersection) / denom) if denom else 0.0
 # print(attack_lines_set)
 # print(intersection)
 
-print(f"共有 {len(intersection)} 条句子在 SST-2 训练集中出现。")
-print(f"占前缀攻击文本的比例为 {ratio:.2%}")
+# print(f"共有 {len(intersection)} 条句子在 SST-2 训练集中出现。")
+# print(f"占前缀攻击文本的比例为 {ratio:.2%}")
 
-print("\n示例匹配句子（前5条）:")
-for s in list(sst2_sentences)[:len(intersection)][:5]:
-    # 如果你不想显示 label，把下面这一行改成 print("-", s) 即可
-    # print(f"- {s} \t(label={sent2label.get(s)})")
-    print("-", s)
+# print("\n示例匹配句子（前5条）:")
+# for s in list(sst2_sentences)[:len(intersection)][:5]:
+#     # 如果你不想显示 label，把下面这一行改成 print("-", s) 即可
+#     # print(f"- {s} \t(label={sent2label.get(s)})")
+#     print("-", s)
     

@@ -1,9 +1,0 @@
-DRY RUN：未启动原实验代码。
-[执行 PTCDS 受保护模型前缀抽取] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/direct_attack/20260807_234848_9605f5
-python3 /home/zjs/code/x73/x73-privacy-tool/PTCDS/attack/extraction_temperature_decay.py --N 20 --batch_size 6 --outfile /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/direct_attack/20260807_234848_9605f5/protected_extraction_temperature_decay.txt --model_name meta-llama/Llama-2-7b-hf --baseline_adapter /home/zjs/code/x73/x73-privacy-tool/PTCDS/outputs/llama2-sst2-lora-esp6-4.20/best_model --protected_adapter /home/zjs/code/x73/x73-privacy-tool/PTCDS/outputs/llama2-sst2-lora-esp6-4.20/best_model
-[统计 PTCDS 受保护模型攻击命中率] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/direct_attack/20260807_234848_9605f5
-python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/direct_attack/20260807_234848_9605f5/runtime_adapters/02_member_test.py
-[执行 PTCDS 未保护 base 模型前缀抽取] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/direct_attack/20260807_234848_9605f5
-python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/direct_attack/20260807_234848_9605f5/runtime_adapters/03_extraction_temperature_decay_base.py --N 20 --batch_size 6 --outfile /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/direct_attack/20260807_234848_9605f5/baseline_extraction_temperature_decay.txt
-[统计 PTCDS 未保护 base 模型攻击命中率] cwd=/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/direct_attack/20260807_234848_9605f5
-python3 /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/embedding/PTCDS/direct_attack/20260807_234848_9605f5/runtime_adapters/04_member_test.py
