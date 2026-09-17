@@ -808,6 +808,21 @@ def _python_available(executable: str) -> tuple[bool, str]:
     return bool(found), found or executable
 
 
+def configured_dataset_path(settings: dict[str, Any]) -> Path:
+    """Resolve the local dataset selected by the JSON configuration."""
+    configured_path = get_nested(settings, "common.dataset_path")
+    if configured_path:
+        return project_path(str(configured_path)).resolve()
+
+    dataset = str(get_nested(settings, "common.dataset", "sst2")).strip()
+    candidate = Path(dataset).expanduser()
+    if candidate.is_absolute() or len(candidate.parts) > 1:
+        return project_path(candidate).resolve()
+
+    directory_name = "sst2" if dataset.casefold() in {"sst-2", "sst_2"} else dataset
+    return (TOOL_ROOT / "datasets" / directory_name).resolve()
+
+
 def doctor(method: Method, settings: dict[str, Any]) -> int:
     failures = 0
     print(f"\n[{method.title}] 环境检查")
@@ -835,6 +850,10 @@ def doctor(method: Method, settings: dict[str, Any]) -> int:
         exists = model_path.exists()
         print(f"  [{'OK' if exists else 'FAIL'}] 模型路径：{model_path}")
         failures += 0 if exists else 1
+    dataset_path = configured_dataset_path(settings)
+    dataset_exists = dataset_path.exists()
+    print(f"  [{'OK' if dataset_exists else 'FAIL'}] 数据集路径：{dataset_path}")
+    failures += 0 if dataset_exists else 1
     for warning in method.warnings:
         print(f"  [WARN] {warning}")
     print(f"检查结论：{'通过' if failures == 0 else f'发现 {failures} 项阻塞'}")

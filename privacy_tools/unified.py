@@ -517,14 +517,15 @@ def _choose_model_and_dataset(
     model_key = "common.model_7b_chat" if uses_chat_model else "common.model_7b"
     fallback = "meta-llama/Llama-2-7b-chat-hf" if uses_chat_model else "meta-llama/Llama-2-7b-hf"
     model = str(get_nested(settings, model_key, fallback))
-    if choose_from_menu("请选择模型", [("configured", f"使用 JSON 配置模型：{model}")]) is None:
+    model = "Llama-2-7b"
+    if choose_from_menu("请选择模型", [("configured", f"当前可选模型：{model}")]) is None:
         return None, None
 
     if not choose_dataset:
         return model, None
 
     dataset = str(get_nested(settings, "common.dataset", "sst2"))
-    if choose_from_menu("请选择数据集", [("configured", f"使用 JSON 配置数据集：{dataset}")]) is None:
+    if choose_from_menu("请选择数据集", [("configured", f"当前可选数据集：{dataset}")]) is None:
         return None, None
     return model, dataset
 
@@ -594,7 +595,7 @@ def interactive(settings: dict[str, Any]) -> int:
     if selection.task_kind == "finetune":
         experiment_id = choose_from_menu(
             "下一步：请选择执行当前方法还是对比方法",
-            [("utility", "当前方法"), ("baseline", "对比方法（baseline）")],
+            [("utility", "当前方法"), ("baseline", "对比方法")],
         )
         if experiment_id is None:
             return 0
@@ -649,7 +650,7 @@ def build_parser() -> argparse.ArgumentParser:
     list_parser = subparsers.add_parser("list", help="列出六种方法及其全部实验")
     list_parser.add_argument("--method", choices=METHODS.keys())
 
-    doctor_parser = subparsers.add_parser("doctor", help="检查代码、Python 和模型")
+    doctor_parser = subparsers.add_parser("doctor", help="检查代码、Python、模型和数据集")
     doctor_parser.add_argument("--method", choices=METHODS.keys())
 
     run_parser = subparsers.add_parser("run", help="跳过菜单，直接执行指定实验")

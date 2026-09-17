@@ -110,13 +110,13 @@ def main() -> int:
     failures += 0 if run_interactive(
         "新 UI 微调路径",
         "1\n1\n1\n1\n1\n1\n1\ny\n",
-        ("任务：微调", "实验：本微调方法", "使用 JSON 配置模型", "使用 JSON 配置数据集", "JSON 配置的 Python"),
+        ("任务：微调", "实验：本微调方法", "当前可选模型", "当前可选数据集", "JSON 配置的 Python", "数据集路径："),
         removed_prompts,
     ) else 1
     failures += 0 if run_interactive(
         "新 UI 评估路径",
         "2\n1\n1\n2\n1\n1\n1\ny\n",
-        ("任务：评估", "评估类型：直接评估", "微调类型：显式微调模型", "使用 JSON 配置模型"),
+        ("任务：评估", "评估类型：直接评估", "微调类型：显式微调模型", "当前可选模型"),
         removed_prompts,
     ) else 1
     failures += 0 if run_interactive(
