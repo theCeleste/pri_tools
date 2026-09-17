@@ -143,7 +143,7 @@ def _indirect_attack_specs(method_id: str, *, protection: str) -> list[PromptSpe
         ]
     elif protection == "steering":
         specs += [
-            PromptSpec("methods.privsv.steering_checkpoint_path", "PrivSV 私有 steering checkpoint 路径", "str"),
+            PromptSpec("methods.privsv.steering_checkpoint_path", "PrivSV 引导向量路径", "str"),
             PromptSpec("methods.privsv.steering_multiplier", "steering 注入倍数", "float"),
         ]
     specs += [
@@ -224,13 +224,13 @@ def prompt_specs(method_id: str, experiment_id: str) -> list[PromptSpec]:
         if experiment_id == "direct_attack":
             return _attack_specs(method_id, adapter=False) + [
                 PromptSpec("methods.privsv.baseline_adapter_path", "未保护对比 adapter 路径或 Hugging Face 名称", "str"),
-                PromptSpec("methods.privsv.steering_checkpoint_path", "PrivSV 私有 steering checkpoint 路径", "str")
+                PromptSpec("methods.privsv.steering_checkpoint_path", "PrivSV 引导向量路径", "str")
             ]
         if experiment_id == "indirect_attack":
             return [
                 MODEL_CHAT,
                 GPU,
-                PromptSpec("methods.privsv.steering_checkpoint_path", "PrivSV 私有 steering checkpoint 路径", "str"),
+                PromptSpec("methods.privsv.steering_checkpoint_path", "PrivSV 引导向量路径", "str"),
                 PromptSpec("methods.privsv.native_member_data_path", "PrivSV 成员样本 JSON 路径", "str"),
                 PromptSpec("methods.privsv.native_attack_samples", "成员与非成员各处理的样本数", "int"),
                 PromptSpec("methods.privsv.native_attack_neighbors", "每条文本使用的邻居数", "int"),
@@ -327,12 +327,12 @@ def _prepare_runtime(method_id: str, experiment_id: str, settings: dict[str, Any
     selected = Path(configured).expanduser()
     _set_nested(settings, f"python.{method_id}", configured)
     if dry_run:
-        print(f"  安全预演使用 JSON 配置的 Python：{configured}")
+        print(f"  安全预演使用默认配置的 Python环境：{configured}")
         print("  安全预演不会安装依赖。")
         return True
     if plan.level == "none":
         print(f"  {plan.explanation}")
-        print(f"  使用 JSON 配置的 Python：{configured}")
+        print(f"  使用默认配置的 Python环境：{configured}")
         return True
     print(f"  {plan.explanation}")
     ready, missing = check_imports(selected, plan.imports)
@@ -340,7 +340,7 @@ def _prepare_runtime(method_id: str, experiment_id: str, settings: dict[str, Any
         print(f"  [OK] 所需依赖已就绪：{selected}")
         return True
     print(f"  [缺少依赖] {', '.join(missing)}")
-    print("已停止：JSON 配置指定的 Python 环境缺少实验依赖；请修改配置后重试。")
+    print("已停止：默认配置指定的 Python 环境缺少实验依赖；请修改配置后重试。")
     return False
 
 
@@ -402,13 +402,13 @@ def _prepare_assets(method_id: str, experiment_id: str, settings: dict[str, Any]
             if not resolved.exists():
                 print(f"[缺少模型] 本地模型路径不存在：{resolved}")
                 return False
-        elif model.startswith("meta-llama/") and not os.environ.get("HF_TOKEN") and not os.environ.get("HUGGING_FACE_HUB_TOKEN"):
-            print("\n[模型权限提示] Llama-2 通常需要先在 Hugging Face 接受许可。")
-            print("如果模型已完整缓存在服务器，可不输入 token。token 只用于本次进程，不会写入结果文件。")
-            if _yes_no("现在输入 Hugging Face token 吗？", default=False):
-                token = getpass.getpass("HF token（输入不回显）：").strip()
-                if token:
-                    os.environ["HF_TOKEN"] = token
+        # elif model.startswith("meta-llama/") and not os.environ.get("HF_TOKEN") and not os.environ.get("HUGGING_FACE_HUB_TOKEN"):
+        #     print("\n[模型权限提示] Llama-2 通常需要先在 Hugging Face 接受许可。")
+        #     print("如果模型已完整缓存在服务器，可不输入 token。token 只用于本次进程，不会写入结果文件。")
+        #     if _yes_no("现在输入 Hugging Face token 吗？", default=False):
+        #         token = getpass.getpass("HF token（输入不回显）：").strip()
+        #         if token:
+        #             os.environ["HF_TOKEN"] = token
 
     if experiment_id == "direct_attack" and method_id in {"cliptext", "ptcds", "kal_dp", "zo_dpga"}:
         adapter_keys = [f"methods.{method_id}.adapter_path", f"methods.{method_id}.baseline_adapter_path"]
@@ -470,10 +470,10 @@ def _prepare_assets(method_id: str, experiment_id: str, settings: dict[str, Any]
             raw = str(get_nested(settings, key, ""))
             resolved = project_path(raw)
             if raw and resolved.is_file():
-                print(f"  [OK] PrivSV 私有 steering checkpoint：{resolved}")
+                print(f"  [OK] PrivSV 引导向量：{resolved}")
                 _set_nested(settings, key, str(resolved))
                 break
-            print(f"\n[缺少 PrivSV 私有 steering checkpoint] 当前文件不存在：{resolved}")
+            print(f"\n[缺少 PrivSV 引导向量] 当前文件不存在：{resolved}")
             replacement = input("请输入 private steering checkpoint 路径；输入 0 取消：").strip()
             if replacement == "0" or not replacement:
                 return False
@@ -571,10 +571,11 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
 
 
 def interactive(settings: dict[str, Any]) -> int:
-    print("\n================================================")
-    print("  具备敏感信息保护能力的大模型微调支撑工具集")
-    print("  按提示选择任务；其他实验参数继续从 JSON 配置读取")
-    print("================================================")
+    print("\n=========================================================")
+    print(" 具备敏感信息保护能力的大模型微调支撑工具集原型系统 v1.0")
+    print("=========================================================")
+    print("  请按提示确定后续如何执行 ")
+    print("=========================================================")
     selection = _select_task(settings)
     if selection is None:
         print("已退出。")
@@ -612,7 +613,7 @@ def interactive(settings: dict[str, Any]) -> int:
     # 其他参数设置菜单暂时关闭，全部直接采用 JSON 配置值。
     collected: list[tuple[PromptSpec, Any]] = [(spec, get_nested(settings, spec.key)) for spec in specs]
     if specs:
-        print("其他实验参数：直接使用 JSON 配置默认值")
+        print("其他实验参数：直接使用默认值")
     if not _prepare_runtime(method_id, experiment_id, settings, dry_run):
         return 1
     if not _prepare_assets(method_id, experiment_id, settings, all_specs, dry_run):
@@ -628,9 +629,9 @@ def interactive(settings: dict[str, Any]) -> int:
     if dataset is not None:
         print(f"数据集：{dataset}")
     print(f"模式：{'安全预演' if dry_run else '真实执行'}")
-    for spec, value in collected:
-        print(f"{spec.label}：{_display_value(value)}")
-    check_code = doctor(method, settings)
+    # for spec, value in collected:
+    #     print(f"{spec.label}：{_display_value(value)}")
+    check_code = doctor(method, settings, check_dataset=selection.task_kind == "finetune")
     if check_code and not dry_run:
         return check_code
     if dry_run:

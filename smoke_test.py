@@ -117,7 +117,7 @@ def main() -> int:
         "新 UI 评估路径",
         "2\n1\n1\n2\n1\n1\n1\ny\n",
         ("任务：评估", "评估类型：直接评估", "微调类型：显式微调模型", "当前可选模型"),
-        removed_prompts,
+        removed_prompts + ("数据集路径：",),
     ) else 1
     failures += 0 if run_interactive(
         "无扰动评估占位接口",

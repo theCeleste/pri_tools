@@ -18,7 +18,8 @@
     "kal_dp": "/home/zjs/anaconda3/envs/kf/bin/python",
     "zo_dpga": "/home/zjs/anaconda3/envs/dpzero/bin/python",
     "dadp_icl": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
-    "privsv": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python"
+    "privsv": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
+    "dpsgd": "/home/zjs/anaconda3/envs/dpsgd/bin/python"
   },
   "methods": {
     "cliptext": {

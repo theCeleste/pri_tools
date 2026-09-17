@@ -709,7 +709,7 @@ def run_experiment(
         print(f"准备实验失败：{exc}", file=sys.stderr)
         print(f"运行记录：{run_dir}")
         if not dry_run:
-            print("运行失败，请重新运行")
+            print("运行异常，请重新运行")
         return 2
 
     (run_dir / "run_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -773,7 +773,7 @@ def run_experiment(
                     break
 
     if not dry_run and return_code != 0:
-        print("\n运行失败，请重新运行")
+        print("\n运行异常，请重新运行")
         return return_code
 
     history_root = project_path(str(settings.get("historical_results_dir", "privacy_tools/historical_results")))
@@ -823,7 +823,7 @@ def configured_dataset_path(settings: dict[str, Any]) -> Path:
     return (TOOL_ROOT / "datasets" / directory_name).resolve()
 
 
-def doctor(method: Method, settings: dict[str, Any]) -> int:
+def doctor(method: Method, settings: dict[str, Any], *, check_dataset: bool = True) -> int:
     failures = 0
     print(f"\n[{method.title}] 环境检查")
     print(f"代码目录：{method.root}")
@@ -850,10 +850,11 @@ def doctor(method: Method, settings: dict[str, Any]) -> int:
         exists = model_path.exists()
         print(f"  [{'OK' if exists else 'FAIL'}] 模型路径：{model_path}")
         failures += 0 if exists else 1
-    dataset_path = configured_dataset_path(settings)
-    dataset_exists = dataset_path.exists()
-    print(f"  [{'OK' if dataset_exists else 'FAIL'}] 数据集路径：{dataset_path}")
-    failures += 0 if dataset_exists else 1
+    if check_dataset:
+        dataset_path = configured_dataset_path(settings)
+        dataset_exists = dataset_path.exists()
+        print(f"  [{'OK' if dataset_exists else 'FAIL'}] 数据集路径：{dataset_path}")
+        failures += 0 if dataset_exists else 1
     for warning in method.warnings:
         print(f"  [WARN] {warning}")
     print(f"检查结论：{'通过' if failures == 0 else f'发现 {failures} 项阻塞'}")
