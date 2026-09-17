@@ -43,6 +43,34 @@ def run(label: str, command: list[str]) -> bool:
     return False
 
 
+def run_interactive(
+    label: str,
+    user_input: str,
+    expected: tuple[str, ...],
+    forbidden: tuple[str, ...] = (),
+) -> bool:
+    print(f"\n[TEST] {label}")
+    result = subprocess.run(
+        [sys.executable, "privacy_tool.py"],
+        cwd=ROOT,
+        input=user_input,
+        text=True,
+        capture_output=True,
+    )
+    output = result.stdout + result.stderr
+    missing = [text for text in expected if text not in output]
+    unexpected = [text for text in forbidden if text in output]
+    if result.returncode == 0 and not missing and not unexpected:
+        print(f"[ OK ] {label}")
+        return True
+    print(f"[FAIL] {label}，return code={result.returncode}")
+    if missing:
+        print(f"       缺少输出：{missing}")
+    if unexpected:
+        print(f"       不应出现：{unexpected}")
+    return False
+
+
 def main() -> int:
     print("=== 隐私实验集成工具交付自检 ===")
     failures = 0
@@ -68,10 +96,34 @@ def main() -> int:
                 failures += 1
     if failures:
         return 1
-    print("[ OK ] 六种方法的全部运行项均有自动环境方案")
+    print("[ OK ] 六种方法的全部运行项均有依赖检查方案")
 
     failures += 0 if run("统一入口菜单清单", [sys.executable, "privacy_tool.py", "list"]) else 1
     failures += 0 if run("24 个运行项完整结构审计", [sys.executable, "full_audit.py"]) else 1
+
+    removed_prompts = (
+        "输入模型路径",
+        "输入数据集名称",
+        "其他参数设置",
+        "请选择 Python 环境准备方式",
+    )
+    failures += 0 if run_interactive(
+        "新 UI 微调路径",
+        "1\n1\n1\n1\n1\n1\n1\ny\n",
+        ("任务：微调", "实验：本微调方法", "使用 JSON 配置模型", "使用 JSON 配置数据集", "JSON 配置的 Python"),
+        removed_prompts,
+    ) else 1
+    failures += 0 if run_interactive(
+        "新 UI 评估路径",
+        "2\n1\n1\n2\n1\n1\n1\ny\n",
+        ("任务：评估", "评估类型：直接评估", "微调类型：显式微调模型", "使用 JSON 配置模型"),
+        removed_prompts,
+    ) else 1
+    failures += 0 if run_interactive(
+        "无扰动评估占位接口",
+        "2\n1\n1\n3\n",
+        ("无扰动微调评估功能暂不在本系统需求范围内，当前不执行。",),
+    ) else 1
 
     for method in ("cliptext", "ptcds", "kal_dp", "zo_dpga", "dadp_icl", "privsv"):
         for experiment in ("utility", "baseline", "direct_attack", "indirect_attack"):
@@ -81,8 +133,8 @@ def main() -> int:
     if failures:
         print(f"\n自检未通过，共 {failures} 项失败。")
         return 1
-    print("\n自检通过：三级类别菜单、六种方法的 24 个运行项、统一指标 CSV，以及全部训练/对比/直接评估/间接评估命令预演均正常。")
-    print("下一步：直接运行 python3 privacy_tool.py，按助手提示选择方法和实验。")
+    print("\n自检通过：微调/评估任务菜单、六种方法的 24 个底层运行项、统一指标 CSV，以及全部命令预演均正常。")
+    print("下一步：直接运行 python3 privacy_tool.py，按助手提示选择任务和方法。")
     return 0
 
 

@@ -673,7 +673,6 @@ def run_experiment(
     method_path_name = method.path_name or method.title
     run_dir = create_run_dir(settings, category, method_path_name, experiment.id)
     started_at = time.time()
-    steps: list[Step] = [] if experiment.internal_report else experiment.builder(settings, run_dir)
     manifest = {
         "schema_version": 1,
         "category": category,
@@ -689,6 +688,7 @@ def run_experiment(
     }
     materialized_steps: list[Step] = []
     try:
+        steps: list[Step] = [] if experiment.internal_report else experiment.builder(settings, run_dir)
         for index, step in enumerate(steps, 1):
             actual = _materialize_patched_step(step, run_dir, index)
             matplotlib_dir = run_dir / ".matplotlib"
@@ -708,6 +708,8 @@ def run_experiment(
         (run_dir / "run_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"准备实验失败：{exc}", file=sys.stderr)
         print(f"运行记录：{run_dir}")
+        if not dry_run:
+            print("运行失败，请重新运行")
         return 2
 
     (run_dir / "run_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -769,6 +771,10 @@ def run_experiment(
                 log.flush()
                 if return_code != 0:
                     break
+
+    if not dry_run and return_code != 0:
+        print("\n运行失败，请重新运行")
+        return return_code
 
     history_root = project_path(str(settings.get("historical_results_dir", "privacy_tools/historical_results")))
     print_historical_results(

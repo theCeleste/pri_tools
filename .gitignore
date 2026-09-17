@@ -1,3 +1,5 @@
 *.safetensors
 Kal-DP/lora_wo_sst2_model_best/
 Kal-DP/kal_dp_adapter_best/
+results/
+privacy_tools/results/

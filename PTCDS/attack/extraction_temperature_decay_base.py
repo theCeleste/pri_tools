@@ -197,7 +197,7 @@ def main(args):
     # MODEL_GPT2_MEDIUM = load_model_for_causal_lm("gpt2-medium", device)
     # MODEL_GPT2_XL = load_model_for_causal_lm("../../models/Llama-2-7b-hf", device, "../outputs/llama2-sst2-lora-base/eps3-checkpoint-7500", config)
     MODEL_GPT2_XL = MODEL_GPT2
-    print("GPT2 and GPT2-XL models loaded!")
+    print("models loaded!")
 
     # number of tokens to generate (from paper)
     seq_len = 256

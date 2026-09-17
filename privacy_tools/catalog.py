@@ -38,6 +38,26 @@ DADP_ROOT = PROJECT_ROOT / "DADP-ICL"
 PRIVSV_ROOT = PROJECT_ROOT / "PrivSV"
 
 
+# User-facing task topology. Command builders remain registered on Method below.
+FINETUNE_METHOD_GROUPS: dict[str, tuple[str, tuple[str, ...]]] = {
+    "gradient": ("梯度扰动", ("kal_dp", "zo_dpga")),
+    "embedding": ("嵌入扰动", ("cliptext", "ptcds")),
+    "example": ("示例扰动", ("dadp_icl", "privsv")),
+}
+
+EVALUATION_METHOD_GROUPS: dict[str, dict[str, tuple[str, tuple[str, ...]]]] = {
+    "explicit": {
+        "gradient": ("梯度扰动", ("kal_dp", "zo_dpga")),
+        "embedding": ("嵌入扰动", ("cliptext", "ptcds")),
+        "none": ("无扰动", ("none",)),
+    },
+    "implicit": {
+        "example": ("示例扰动", ("dadp_icl", "privsv")),
+        "none": ("无扰动", ("none",)),
+    },
+}
+
+
 def _method_value(settings: dict[str, Any], method: str, key: str, default: Any) -> Any:
     return get_nested(settings, f"methods.{method}.{key}", default)
 

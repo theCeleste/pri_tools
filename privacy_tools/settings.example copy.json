@@ -1,0 +1,102 @@
+{
+  "results_dir": "privacy_tools/results",
+  "historical_results_dir": "privacy_tools/historical_results",
+  "common": {
+    "gpu": "0",
+    "dataset": "sst2",
+    "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
+    "model_7b_chat": "meta-llama/Llama-2-7b-chat-hf",
+    "model_13b": "meta-llama/Llama-2-13b-hf",
+    "mask_model": "/home/zjs/llm/roberta-base",
+    "hf_endpoint": "https://hf-mirror.com"
+  },
+  "python": {
+    "default": "python3",
+    "cliptext": "/home/zjs/anaconda3/envs/embedding/bin/python",
+    "ptcds": "/home/zjs/anaconda3/envs/embedding/bin/python",
+    "kal_dp": "/home/zjs/anaconda3/envs/kf/bin/python",
+    "zo_dpga": "/home/zjs/anaconda3/envs/dpzero/bin/python",
+    "dadp_icl": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
+    "privsv": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python"
+  },
+  "methods": {
+    "cliptext": {
+      "epsilon": 10.0,
+      "top_k": 20,
+      "save_stop_words": true,
+      "batch_size": 8,
+      "epochs": 2,
+      "lora_rank": 16,
+      "attack_samples": 20,
+      "native_attack_samples": 20,
+      "adapter_path": "/home/zjs/code/x73/dpsgd/lora_outputs/eps_10.0_top_20_s1_save_stop_words_True/best_20260607_160217",
+      "baseline_adapter_path": "/home/zjs/code/x73/embedding/SanText/outputs/llama2-sst2-lora-base/base-checkpoint-6500"
+    },
+    "ptcds": {
+      "epsilon": 6.0,
+      "train_data_path": "PTCDS/output_PTCDS_plus_glove/SST-2/eps_6.00/sword_0.90_p_0.30/train.tsv",
+      "attack_samples": 20,
+      "native_attack_samples": 20,
+      "adapter_path": "/home/zjs/santext420/outputs/llama2-sst2-lora-esp6-4.20/best_model",
+      "baseline_adapter_path": "/home/zjs/santext420/outputs/llama2-sst2-lora-base-4.20/best_model"
+    },
+    "kal_dp": {
+      "epsilon": 8.0,
+      "delta": 0.000005,
+      "batch_size": 32,
+      "max_physical_batch_size": 16,
+      "dpsgd_max_physical_batch_size": 12,
+      "max_grad_norm": 3.0,
+      "epochs": 2,
+      "lora_rank": 16,
+      "learning_rate": 0.0001,
+      "attack_samples": 20,
+      "native_attack_samples": 20,
+      "adapter_path": "/home/zjs/code/x73/dpsgd/lora_kaldp_sst2_model_best/",
+      "baseline_adapter_path": "/home/zjs/santext420/outputs/llama2-sst2-lora-base-4.20/best_model/"
+    },
+    "zo_dpga": {
+      "formal_suite": "zo_dpga_budget_sweep",
+      "formal_index": 0,
+      "attack_samples": 20,
+      "native_attack_samples": 20,
+      "indirect_samples": 20,
+      "indirect_neighbors": 3,
+      "indirect_max_length": 256,
+      "indirect_seed": 0,
+      "adapter_path": "/home/zjs/code/x73/dpsgd/zo-dp/result/reproduction/lora_dpzero_858_seed2_repeat2/checkpoint-10000",
+      "baseline_adapter_path": "/home/zjs/code/x73/dpsgd/zo-dp/result/reproduction/lora_mezo_892_repeat2/checkpoint-10000/"
+    },
+    "dadp_icl": {
+      "sigma": 0.39,
+      "num_private_train": 20,
+      "num_private_train_splits": 10,
+      "num_valid": 10,
+      "num_test": 20,
+      "max_token_per_text": 100,
+      "synth_seed": 0,
+      "eval_seed": 0,
+      "prompt_data_path": "DADP-ICL/synthetic_text_results.json",
+      "prompt_examples": 5,
+      "attack_samples": 20,
+      "attack_max_new_tokens": 96,
+      "attack_temperature": 1.0,
+      "attack_seed": 0,
+      "native_attack_samples": 20,
+      "native_attack_neighbors": 10
+    },
+    "privsv": {
+      "dataset": "sst2",
+      "layers": [11, 12, 13, 14, 15],
+      "noise_multiplier": 0.06,
+      "clip": 18,
+      "attack_samples": 20,
+      "baseline_adapter_path": "Styxxxx/llama2_7b_lora-sst2",
+      "steering_checkpoint_path": "PrivSV/private_steering_vectors_llama_7b_hf.pt",
+      "steering_multiplier": 2.0,
+      "native_member_data_path": "PrivSV/Indirect_attack/sst2_train.json",
+      "native_attack_samples": 20,
+      "native_attack_neighbors": 10
+    }
+  }
+}

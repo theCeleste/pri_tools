@@ -12,12 +12,12 @@
   },
   "python": {
     "default": "python3",
-    "cliptext": "python3",
-    "ptcds": "python3",
-    "kal_dp": "python3",
-    "zo_dpga": "python3",
-    "dadp_icl": "python3",
-    "privsv": "python3"
+    "cliptext": "/home/zjs/anaconda3/envs/embedding/bin/python",
+    "ptcds": "/home/zjs/anaconda3/envs/embedding/bin/python",
+    "kal_dp": "/home/zjs/anaconda3/envs/kf/bin/python",
+    "zo_dpga": "/home/zjs/anaconda3/envs/dpzero/bin/python",
+    "dadp_icl": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
+    "privsv": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python"
   },
   "methods": {
     "cliptext": {
@@ -29,16 +29,16 @@
       "lora_rank": 16,
       "attack_samples": 20,
       "native_attack_samples": 20,
-      "adapter_path": "/home/zjs/code/x73/dpsgd/lora_outputs/eps_10.0_top_20_s1_save_stop_words_True/best_20260607_160217",
-      "baseline_adapter_path": "/home/zjs/code/x73/embedding/SanText/outputs/llama2-sst2-lora-base/base-checkpoint-6500"
+      "adapter_path": "privacy_tools/results/models/cliptext",
+      "baseline_adapter_path": "privacy_tools/results/models/peft-cliptext"
     },
     "ptcds": {
       "epsilon": 6.0,
       "train_data_path": "PTCDS/output_PTCDS_plus_glove/SST-2/eps_6.00/sword_0.90_p_0.30/train.tsv",
       "attack_samples": 20,
       "native_attack_samples": 20,
-      "adapter_path": "/home/zjs/santext420/outputs/llama2-sst2-lora-esp6-4.20/best_model",
-      "baseline_adapter_path": "/home/zjs/santext420/outputs/llama2-sst2-lora-base-4.20/best_model"
+      "adapter_path": "privacy_tools/results/models/PTCDS",
+      "baseline_adapter_path": "privacy_tools/results/models/peft-PTCDS"
     },
     "kal_dp": {
       "epsilon": 8.0,
@@ -52,8 +52,8 @@
       "learning_rate": 0.0001,
       "attack_samples": 20,
       "native_attack_samples": 20,
-      "adapter_path": "/home/zjs/code/x73/dpsgd/lora_kaldp_sst2_model_best/",
-      "baseline_adapter_path": "/home/zjs/santext420/outputs/llama2-sst2-lora-base-4.20/best_model/"
+      "adapter_path": "privacy_tools/results/models/kal_dp",
+      "baseline_adapter_path": "privacy_tools/results/models/peft-kal_dp"
     },
     "zo_dpga": {
       "formal_suite": "zo_dpga_budget_sweep",
@@ -64,8 +64,8 @@
       "indirect_neighbors": 3,
       "indirect_max_length": 256,
       "indirect_seed": 0,
-      "adapter_path": "/home/zjs/code/x73/dpsgd/zo-dp/result/reproduction/lora_dpzero_858_seed2_repeat2/checkpoint-10000",
-      "baseline_adapter_path": "/home/zjs/code/x73/dpsgd/zo-dp/result/reproduction/lora_mezo_892_repeat2/checkpoint-10000/"
+      "adapter_path": "privacy_tools/results/models/zo_dpga",
+      "baseline_adapter_path": "privacy_tools/results/models/peft-zo_dpga"
     },
     "dadp_icl": {
       "sigma": 0.39,

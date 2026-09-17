@@ -122,16 +122,23 @@ def _semantic_failures(label: str, actual, source_text: str) -> list[str]:
                 if "load_dataset(\"glue\", \"sst2\")" in source_text:
                     failures.append("原生示例邻居攻击仍依赖在线 SST-2 数据下载")
             elif script_name.endswith("combine.py"):
-                protected = "本方法" in actual.name
-                expected_label = "本方法" if protected else "对比方法"
+                protected = any(marker in actual.name for marker in ("本方法", "所提出方法"))
+                expected_labels = (
+                    ("当前评估：本方法", "当前评估：所提出方法")
+                    if protected
+                    else ("当前评估：对比方法",)
+                )
                 expected_file = "attack_results_bert_combined_noise.csv" if protected else "attack_results_bert_combined.csv"
                 print_lines = [line for line in source_text.splitlines() if "已合并成员+非成员文件" in line]
                 if len(print_lines) != 1:
                     failures.append("间接评估 combine 应且只能输出一条实际保存位置")
                 else:
                     output_line = print_lines[0]
-                    if f"当前评估：{expected_label}" not in output_line:
-                        failures.append(f"间接评估 combine 未输出当前评估对象 {expected_label}")
+                    if not any(label in output_line for label in expected_labels):
+                        failures.append(
+                            "间接评估 combine 未输出当前评估对象："
+                            + " 或 ".join(expected_labels)
+                        )
                     if expected_file not in output_line:
                         failures.append(f"间接评估 combine 输出文件名未同步为 {expected_file}")
                     if not protected and "attack_results_bert_combined_noise.csv" in output_line:

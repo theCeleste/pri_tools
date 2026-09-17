@@ -198,7 +198,7 @@ def main(args):
     MODEL_GPT2 = load_model_for_causal_lm("../../models/Llama-2-7b-hf", device, "../../Kal-DP/lora_wo_sst2_model_best", config)
     # MODEL_GPT2_MEDIUM = load_model_for_causal_lm("gpt2-medium", device)
     MODEL_GPT2_XL = load_model_for_causal_lm("../../models/Llama-2-7b-hf", device, "../../Kal-DP/lora_wo_sst2_model_best", config)
-    print("GPT2 and GPT2-XL models loaded!")
+    print("models loaded!")
 
     # number of tokens to generate (from paper)
     seq_len = 256

@@ -3,7 +3,7 @@ import numpy as np
 import sys
 import math
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 import torch
 import zlib
 from transformers import AutoTokenizer, AutoModelForCausalLM, LlamaConfig
@@ -200,7 +200,7 @@ def main(args):
     MODEL_GPT2 = load_model_for_causal_lm("../../models/Llama-2-7b-hf", device, "../../Kal-DP/kal_dp_adapter_best", config)
     # MODEL_GPT2_MEDIUM = load_model_for_causal_lm("gpt2-medium", device)
     MODEL_GPT2_XL = load_model_for_causal_lm("../../models/Llama-2-7b-hf", device, "../../Kal-DP/kal_dp_adapter_best", config)
-    print("GPT2 and GPT2-XL models loaded!")
+    print("models loaded!")
 
     # number of tokens to generate (from paper)
     seq_len = 256

@@ -16,13 +16,17 @@ from .bootstrap import (
     check_cuda,
     check_imports,
     copy_glove,
-    create_environment,
     download_glove,
     environment_plan,
-    environment_python,
     ensure_nltk_stopwords,
 )
-from .catalog import embedding_methods, example_methods, gradient_methods
+from .catalog import (
+    EVALUATION_METHOD_GROUPS,
+    FINETUNE_METHOD_GROUPS,
+    embedding_methods,
+    example_methods,
+    gradient_methods,
+)
 from .core import (
     Method,
     choose_from_menu,
@@ -79,25 +83,6 @@ class TaskSelection:
     model: str | None = None
     dataset: str | None = None
     unsupported: bool = False
-
-
-FINETUNE_GROUPS: dict[str, tuple[str, tuple[str, ...]]] = {
-    "gradient": ("梯度扰动", ("kal_dp", "zo_dpga")),
-    "embedding": ("嵌入扰动", ("cliptext", "ptcds")),
-    "example": ("示例扰动", ("dadp_icl", "privsv")),
-}
-
-EVALUATION_GROUPS: dict[str, dict[str, tuple[str, tuple[str, ...]]]] = {
-    "explicit": {
-        "gradient": ("梯度扰动", ("kal_dp", "zo_dpga")),
-        "embedding": ("嵌入扰动", ("cliptext", "ptcds")),
-        "none": ("无扰动", ("none",)),
-    },
-    "implicit": {
-        "example": ("示例扰动", ("dadp_icl", "privsv")),
-        "none": ("无扰动", ("none",)),
-    },
-}
 
 
 PYTHON = PromptSpec("", "Python 解释器", "str", "直接回车使用当前激活环境")
@@ -334,73 +319,29 @@ def _confirm_real_run() -> bool:
 
 def _prepare_runtime(method_id: str, experiment_id: str, settings: dict[str, Any], dry_run: bool) -> bool:
     plan = environment_plan(method_id, experiment_id)
+    configured = str(get_nested(
+        settings,
+        f"python.{method_id}",
+        get_nested(settings, "python.default", sys.executable),
+    ))
+    selected = Path(configured).expanduser()
+    _set_nested(settings, f"python.{method_id}", configured)
     if dry_run:
-        _set_nested(settings, f"python.{method_id}", sys.executable)
-        print(f"  安全预演使用当前 Python：{sys.executable}")
+        print(f"  安全预演使用 JSON 配置的 Python：{configured}")
         print("  安全预演不会安装依赖。")
         return True
     if plan.level == "none":
-        _set_nested(settings, f"python.{method_id}", sys.executable)
         print(f"  {plan.explanation}")
-        print(f"  使用当前 Python：{sys.executable}")
+        print(f"  使用 JSON 配置的 Python：{configured}")
         return True
-
     print(f"  {plan.explanation}")
-    strategy = choose_from_menu(
-        "请选择 Python 环境准备方式",
-        [
-            ("managed", "自动创建隔离环境并安装缺失依赖（推荐）"),
-            ("current", f"使用当前环境：{sys.executable}"),
-            ("existing", "输入一个已经准备好的 Python 路径"),
-        ],
-    )
-    if strategy is None:
-        return False
-    if strategy == "managed":
-        selected = environment_python(method_id, plan.level)
-    elif strategy == "current":
-        selected = Path(sys.executable)
-    else:
-        raw = input("请输入 Python 解释器完整路径：").strip()
-        if not raw:
-            print("没有输入路径，已取消。")
-            return False
-        selected = Path(raw).expanduser()
-
     ready, missing = check_imports(selected, plan.imports)
     if ready:
         print(f"  [OK] 所需依赖已就绪：{selected}")
-        _set_nested(settings, f"python.{method_id}", str(selected))
         return True
-
     print(f"  [缺少依赖] {', '.join(missing)}")
-    if strategy != "managed":
-        if not _yes_no("是否改用自动隔离环境？"):
-            print("已停止。当前环境缺少实验依赖。")
-            return False
-        selected = environment_python(method_id, plan.level)
-        ready, missing = check_imports(selected, plan.imports)
-        if ready:
-            _set_nested(settings, f"python.{method_id}", str(selected))
-            return True
-
-    print(f"  将准备：{selected}")
-    print(f"  依赖文件：{plan.requirements}")
-    print("  需要网络连接；训练环境通常需要数 GB 磁盘空间。")
-    if not _yes_no("现在自动创建并安装吗？"):
-        print("已取消环境安装。")
-        return False
-    code, selected = create_environment(method_id, plan)
-    if code != 0:
-        print(f"环境安装失败（return code={code}）。上方 pip/conda 输出包含具体原因。")
-        return False
-    ready, missing = check_imports(selected, plan.imports)
-    if not ready:
-        print(f"环境仍缺少依赖：{', '.join(missing)}")
-        return False
-    print(f"  [OK] 隔离环境准备完成：{selected}")
-    _set_nested(settings, f"python.{method_id}", str(selected))
-    return True
+    print("已停止：JSON 配置指定的 Python 环境缺少实验依赖；请修改配置后重试。")
+    return False
 
 
 def _looks_like_local_path(value: str) -> bool:
@@ -567,36 +508,24 @@ def _prepare_assets(method_id: str, experiment_id: str, settings: dict[str, Any]
 def _choose_model_and_dataset(
     settings: dict[str, Any],
     *,
+    method_id: str,
+    experiment_id: str,
     choose_dataset: bool = True,
 ) -> tuple[str | None, str | None]:
-    """Choose user-facing model/dataset values while retaining JSON defaults."""
-    default_model = str(get_nested(settings, "common.model_7b", "meta-llama/Llama-2-7b-hf"))
-    model_mode = choose_from_menu(
-        "请选择模型",
-        [("default", f"使用配置默认模型：{default_model}"), ("custom", "输入模型路径或 Hugging Face 名称")],
-    )
-    if model_mode is None:
+    """Select only JSON-defined model/dataset values; custom input is disabled."""
+    uses_chat_model = experiment_id == "indirect_attack" and method_id in {"dadp_icl", "privsv"}
+    model_key = "common.model_7b_chat" if uses_chat_model else "common.model_7b"
+    fallback = "meta-llama/Llama-2-7b-chat-hf" if uses_chat_model else "meta-llama/Llama-2-7b-hf"
+    model = str(get_nested(settings, model_key, fallback))
+    if choose_from_menu("请选择模型", [("configured", f"使用 JSON 配置模型：{model}")]) is None:
         return None, None
-    if model_mode == "custom":
-        model = input(f"模型路径或名称 [{default_model}]：").strip() or default_model
-    else:
-        model = default_model
-    _set_nested(settings, "common.model_7b", model)
-    # 评估脚本中的对话模型默认也跟随用户选择；专用 13B 评分模型仍由 JSON 保持。
-    _set_nested(settings, "common.model_7b_chat", model)
 
     if not choose_dataset:
         return model, None
 
-    default_dataset = str(get_nested(settings, "common.dataset", "sst2"))
-    dataset_mode = choose_from_menu(
-        "请选择数据集",
-        [("default", f"使用配置默认数据集：{default_dataset}"), ("custom", "输入数据集名称")],
-    )
-    if dataset_mode is None:
+    dataset = str(get_nested(settings, "common.dataset", "sst2"))
+    if choose_from_menu("请选择数据集", [("configured", f"使用 JSON 配置数据集：{dataset}")]) is None:
         return None, None
-    dataset = default_dataset if dataset_mode == "default" else (input(f"数据集名称 [{default_dataset}]：").strip() or default_dataset)
-    _set_nested(settings, "common.dataset", dataset)
     return model, dataset
 
 
@@ -605,10 +534,10 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
     if task_kind is None:
         return None
     if task_kind == "finetune":
-        group = choose_from_menu("第二步：请选择敏感信息保护的微调方法", [(key, title) for key, (title, _) in FINETUNE_GROUPS.items()])
+        group = choose_from_menu("第二步：请选择敏感信息保护的微调方法", [(key, title) for key, (title, _) in FINETUNE_METHOD_GROUPS.items()])
         if group is None:
             return None
-        group_title, method_ids = FINETUNE_GROUPS[group]
+        group_title, method_ids = FINETUNE_METHOD_GROUPS[group]
         method_id = choose_from_menu(
             f"第三步：请选择{group_title}具体方法",
             [(key, f"{METHODS[key].title} — {METHODS[key].description}") for key in method_ids],
@@ -624,7 +553,7 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
     finetune_type = choose_from_menu("第三步：请选择评估模型的微调类型", [("explicit", "显式微调模型"), ("implicit", "隐式微调模型")])
     if finetune_type is None:
         return None
-    groups = EVALUATION_GROUPS[finetune_type]
+    groups = EVALUATION_METHOD_GROUPS[finetune_type]
     group = choose_from_menu("第四步：请选择扰动类型", [(key, title) for key, (title, _) in groups.items()])
     if group is None:
         return None
@@ -652,7 +581,12 @@ def interactive(settings: dict[str, Any]) -> int:
     if selection.unsupported:
         print("无扰动微调评估功能暂不在本系统需求范围内，当前不执行。")
         return 0
-    model, dataset = _choose_model_and_dataset(settings, choose_dataset=selection.task_kind == "finetune")
+    model, dataset = _choose_model_and_dataset(
+        settings,
+        method_id=selection.method_id,
+        experiment_id=selection.experiment_id,
+        choose_dataset=selection.task_kind == "finetune",
+    )
     if model is None or (selection.task_kind == "finetune" and dataset is None):
         print("已退出。")
         return 0
@@ -674,18 +608,10 @@ def interactive(settings: dict[str, Any]) -> int:
     dry_run = mode == "dry"
     all_specs = prompt_specs(method_id, experiment_id)
     specs = [spec for spec in all_specs if spec.key not in {"common.model_7b", "common.model_7b_chat"}]
-    collected: list[tuple[PromptSpec, Any]] = []
+    # 其他参数设置菜单暂时关闭，全部直接采用 JSON 配置值。
+    collected: list[tuple[PromptSpec, Any]] = [(spec, get_nested(settings, spec.key)) for spec in specs]
     if specs:
-        parameter_mode = choose_from_menu("其他参数设置", [("defaults", "使用 JSON 全部默认参数"), ("custom", "逐项调整 JSON 参数")])
-        if parameter_mode is None:
-            return 0
-        if parameter_mode == "defaults":
-            collected = [(spec, get_nested(settings, spec.key)) for spec in specs]
-        else:
-            for spec in specs:
-                value = _ask_setting(settings, spec)
-                _set_nested(settings, spec.key, value)
-                collected.append((spec, value))
+        print("其他实验参数：直接使用 JSON 配置默认值")
     if not _prepare_runtime(method_id, experiment_id, settings, dry_run):
         return 1
     if not _prepare_assets(method_id, experiment_id, settings, all_specs, dry_run):
