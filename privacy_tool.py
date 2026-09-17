@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""六种隐私保护方法的唯一命令行入口。"""
+"""具备MG信息保护能力的大模型微调支撑工具集原型系统命令行入口"""
 
 from privacy_tools.unified import main
 

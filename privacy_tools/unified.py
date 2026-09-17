@@ -176,7 +176,7 @@ def prompt_specs(method_id: str, experiment_id: str) -> list[PromptSpec]:
             return _native_adapter_indirect_specs(method_id)
         if experiment_id == "utility":
             return [MODEL, GPU, EPS_CLIP, TOP_K, STOP_WORDS, CLIP_BATCH, CLIP_EPOCHS]
-        if experiment_id == "baseline":
+        if experiment_id in {"baseline", "performance_baseline"}:
             return [MODEL, GPU, CLIP_BATCH, CLIP_EPOCHS]
         return []
     if method_id == "ptcds":
@@ -184,7 +184,7 @@ def prompt_specs(method_id: str, experiment_id: str) -> list[PromptSpec]:
             return _attack_specs(method_id)
         if experiment_id == "indirect_attack":
             return _native_adapter_indirect_specs(method_id)
-        if experiment_id == "baseline":
+        if experiment_id in {"baseline", "performance_baseline"}:
             return [MODEL, GPU]
         return [MODEL, GPU, PT_TRAIN_DATA]
     if method_id == "kal_dp":
@@ -217,7 +217,7 @@ def prompt_specs(method_id: str, experiment_id: str) -> list[PromptSpec]:
                 PromptSpec("methods.dadp_icl.native_attack_samples", "成员与非成员各处理的样本数", "int"),
                 PromptSpec("methods.dadp_icl.native_attack_neighbors", "每条文本使用的邻居数", "int"),
             ]
-        if experiment_id == "baseline":
+        if experiment_id in {"baseline", "performance_baseline"}:
             return [MODEL, GPU, DADP_VALID, DADP_TEST]
         return [MODEL, GPU, DADP_SIGMA, DADP_TRAIN, DADP_SPLITS, DADP_VALID, DADP_TEST, DADP_TOKENS]
     if method_id == "privsv":
@@ -318,14 +318,17 @@ def _confirm_real_run() -> bool:
 
 
 def _prepare_runtime(method_id: str, experiment_id: str, settings: dict[str, Any], dry_run: bool) -> bool:
-    plan = environment_plan(method_id, experiment_id)
+    runtime_method = "dpsgd" if experiment_id == "performance_baseline" and method_id not in {"kal_dp", "zo_dpga"} else method_id
+    runtime_experiment = "utility" if experiment_id == "performance_baseline" else experiment_id
+    plan = environment_plan(runtime_method, runtime_experiment)
+    python_profile = "kal_dp" if experiment_id == "performance_baseline" and method_id in {"kal_dp", "zo_dpga"} else runtime_method
     configured = str(get_nested(
         settings,
-        f"python.{method_id}",
+        f"python.{python_profile}",
         get_nested(settings, "python.default", sys.executable),
     ))
     selected = Path(configured).expanduser()
-    _set_nested(settings, f"python.{method_id}", configured)
+    _set_nested(settings, f"python.{python_profile}", configured)
     if dry_run:
         print(f"  安全预演使用默认配置的 Python环境：{configured}")
         print("  安全预演不会安装依赖。")
@@ -596,7 +599,7 @@ def interactive(settings: dict[str, Any]) -> int:
     if selection.task_kind == "finetune":
         experiment_id = choose_from_menu(
             "下一步：请选择执行当前方法还是对比方法",
-            [("utility", "当前方法"), ("baseline", "对比方法")],
+            [("utility", "当前方法"), ("baseline", "效用对比方法"), ("performance_baseline", "性能对比方法")],
         )
         if experiment_id is None:
             return 0
@@ -631,7 +634,8 @@ def interactive(settings: dict[str, Any]) -> int:
     print(f"模式：{'安全预演' if dry_run else '真实执行'}")
     # for spec, value in collected:
     #     print(f"{spec.label}：{_display_value(value)}")
-    check_code = doctor(method, settings, check_dataset=selection.task_kind == "finetune")
+    python_profile = "kal_dp" if experiment_id == "performance_baseline" and method_id in {"kal_dp", "zo_dpga"} else ("dpsgd" if experiment_id == "performance_baseline" else method_id)
+    check_code = doctor(method, settings, check_dataset=selection.task_kind == "finetune", python_profile=python_profile)
     if check_code and not dry_run:
         return check_code
     if dry_run:

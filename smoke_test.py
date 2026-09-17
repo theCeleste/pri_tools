@@ -99,7 +99,7 @@ def main() -> int:
     print("[ OK ] 六种方法的全部运行项均有依赖检查方案")
 
     failures += 0 if run("统一入口菜单清单", [sys.executable, "privacy_tool.py", "list"]) else 1
-    failures += 0 if run("24 个运行项完整结构审计", [sys.executable, "full_audit.py"]) else 1
+    failures += 0 if run("30 个运行项完整结构审计", [sys.executable, "full_audit.py"]) else 1
 
     removed_prompts = (
         "输入模型路径",
@@ -110,7 +110,7 @@ def main() -> int:
     failures += 0 if run_interactive(
         "新 UI 微调路径",
         "1\n1\n1\n1\n1\n1\n1\ny\n",
-        ("任务：微调", "实验：本微调方法", "当前可选模型", "当前可选数据集", "JSON 配置的 Python", "数据集路径："),
+        ("任务：微调", "实验：本微调方法", "当前可选模型", "当前可选数据集", "安全预演使用默认配置的 Python环境", "数据集路径："),
         removed_prompts,
     ) else 1
     failures += 0 if run_interactive(
@@ -126,14 +126,14 @@ def main() -> int:
     ) else 1
 
     for method in ("cliptext", "ptcds", "kal_dp", "zo_dpga", "dadp_icl", "privsv"):
-        for experiment in ("utility", "baseline", "direct_attack", "indirect_attack"):
+        for experiment in ("utility", "baseline", "performance_baseline", "direct_attack", "indirect_attack"):
             command = [sys.executable, "privacy_tool.py", "run", "--method", method, "--experiment", experiment, "--dry-run"]
             failures += 0 if run(f"{method}/{experiment} 命令预演", command) else 1
 
     if failures:
         print(f"\n自检未通过，共 {failures} 项失败。")
         return 1
-    print("\n自检通过：微调/评估任务菜单、六种方法的 24 个底层运行项、统一指标 CSV，以及全部命令预演均正常。")
+    print("\n自检通过：微调/评估任务菜单、六种方法的 30 个底层运行项、统一指标 CSV，以及全部命令预演均正常。")
     print("下一步：直接运行 python3 privacy_tool.py，按助手提示选择任务和方法。")
     return 0
 

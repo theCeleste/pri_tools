@@ -36,6 +36,8 @@ ZO_ROOT = PROJECT_ROOT / "ZO-DPGA"
 ZO_REPRODUCTION = ZO_ROOT / "run_zo_dpga_858_reproduction.py"
 DADP_ROOT = PROJECT_ROOT / "DADP-ICL"
 PRIVSV_ROOT = PROJECT_ROOT / "PrivSV"
+DPSGD_ROOT = PROJECT_ROOT / "dpsgd"
+DPSGD_SCRIPT = DPSGD_ROOT / "dpsgd.py"
 
 
 # User-facing task topology. Command builders remain registered on Method below.
@@ -559,6 +561,62 @@ def peft_train(settings: dict[str, Any], run_dir: Path) -> list[Step]:
         run_dir,
         env=method_env(settings, KAL_ROOT),
     )]
+
+
+def _dpsgd_performance(settings: dict[str, Any], run_dir: Path, *, method_id: str, use_kal_script: bool = False) -> list[Step]:
+    """统一性能基线；Kal-DP/ZO-DPGA 复用 Kal-DP 原始 DP-SGD。"""
+    profile = "kal_dp" if use_kal_script else "dpsgd"
+    if use_kal_script:
+        source = KAL_ROOT / "dpsgd.py"
+        args = [
+            "--batch_size", get_nested(settings, "methods.kal_dp.batch_size", 32),
+            "--max_physical_batch_size", get_nested(settings, "methods.kal_dp.dpsgd_max_physical_batch_size", 12),
+            "--seq_length", 128, "--is_lora", "True",
+            "--lora_rank", get_nested(settings, "dpsgd.lora_rank", 16),
+            "--learning_rate", get_nested(settings, "methods.kal_dp.learning_rate", 1e-4),
+            "--max_grad_norm", get_nested(settings, "methods.kal_dp.max_grad_norm", 3.0),
+            "--epochs", 1,
+            "--model_name", _common_value(settings, "model_7b", "meta-llama/Llama-2-7b-hf"),
+        ]
+        replacements = _patch_dp_accounting(
+            source,
+            float(get_nested(settings, "dpsgd.target_epsilon", 8.0)),
+            float(get_nested(settings, "dpsgd.target_delta", 1e-5)),
+            1,
+        )
+    else:
+        source = DPSGD_SCRIPT
+        args = [
+            "--model_name", _common_value(settings, "model_7b", "meta-llama/Llama-2-7b-hf"),
+            "--target_epsilon", get_nested(settings, "dpsgd.target_epsilon", 8.0),
+            "--target_delta", get_nested(settings, "dpsgd.target_delta", 1e-5),
+            "--max_grad_norm", get_nested(settings, "dpsgd.max_grad_norm", 1.0),
+            "--num_epochs", 1,
+            "--per_device_batch_size", get_nested(settings, "dpsgd.per_device_batch_size", 8),
+            "--max_physical_batch_size", get_nested(settings, "dpsgd.max_physical_batch_size", 8),
+            "--logical_batch_size", get_nested(settings, "dpsgd.logical_batch_size", 256),
+            "--learning_rate", get_nested(settings, "dpsgd.learning_rate", 2e-4),
+            "--lora_r", get_nested(settings, "dpsgd.lora_r", 8),
+            "--output_dir", run_dir / "model_output",
+            "--dataset_path", _as_path(get_nested(settings, "common.dataset_path", SHARED_SST2_ROOT)),
+        ]
+        replacements = None
+    return [python_step(
+        settings, method_id, "运行 DP-SGD 性能对比基线", source, args, run_dir,
+        env=method_env(settings, source.parent), replacements=replacements, python_profile=profile,
+    )]
+
+
+def generic_dpsgd_performance(settings: dict[str, Any], run_dir: Path) -> list[Step]:
+    return _dpsgd_performance(settings, run_dir, method_id="cliptext")
+
+
+def kal_dpsgd_performance(settings: dict[str, Any], run_dir: Path) -> list[Step]:
+    return _dpsgd_performance(settings, run_dir, method_id="kal_dp", use_kal_script=True)
+
+
+def zo_dpsgd_performance(settings: dict[str, Any], run_dir: Path) -> list[Step]:
+    return _dpsgd_performance(settings, run_dir, method_id="zo_dpga", use_kal_script=True)
 
 
 def kal_prefix_attack(settings: dict[str, Any], run_dir: Path) -> list[Step]:
@@ -1376,7 +1434,8 @@ def embedding_methods() -> dict[str, Method]:
             [CLIP_SST / "main.py", CLIP_ROOT / "dp" / "cliptext.py", CLIP_ATTACK / "neighbour_attack.py", CLIP_ATTACK / "neighbour_attack_wo.py", ATTACK_EVALUATOR],
             [
                 Experiment("utility", "本微调方法", "在 ClipText 脱敏文本上进行微调，输出 Acc、内存、运行时间和吞吐率。", clip_llama_utility),
-                Experiment("baseline", "对比微调方法", "在原始 SST-2 文本上运行相同 LoRA 微调，输出对比 Acc 与效率指标。", clip_baseline),
+                Experiment("baseline", "效用对比方法", "在原始 SST-2 文本上运行相同 LoRA 微调，仅输出准确率。", clip_baseline),
+                Experiment("performance_baseline", "性能对比方法", "运行统一 DP-SGD 性能基线，仅输出性能指标。", generic_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", clip_prefix_attack),
                 Experiment("indirect_attack", "间接评估", "执行邻居成员推断评估并保存攻击性能指标。", clip_indirect_attack),
             ],
@@ -1398,7 +1457,8 @@ def embedding_methods() -> dict[str, Method]:
             ],
             [
                 Experiment("utility", "本微调方法", "运行 PTCDS 微调，输出 Acc、内存、运行时间和吞吐率。", ptcds_train),
-                Experiment("baseline", "对比微调方法", "在原始 SST-2 文本上运行 LoRA 对比微调，输出对比 Acc 与效率指标。", ptcds_baseline),
+                Experiment("baseline", "效用对比方法", "在原始 SST-2 文本上运行 LoRA 对比微调，仅输出准确率。", ptcds_baseline),
+                Experiment("performance_baseline", "性能对比方法", "运行统一 DP-SGD 性能基线，仅输出性能指标。", generic_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", ptcds_prefix_attack),
                 Experiment("indirect_attack", "间接评估", "执行邻居成员推断评估并保存攻击性能指标。", ptcds_indirect_attack),
             ],
@@ -1418,7 +1478,8 @@ def gradient_methods() -> dict[str, Method]:
             [KAL_ROOT / "kal_dp.py", KAL_ROOT / "dpsgd.py", KAL_ATTACK / "neighbour_attack.py", KAL_ATTACK / "neighbour_attack_wo.py"],
             [
                 Experiment("utility", "本微调方法", "运行 Kal-DP 微调，输出 Acc、内存、运行时间和吞吐率。", kal_train),
-                Experiment("baseline", "对比微调方法", "运行相同隐私预算下的 DP-SGD 对比微调，输出 Acc、内存、运行时间和吞吐率。", dpsgd_train),
+                Experiment("baseline", "效用对比方法", "运行非隐私 LoRA/PEFT 对比训练，仅输出准确率。", peft_train),
+                Experiment("performance_baseline", "性能对比方法", "运行 Kal-DP 原始 DP-SGD 性能基线，仅输出性能指标。", kal_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", kal_prefix_attack),
                 Experiment("indirect_attack", "间接评估", "执行邻居成员推断评估并保存攻击性能指标。", kal_indirect_attack),
             ],
@@ -1432,7 +1493,8 @@ def gradient_methods() -> dict[str, Method]:
             [ZO_ROOT / "run_formal_experiment.py", ZO_REPRODUCTION, ZO_ROOT / "tests" / "validate_zo_math.py"],
             [
                 Experiment("utility", "本微调方法", "运行 ZO-DPGA 微调，输出 Acc、内存、运行时间和吞吐率。", zo_reproduce),
-                Experiment("baseline", "对比微调方法", "运行 LoRA + MeZO 对比微调，输出对比 Acc 与效率指标。", zo_baseline),
+                Experiment("baseline", "效用对比方法", "运行 LoRA + MeZO 对比微调，仅输出准确率。", zo_baseline),
+                Experiment("performance_baseline", "性能对比方法", "运行 Kal-DP 原始 DP-SGD 性能基线，仅输出性能指标。", zo_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", zo_prefix_attack),
                 Experiment("indirect_attack", "间接评估", "执行邻居成员推断评估并保存攻击性能指标。", zo_indirect_attack),
             ],
@@ -1451,7 +1513,8 @@ def example_methods() -> dict[str, Method]:
             [DADP_ROOT / "run_exp_sst2_loca_monitor.py", DADP_ROOT / "direct_attack" / "member_test.py", DADP_ROOT / "Indirect_attack" / "neighbour_mia.py"],
             [
                 Experiment("utility", "本微调方法", "运行 DADP-ICL 私有示例生成与隐式微调，输出 Acc、内存、运行时间和吞吐率。", dadp_utility),
-                Experiment("baseline", "对比微调方法", "关闭私有聚合并进行隐式微调，输出对比 Acc 与效率指标。", dadp_nonprivate),
+                Experiment("baseline", "效用对比方法", "关闭私有聚合并进行隐式微调，仅输出准确率。", dadp_nonprivate),
+                Experiment("performance_baseline", "性能对比方法", "运行统一 DP-SGD 性能基线，仅输出性能指标。", generic_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", dadp_direct_attack),
                 Experiment("indirect_attack", "间接评估", "执行邻居成员推断评估并保存攻击性能指标。", dadp_indirect_attack),
             ],
@@ -1465,7 +1528,8 @@ def example_methods() -> dict[str, Method]:
             [PRIVSV_ROOT / "run.py", PRIVSV_ROOT / "steering_wrapper.py", PRIVSV_ROOT / "direct_attack" / "member_test-sv.py", PRIVSV_ROOT / "Indirect_attack" / "neighbour_mia_sv.py"],
             [
                 Experiment("utility", "本微调方法", "训练私有引导向量并评估，输出 Acc、内存、运行时间和吞吐率。", privsv_utility),
-                Experiment("baseline", "对比微调方法", "运行无噪声引导向量对比方法，输出对比 Acc 与效率指标。", privsv_ablation),
+                Experiment("baseline", "效用对比方法", "运行无噪声引导向量对比方法，仅输出准确率。", privsv_ablation),
+                Experiment("performance_baseline", "性能对比方法", "运行统一 DP-SGD 性能基线，仅输出性能指标。", generic_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", privsv_direct_attack),
                 Experiment("indirect_attack", "间接评估", "执行邻居成员推断评估并保存攻击性能指标。", privsv_indirect_attack),
             ],

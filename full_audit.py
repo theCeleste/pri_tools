@@ -20,11 +20,12 @@ from privacy_tools.core import (
 from privacy_tools.unified import CATEGORIES, METHOD_GROUPS, METHODS, _confirm_real_run, prompt_specs
 
 
-EXPECTED_CHOICES = 24
-EXPECTED_KINDS = {"experiment": 24}
+EXPECTED_CHOICES = 30
+EXPECTED_KINDS = {"experiment": 30}
 EXPECTED_EXPERIMENTS = (
     ("utility", "本微调方法"),
-    ("baseline", "对比微调方法"),
+    ("baseline", "效用对比方法"),
+    ("performance_baseline", "性能对比方法"),
     ("direct_attack", "直接评估"),
     ("indirect_attack", "间接评估"),
 )
@@ -205,7 +206,8 @@ def structural_audit() -> int:
                     failures.append(f"{label}: 实验 ID 重复")
                 seen.add(experiment.id)
 
-                plan = environment_plan(method_id, experiment.id)
+                runtime_method = "dpsgd" if experiment.id == "performance_baseline" and method_id not in {"kal_dp", "zo_dpga"} else method_id
+                plan = environment_plan(runtime_method, "utility" if experiment.id == "performance_baseline" else experiment.id)
                 if plan.requirements is not None and not plan.requirements.is_file():
                     failures.append(f"{label}: 缺少依赖文件 {plan.requirements}")
                 specs = prompt_specs(method_id, experiment.id)
@@ -255,7 +257,7 @@ def structural_audit() -> int:
                         forbidden = {"--target_layer", "--cluster_num", "--recluster", "--eps"}
                         if any(option in command for option in forbidden):
                             failures.append(f"{label}: 仍混入旧版隐层聚类训练参数")
-                    if label == "kal_dp/baseline":
+                    if label == "kal_dp/performance_baseline":
                         command = step.command
                         expected_options = {
                             "--batch_size": "32",
@@ -265,7 +267,7 @@ def structural_audit() -> int:
                             "--lora_rank": "16",
                             "--learning_rate": "0.0001",
                             "--max_grad_norm": "3.0",
-                            "--epochs": "2",
+                            "--epochs": "1",
                         }
                         for option, expected in expected_options.items():
                             if option not in command or command[command.index(option) + 1] != expected:

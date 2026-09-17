@@ -21,6 +21,17 @@
     "privsv": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
     "dpsgd": "/home/zjs/anaconda3/envs/dpsgd/bin/python"
   },
+  "dpsgd": {
+    "target_epsilon": 8.0,
+    "target_delta": 0.00001,
+    "max_grad_norm": 1.0,
+    "num_epochs": 1,
+    "per_device_batch_size": 8,
+    "max_physical_batch_size": 8,
+    "logical_batch_size": 256,
+    "learning_rate": 0.0002,
+    "lora_r": 8
+  },
   "methods": {
     "cliptext": {
       "epsilon": 10.0,

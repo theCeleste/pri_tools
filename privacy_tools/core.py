@@ -131,8 +131,9 @@ def python_step(
     *,
     env: dict[str, str] | None = None,
     replacements: dict[str, str] | None = None,
+    python_profile: str | None = None,
 ) -> Step:
-    command = [configured_python(settings, method_id), str(script), *[str(arg) for arg in args]]
+    command = [configured_python(settings, python_profile or method_id), str(script), *[str(arg) for arg in args]]
     return Step(
         name=name,
         command=command,
@@ -389,11 +390,17 @@ def print_historical_results(
     except OSError as exc:
         print(f"\n读取历史结果失败：{result_file}（{exc}）")
         return
+    if experiment_id == "baseline":
+        lines = [line for line in content.splitlines() if re.search(r"准确率|Accuracy|基准方法|peft|Prompt|非隐私|对比方法", line, re.I)]
+        content = "\n".join(lines)
+    elif experiment_id == "performance_baseline":
+        lines = [line for line in content.splitlines() if re.search(r"内存|memory|运行时间|runtime|耗时|吞吐率|throughput|samples?/sec|DP-SGD|性能对比", line, re.I)]
+        content = "\n".join(lines)
     print(f"\n===== {method_title or method_id} {result_label}结果 =====")
-    print(content or "（历史结果文件为空）")
+    print(content or "（历史结果文件中没有匹配的指标）")
     if real_execution and experiment_id == "utility":
         print("\n其中基准方法结果为历史结果")
-    elif real_execution and experiment_id == "baseline":
+    elif real_execution and experiment_id in {"baseline", "performance_baseline"}:
         print("\n其中所提出方法结果为历史结果")
 
 
@@ -643,6 +650,16 @@ def write_metrics_result(
         "throughput_source": throughput_source,
         "epsilon_source": epsilon_source,
     }
+    if experiment.id == "baseline":
+        for key in (
+            "peak_memory_gb", "memory_scope", "runtime_hours",
+            "throughput_samples_per_second", "memory_source",
+            "runtime_source", "throughput_source",
+        ):
+            result[key] = ""
+    elif experiment.id == "performance_baseline":
+        result["accuracy_pct"] = ""
+        result["accuracy_source"] = ""
     result_path = run_dir.parent / "experiment_metrics.csv"
     exists = result_path.exists() and result_path.stat().st_size > 0
     encoding = "utf-8" if exists else "utf-8-sig"
@@ -792,7 +809,7 @@ def run_experiment(
     artifacts.extend(path for path in discover_artifacts(run_dir) if path not in artifacts)
     if dry_run:
         print("\n安全预演完成，当前输出结果为历史运行结果。")
-    elif experiment.id in {"utility", "baseline"}:
+    elif experiment.id in {"utility", "baseline", "performance_baseline"}:
         result_path = write_metrics_result(run_dir, method, experiment, return_code, started_at, artifacts, settings)
         print(f"\n训练指标结果：{result_path}")
     else:
@@ -823,7 +840,7 @@ def configured_dataset_path(settings: dict[str, Any]) -> Path:
     return (TOOL_ROOT / "datasets" / directory_name).resolve()
 
 
-def doctor(method: Method, settings: dict[str, Any], *, check_dataset: bool = True) -> int:
+def doctor(method: Method, settings: dict[str, Any], *, check_dataset: bool = True, python_profile: str | None = None) -> int:
     failures = 0
     print(f"\n[{method.title}] 环境检查")
     print(f"代码目录：{method.root}")
@@ -838,7 +855,7 @@ def doctor(method: Method, settings: dict[str, Any], *, check_dataset: bool = Tr
         else:
             print(f"  [FAIL] 缺少 {path}")
             failures += 1
-    executable = configured_python(settings, method.id)
+    executable = configured_python(settings, python_profile or method.id)
     ok, resolved = _python_available(executable)
     print(f"  [{'OK' if ok else 'FAIL'}] Python: {resolved}")
     failures += 0 if ok else 1

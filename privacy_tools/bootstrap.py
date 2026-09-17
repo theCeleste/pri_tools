@@ -44,10 +44,12 @@ FULL_IMPORTS: dict[str, tuple[str, ...]] = {
     "dadp_icl": ("torch", "transformers", "datasets", "autodp", "scipy", "pandas", "tiktoken"),
     "privsv": ("torch", "transformers", "datasets", "steering_vectors", "sklearn", "pandas"),
 }
+FULL_IMPORTS["dpsgd"] = ("torch", "transformers", "datasets", "peft", "opacus", "numpy", "pandas", "sklearn", "psutil")
 
 FULL_REQUIREMENTS = {
     method: REQUIREMENTS_ROOT / f"{method}.txt" for method in FULL_IMPORTS
 }
+FULL_REQUIREMENTS["dpsgd"] = REQUIREMENTS_ROOT / "dpsgd.txt"
 
 NO_DEPENDENCY_EXPERIMENTS = {
     ("zo_dpga", "summarize"),
