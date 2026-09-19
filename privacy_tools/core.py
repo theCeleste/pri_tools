@@ -184,10 +184,10 @@ def evaluation_scope(step_name: str) -> str:
     return "当前方法评估流程"
 
 
-def evaluation_banner(method: Method, experiment: Experiment, step: Step) -> str | None:
+def evaluation_banner(method: Method, experiment: Experiment, step: Step, display_title: str | None = None) -> str | None:
     if experiment.id not in {"direct_attack", "indirect_attack"}:
         return None
-    return f"当前评估：{method.title}｜{evaluation_scope(step.name)}"
+    return f"当前评估：{display_title or method.title}｜{evaluation_scope(step.name)}"
 
 
 def _materialize_patched_step(step: Step, run_dir: Path, index: int) -> Step:
@@ -355,6 +355,8 @@ def print_historical_results(
     method_title: str | None = None,
     experiment_id: str | None = None,
     real_execution: bool = False,
+    display_title: str | None = None,
+    baseline_only: bool = False,
 ) -> None:
     """Print the prepared result for the selected method and experiment kind."""
     if not root.exists():
@@ -390,13 +392,16 @@ def print_historical_results(
     except OSError as exc:
         print(f"\n读取历史结果失败：{result_file}（{exc}）")
         return
-    if experiment_id == "baseline":
+    if baseline_only:
+        match = re.search(r"(?ms)^基准方法\s*$.*?(?=^\S|\Z)", content)
+        content = match.group(0).strip() if match else ""
+    elif experiment_id == "baseline":
         lines = [line for line in content.splitlines() if re.search(r"准确率|Accuracy|基准方法|peft|Prompt|非隐私|对比方法", line, re.I)]
         content = "\n".join(lines)
     elif experiment_id == "performance_baseline":
         lines = [line for line in content.splitlines() if re.search(r"内存|memory|运行时间|runtime|耗时|吞吐率|throughput|samples?/sec|DP-SGD|性能对比", line, re.I)]
         content = "\n".join(lines)
-    print(f"\n===== {method_title or method_id} {result_label}结果 =====")
+    print(f"\n===== {display_title or method_title or method_id} {result_label}结果 =====")
     print(content or "（历史结果文件中没有匹配的指标）")
     if real_execution and experiment_id == "utility":
         print("\n其中基准方法结果为历史结果")
@@ -686,6 +691,8 @@ def run_experiment(
     settings: dict[str, Any],
     *,
     dry_run: bool,
+    display_title: str | None = None,
+    historical_baseline_only: bool = False,
 ) -> int:
     method_path_name = method.path_name or method.title
     run_dir = create_run_dir(settings, category, method_path_name, experiment.id)
@@ -733,7 +740,7 @@ def run_experiment(
     print(f"\n运行目录：{run_dir}")
     for index, step in enumerate(materialized_steps, 1):
         print(f"[{index}/{len(materialized_steps)}] {step.name}")
-        banner = evaluation_banner(method, experiment, step)
+        banner = evaluation_banner(method, experiment, step, display_title)
         # if banner:
         #     print(f"  >>> {banner}")
         print(f"  cwd: {step.cwd}")
@@ -748,7 +755,7 @@ def run_experiment(
                 log.write(f"[{step.name}] cwd={step.cwd}\n{printable_command(step)}\n")
         else:
             for index, step in enumerate(materialized_steps, 1):
-                banner = evaluation_banner(method, experiment, step)
+                banner = evaluation_banner(method, experiment, step, display_title)
                 if banner:
                     banner_line = f"\n>>> {banner}\n"
                     safe_console_write(banner_line)
@@ -800,6 +807,8 @@ def run_experiment(
         method.title,
         experiment.id,
         real_execution=not dry_run,
+        display_title=display_title,
+        baseline_only=historical_baseline_only,
     )
     artifact_since = None if experiment.internal_report else started_at
     artifacts = discover_artifacts(method.root, since=artifact_since)
@@ -840,9 +849,16 @@ def configured_dataset_path(settings: dict[str, Any]) -> Path:
     return (TOOL_ROOT / "datasets" / directory_name).resolve()
 
 
-def doctor(method: Method, settings: dict[str, Any], *, check_dataset: bool = True, python_profile: str | None = None) -> int:
+def doctor(
+    method: Method,
+    settings: dict[str, Any],
+    *,
+    check_dataset: bool = True,
+    python_profile: str | None = None,
+    display_title: str | None = None,
+) -> int:
     failures = 0
-    print(f"\n[{method.title}] 环境检查")
+    print(f"\n[{display_title or method.title}] 环境检查")
     print(f"代码目录：{method.root}")
     if method.root.exists():
         print("  [OK] 代码目录存在")

@@ -110,19 +110,38 @@ def main() -> int:
     failures += 0 if run_interactive(
         "新 UI 微调路径",
         "1\n1\n1\n1\n1\n1\n1\ny\n",
-        ("任务：微调", "实验：本微调方法", "当前可选模型", "当前可选数据集", "安全预演使用默认配置的 Python环境", "数据集路径："),
+        ("任务：微调", "实验：当前微调方法", "Llama-2-7b", "sst2", "安全预演使用默认配置的 Python环境", "数据集路径："),
         removed_prompts,
     ) else 1
     failures += 0 if run_interactive(
         "新 UI 评估路径",
         "2\n1\n1\n2\n1\n1\n1\ny\n",
-        ("任务：评估", "评估类型：直接评估", "微调类型：显式微调模型", "当前可选模型"),
+        ("任务：评估", "评估类型：直接评估", "微调类型：显式微调模型", "Llama-2-7b"),
         removed_prompts + ("数据集路径：",),
     ) else 1
     failures += 0 if run_interactive(
-        "无扰动评估占位接口",
-        "2\n1\n1\n3\n",
-        ("无扰动微调评估功能暂不在本系统需求范围内，当前不执行。",),
+        "ChatGLM 显式无扰动评估接口",
+        "2\n1\n1\n3\n2\n1\n",
+        ("模型：ChatGLM3-6b", "ChatGLM3-6b 显式微调无扰动评估接口已预留"),
+        ("请选择模型\n", "方法：Kal-DP", "方法：DADP-ICL"),
+    ) else 1
+    failures += 0 if run_interactive(
+        "Llama 显式无扰动直接评估",
+        "2\n1\n1\n3\n1\n1\ny\n",
+        ("模型：Llama-2-7b", "扰动类型：无扰动", "===== 显式微调 直接评估结果 =====", "基准方法"),
+        ("请选择模型\n", "方法：Kal-DP", "本方法\n"),
+    ) else 1
+    failures += 0 if run_interactive(
+        "Llama 隐式无扰动间接评估",
+        "2\n2\n2\n2\n1\n1\ny\n",
+        ("模型：Llama-2-7b", "扰动类型：无扰动", "===== 隐式微调 间接评估结果 =====", "基准方法"),
+        ("请选择模型\n", "方法：DADP-ICL", "本方法\n"),
+    ) else 1
+    failures += 0 if run_interactive(
+        "Llama 隐式无扰动直接评估",
+        "2\n1\n2\n2\n1\n1\ny\n",
+        ("按原始说明用原始示例提示执行前缀抽取", "按原始 member_test 统计原始提示攻击命中率"),
+        ("按原始说明用合成示例提示执行前缀抽取", "统计合成提示攻击命中率"),
     ) else 1
 
     for method in ("cliptext", "ptcds", "kal_dp", "zo_dpga", "dadp_icl", "privsv"):

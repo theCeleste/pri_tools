@@ -53,8 +53,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="复核共享遗留邻居成员推断样例")
     parser.add_argument("--base-train-pkl", type=Path, required=True)
     parser.add_argument("--base-test-pkl", type=Path, required=True)
-    parser.add_argument("--priv-train-pkl", type=Path, required=True)
-    parser.add_argument("--priv-test-pkl", type=Path, required=True)
+    parser.add_argument("--priv-train-pkl", type=Path)
+    parser.add_argument("--priv-test-pkl", type=Path)
+    parser.add_argument("--baseline-only", action="store_true")
     parser.add_argument("--target-fprs", type=float, nargs="+", default=[0.01, 0.001, 0.0001])
     parser.add_argument("--pos-neg-ratio", type=float, default=1.0)
     parser.add_argument("--seed", type=int, default=0)
@@ -66,27 +67,32 @@ def main() -> int:
     base_train, base_test = subsample(
         score_gaps(args.base_train_pkl), score_gaps(args.base_test_pkl), args.pos_neg_ratio, args.seed
     )
-    protected_train, protected_test = subsample(
-        score_gaps(args.priv_train_pkl), score_gaps(args.priv_test_pkl), args.pos_neg_ratio, args.seed + 1
-    )
+    if not args.baseline_only and (args.priv_train_pkl is None or args.priv_test_pkl is None):
+        parser.error("非 baseline-only 模式必须提供 --priv-train-pkl 和 --priv-test-pkl")
+    protected_train = protected_test = None
+    if not args.baseline_only:
+        protected_train, protected_test = subsample(
+            score_gaps(args.priv_train_pkl), score_gaps(args.priv_test_pkl), args.pos_neg_ratio, args.seed + 1
+        )
     rows: list[dict[str, object]] = []
     for target in args.target_fprs:
         # 阈值只由基线非成员分数确定；随后固定阈值比较基线和受保护结果。
         threshold = float(np.quantile(base_test, 1.0 - target, method="higher"))
         base_tpr, base_fpr = rates(base_train, base_test, threshold)
-        protected_tpr, protected_fpr = rates(protected_train, protected_test, threshold)
-        rows.append({
+        row = {
             "target_fpr": target,
             "threshold_from_baseline": threshold,
             "baseline_tpr": base_tpr,
             "baseline_fpr": base_fpr,
-            "protected_tpr": protected_tpr,
-            "protected_fpr": protected_fpr,
             "positive_samples": len(base_train),
             "negative_samples": len(base_test),
             "scope": args.scope,
             "method_independent_evidence": args.method_specific,
-        })
+        }
+        if protected_train is not None and protected_test is not None:
+            protected_tpr, protected_fpr = rates(protected_train, protected_test, threshold)
+            row.update({"protected_tpr": protected_tpr, "protected_fpr": protected_fpr})
+        rows.append(row)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w", encoding="utf-8", newline="") as handle:
@@ -98,6 +104,7 @@ def main() -> int:
         "evaluation": "neighbour_membership_inference",
         "scope": args.scope,
         "method_independent_evidence": args.method_specific,
+        "baseline_only": args.baseline_only,
         "rows": rows,
         "csv": str(args.output),
     }

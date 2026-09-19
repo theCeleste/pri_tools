@@ -7,6 +7,7 @@
     "dataset_path": "privacy_tools/datasets/sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
     "model_7b_chat": "meta-llama/Llama-2-7b-chat-hf",
+    "chatglm3_6b": "THUDM/chatglm3-6b",
     "model_13b": "meta-llama/Llama-2-13b-hf",
     "mask_model": "/home/zjs/llm/roberta-base",
     "hf_endpoint": "https://hf-mirror.com"
@@ -30,7 +31,7 @@
     "max_physical_batch_size": 8,
     "logical_batch_size": 256,
     "learning_rate": 0.0002,
-    "lora_r": 8
+    "lora_r": 4
   },
   "methods": {
     "cliptext": {

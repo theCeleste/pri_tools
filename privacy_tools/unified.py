@@ -26,8 +26,13 @@ from .catalog import (
     embedding_methods,
     example_methods,
     gradient_methods,
+    kal_no_perturbation_direct,
+    kal_no_perturbation_indirect,
+    dadp_no_perturbation_direct,
+    dadp_no_perturbation_indirect,
 )
 from .core import (
+    Experiment,
     Method,
     choose_from_menu,
     doctor,
@@ -83,6 +88,10 @@ class TaskSelection:
     model: str | None = None
     dataset: str | None = None
     unsupported: bool = False
+    evaluation_model: str | None = None
+    evaluation_model_title: str | None = None
+    backend_method_id: str | None = None
+    display_method_title: str | None = None
 
 
 PYTHON = PromptSpec("", "Python 解释器", "str", "直接回车使用当前激活环境")
@@ -351,7 +360,15 @@ def _looks_like_local_path(value: str) -> bool:
     return value.startswith(("/", "./", "../", "~", "\\")) or bool(re.match(r"^[A-Za-z]:[\\/]", value))
 
 
-def _prepare_assets(method_id: str, experiment_id: str, settings: dict[str, Any], specs: list[PromptSpec], dry_run: bool) -> bool:
+def _prepare_assets(
+    method_id: str,
+    experiment_id: str,
+    settings: dict[str, Any],
+    specs: list[PromptSpec],
+    dry_run: bool,
+    *,
+    baseline_only: bool = False,
+) -> bool:
     if dry_run:
         print("  安全预演只检查命令结构，不下载模型或数据。")
         return True
@@ -414,7 +431,9 @@ def _prepare_assets(method_id: str, experiment_id: str, settings: dict[str, Any]
         #             os.environ["HF_TOKEN"] = token
 
     if experiment_id == "direct_attack" and method_id in {"cliptext", "ptcds", "kal_dp", "zo_dpga"}:
-        adapter_keys = [f"methods.{method_id}.adapter_path", f"methods.{method_id}.baseline_adapter_path"]
+        adapter_keys = [f"methods.{method_id}.baseline_adapter_path"] if baseline_only else [
+            f"methods.{method_id}.adapter_path", f"methods.{method_id}.baseline_adapter_path"
+        ]
         for key in adapter_keys:
             while True:
                 raw = str(get_nested(settings, key, ""))
@@ -432,9 +451,9 @@ def _prepare_assets(method_id: str, experiment_id: str, settings: dict[str, Any]
                 _set_nested(settings, key, replacement)
 
     if experiment_id == "indirect_attack" and method_id in {"cliptext", "ptcds", "kal_dp", "zo_dpga"}:
-        adapter_keys = [f"methods.{method_id}.adapter_path"]
-        if method_id in {"cliptext", "ptcds", "kal_dp", "zo_dpga"}:
-            adapter_keys.append(f"methods.{method_id}.baseline_adapter_path")
+        adapter_keys = [f"methods.{method_id}.baseline_adapter_path"] if baseline_only else [
+            f"methods.{method_id}.adapter_path", f"methods.{method_id}.baseline_adapter_path"
+        ]
         for key in adapter_keys:
             while True:
                 raw = str(get_nested(settings, key, ""))
@@ -521,20 +540,20 @@ def _choose_model_and_dataset(
     fallback = "meta-llama/Llama-2-7b-chat-hf" if uses_chat_model else "meta-llama/Llama-2-7b-hf"
     model = str(get_nested(settings, model_key, fallback))
     model = "Llama-2-7b"
-    if choose_from_menu("请选择模型", [("configured", f"当前可选模型：{model}")]) is None:
+    if choose_from_menu("请选择模型", [("configured", f"{model}")]) is None:
         return None, None
 
     if not choose_dataset:
         return model, None
 
     dataset = str(get_nested(settings, "common.dataset", "sst2"))
-    if choose_from_menu("请选择数据集", [("configured", f"当前可选数据集：{dataset}")]) is None:
+    if choose_from_menu("请选择数据集", [("configured", f"{dataset}")]) is None:
         return None, None
     return model, dataset
 
 
 def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
-    task_kind = choose_from_menu("第一步：请选择任务类型", [("finetune", "微调"), ("evaluation", "评估")])
+    task_kind = choose_from_menu("第一步：请选择执行的方法类型", [("finetune", "微调方法"), ("evaluation", "评估方法")])
     if task_kind is None:
         return None
     if task_kind == "finetune":
@@ -563,7 +582,20 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
         return None
     group_title, method_ids = groups[group]
     if group == "none":
-        return TaskSelection("evaluation", "none", evaluation_type, "none", evaluation_type, finetune_type, unsupported=True)
+        model = choose_from_menu(
+            "请选择无扰动评估模型",
+            [("llama", "Llama-2-7b"), ("chatglm", "ChatGLM3-6b")],
+        )
+        if model is None:
+            return None
+        explicit = finetune_type == "explicit"
+        return TaskSelection(
+            "evaluation", "none", evaluation_type, "none", evaluation_type, finetune_type,
+            evaluation_model=model,
+            evaluation_model_title="Llama-2-7b" if model == "llama" else "ChatGLM3-6b",
+            backend_method_id="kal_dp" if explicit else "dadp_icl",
+            display_method_title="显式微调" if explicit else "隐式微调",
+        )
     method_id = choose_from_menu(
         f"请选择{group_title}具体方法",
         [(key, f"{METHODS[key].title} — {METHODS[key].description}") for key in method_ids],
@@ -571,6 +603,40 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
     if method_id is None:
         return None
     return TaskSelection("evaluation", method_id, evaluation_type, group, evaluation_type, finetune_type)
+
+
+def _chatglm_explicit_direct_attack() -> int:
+    print("\n===== 显式微调 直接评估结果 =====")
+    print("ChatGLM3-6b 显式微调无扰动评估接口已预留，具体评估方法待补充。")
+    return 0
+
+
+def _chatglm_explicit_indirect_attack() -> int:
+    print("\n===== 显式微调 间接评估结果 =====")
+    print("ChatGLM3-6b 显式微调无扰动评估接口已预留，具体评估方法待补充。")
+    return 0
+
+
+def _chatglm_implicit_direct_attack() -> int:
+    print("\n===== 隐式微调 直接评估结果 =====")
+    print("ChatGLM3-6b 隐式微调无扰动评估接口已预留，具体评估方法待补充。")
+    return 0
+
+
+def _chatglm_implicit_indirect_attack() -> int:
+    print("\n===== 隐式微调 间接评估结果 =====")
+    print("ChatGLM3-6b 隐式微调无扰动评估接口已预留，具体评估方法待补充。")
+    return 0
+
+
+def _run_chatglm_no_perturbation(selection: TaskSelection) -> int:
+    handlers = {
+        ("explicit", "direct_attack"): _chatglm_explicit_direct_attack,
+        ("explicit", "indirect_attack"): _chatglm_explicit_indirect_attack,
+        ("implicit", "direct_attack"): _chatglm_implicit_direct_attack,
+        ("implicit", "indirect_attack"): _chatglm_implicit_indirect_attack,
+    }
+    return handlers[(selection.finetune_type, selection.experiment_id)]()
 
 
 def interactive(settings: dict[str, Any]) -> int:
@@ -583,22 +649,23 @@ def interactive(settings: dict[str, Any]) -> int:
     if selection is None:
         print("已退出。")
         return 0
-    if selection.unsupported:
-        print("无扰动微调评估功能暂不在本系统需求范围内，当前不执行。")
-        return 0
-    model, dataset = _choose_model_and_dataset(
-        settings,
-        method_id=selection.method_id,
-        experiment_id=selection.experiment_id,
-        choose_dataset=selection.task_kind == "finetune",
-    )
+    no_perturbation = selection.perturbation_group == "none"
+    method_id = selection.backend_method_id or selection.method_id
+    if no_perturbation:
+        model, dataset = selection.evaluation_model_title, None
+    else:
+        model, dataset = _choose_model_and_dataset(
+            settings,
+            method_id=method_id,
+            experiment_id=selection.experiment_id,
+            choose_dataset=selection.task_kind == "finetune",
+        )
     if model is None or (selection.task_kind == "finetune" and dataset is None):
         print("已退出。")
         return 0
-    method_id = selection.method_id
     if selection.task_kind == "finetune":
         experiment_id = choose_from_menu(
-            "下一步：请选择执行当前方法还是对比方法",
+            "请选择执行当前方法还是对比方法",
             [("utility", "当前方法"), ("baseline", "效用对比方法"), ("performance_baseline", "性能对比方法")],
         )
         if experiment_id is None:
@@ -607,10 +674,29 @@ def interactive(settings: dict[str, Any]) -> int:
         experiment_id = selection.experiment_id
     method = METHODS[method_id]
     experiment = next(item for item in method.experiments if item.id == experiment_id)
+    if selection.evaluation_model == "llama":
+        if method_id == "dadp_icl" and experiment_id == "indirect_attack":
+            _set_nested(settings, "common.model_7b_chat", get_nested(settings, "common.model_7b"))
+        builder = (
+            kal_no_perturbation_direct if method_id == "kal_dp" and experiment_id == "direct_attack" else
+            kal_no_perturbation_indirect if method_id == "kal_dp" else
+            dadp_no_perturbation_direct if experiment_id == "direct_attack" else
+            dadp_no_perturbation_indirect
+        )
+        experiment = Experiment(experiment.id, "无扰动基准评估", experiment.description, builder=builder)
     mode = choose_from_menu("请选择执行模式", [("dry", "安全预演（推荐）"), ("run", "真实执行")])
     if mode is None:
         return 0
     dry_run = mode == "dry"
+    if selection.evaluation_model == "chatglm":
+        print("\n---------------- 任务确认 ----------------")
+        print("任务：评估")
+        print(f"评估类型：{'直接评估' if experiment_id == 'direct_attack' else '间接评估'}")
+        print(f"微调类型：{'显式微调模型' if selection.finetune_type == 'explicit' else '隐式微调模型'}")
+        print("扰动类型：无扰动")
+        print(f"模型：{model}")
+        print(f"模式：{'安全预演' if dry_run else '真实执行'}")
+        return _run_chatglm_no_perturbation(selection)
     all_specs = prompt_specs(method_id, experiment_id)
     specs = [spec for spec in all_specs if spec.key not in {"common.model_7b", "common.model_7b_chat"}]
     # 其他参数设置菜单暂时关闭，全部直接采用 JSON 配置值。
@@ -619,15 +705,18 @@ def interactive(settings: dict[str, Any]) -> int:
         print("其他实验参数：直接使用默认值")
     if not _prepare_runtime(method_id, experiment_id, settings, dry_run):
         return 1
-    if not _prepare_assets(method_id, experiment_id, settings, all_specs, dry_run):
+    if not _prepare_assets(method_id, experiment_id, settings, all_specs, dry_run, baseline_only=no_perturbation):
         return 1
     print("\n---------------- 任务确认 ----------------")
     print(f"任务：{'微调' if selection.task_kind == 'finetune' else '评估'}")
-    print(f"方法：{method.title}（{method.id}）")
+    if not no_perturbation:
+        print(f"方法：{method.title}（{method.id}）")
     print(f"实验：{experiment.title}（{experiment.id}）")
     if selection.task_kind == "evaluation":
         print(f"评估类型：{'直接评估' if selection.evaluation_type == 'direct_attack' else '间接评估'}")
         print(f"微调类型：{'显式微调模型' if selection.finetune_type == 'explicit' else '隐式微调模型'}")
+        if no_perturbation:
+            print("扰动类型：无扰动")
     print(f"模型：{model}")
     if dataset is not None:
         print(f"数据集：{dataset}")
@@ -635,7 +724,13 @@ def interactive(settings: dict[str, Any]) -> int:
     # for spec, value in collected:
     #     print(f"{spec.label}：{_display_value(value)}")
     python_profile = "kal_dp" if experiment_id == "performance_baseline" and method_id in {"kal_dp", "zo_dpga"} else ("dpsgd" if experiment_id == "performance_baseline" else method_id)
-    check_code = doctor(method, settings, check_dataset=selection.task_kind == "finetune", python_profile=python_profile)
+    check_code = doctor(
+        method,
+        settings,
+        check_dataset=selection.task_kind == "finetune",
+        python_profile=python_profile,
+        display_title=selection.display_method_title if no_perturbation else None,
+    )
     if check_code and not dry_run:
         return check_code
     if dry_run:
@@ -643,7 +738,11 @@ def interactive(settings: dict[str, Any]) -> int:
             return 0
     elif not _confirm_real_run():
         return 0
-    return run_experiment(CATEGORIES[method_id], method, experiment, settings, dry_run=dry_run)
+    return run_experiment(
+        CATEGORIES[method_id], method, experiment, settings, dry_run=dry_run,
+        display_title=selection.display_method_title if no_perturbation else None,
+        historical_baseline_only=no_perturbation,
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:

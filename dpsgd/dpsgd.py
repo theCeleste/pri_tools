@@ -36,6 +36,7 @@ from datasets import load_dataset
 from transformers import (
     AutoTokenizer,
     AutoModelForSequenceClassification,
+    DataCollatorWithPadding,
     get_linear_schedule_with_warmup,
     set_seed,
 )
@@ -267,7 +268,10 @@ class TrainingConfig:
     num_labels: int = 2                      # SST-2 二分类
 
     # 数据
-    max_seq_length: int = 128                # SST-2 句子较短，128 足够
+    # SST-2 的句子绝大多数不超过 96 个 token；缩短固定 padding 可显著减少
+    # LLaMA 前向/反向的激活量，同时保留足够的文本上下文。
+    # 速度优先配置：SST-2 文本很短，64 token 通常已覆盖绝大多数样本。
+    max_seq_length: int = 64
     dataset_name: str = "sst2"
     dataset_path: str = ""
 
@@ -278,9 +282,12 @@ class TrainingConfig:
 
     # 训练
     num_epochs: int = 1
-    per_device_batch_size: int = 8          # 物理 batch size（受显存限制）
-    max_physical_batch_size: int = 8        # Opacus BatchMemoryManager 用
-    logical_batch_size: int = 256           # 逻辑 batch size（影响噪声量）
+    # 保持当前物理 batch 不变；主要通过动态 padding 和 TF32 缩短耗时。
+    per_device_batch_size: int = 8
+    max_physical_batch_size: int = 8
+    # DataLoader 的 batch 才是 Opacus 的逻辑/隐私 batch。保持为 8 可继续
+    # 使用小 batch 动态 padding；Poisson 抽样偶尔产生 >8 条时再由 BMM 拆分。
+    logical_batch_size: int = 8
     learning_rate: float = 2e-4
     warmup_ratio: float = 0.06
     weight_decay: float = 0.01
@@ -288,23 +295,27 @@ class TrainingConfig:
 
     # LoRA（大幅减少可训练参数，降低隐私成本）
     use_lora: bool = True
-    lora_r: int = 8
-    lora_alpha: int = 16
+    # 降低 LoRA rank 可减少逐样本梯度计算量（速度优先，效果会有一定损失）。
+    lora_r: int = 4
+    lora_alpha: int = 8
     lora_dropout: float = 0.05
     lora_target_modules: List[str] = field(
-        default_factory=lambda: ["q_proj", "v_proj"]
+        # 仅训练 query 投影，进一步减少 Opacus 的逐样本梯度开销。
+        default_factory=lambda: ["q_proj"]
     )
 
     # 输出
     output_dir: str = "./dpsgd_llama2_sst2_output"
-    save_steps: int = 100
-    eval_steps: int = 100
-    logging_steps: int = 20
+    # 中途评估会对完整验证集再次运行 LLaMA，可能额外占用几十分钟；
+    # 默认仅做 epoch 末评估和最终保存。
+    save_steps: int = 10_000_000
+    eval_steps: int = 10_000_000
+    logging_steps: int = 50
 
     # 硬件
     fp16: bool = True                        # A100 支持 BF16/FP16
     bf16: bool = False                       # 与 fp16 二选一
-    dataloader_num_workers: int = 4
+    dataloader_num_workers: int = 8
     gradient_checkpointing: bool = False     # Opacus 与 grad checkpointing 有限兼容
 
     # 快速验证（smoke test）
@@ -364,7 +375,9 @@ def load_and_tokenize(cfg: TrainingConfig, tokenizer):
     def tokenize_fn(examples):
         return tokenizer(
             examples["sentence"],
-            padding="max_length",
+            # 不在预处理时统一补齐到 64；在 collate 时仅补齐到当前
+            # batch 的最长文本，减少 SST-2 短句上的无效计算。
+            padding=False,
             truncation=True,
             max_length=cfg.max_seq_length,
         )
@@ -385,14 +398,6 @@ def load_and_tokenize(cfg: TrainingConfig, tokenizer):
 
     logger.info(f"Train samples: {len(train_dataset)} | Eval samples: {len(eval_dataset)}")
     return train_dataset, eval_dataset
-
-
-def collate_fn(batch):
-    return {
-        "input_ids":      torch.stack([x["input_ids"]      for x in batch]),
-        "attention_mask": torch.stack([x["attention_mask"] for x in batch]),
-        "labels":         torch.tensor([x["label"]          for x in batch], dtype=torch.long),
-    }
 
 
 # ─────────────────────────── 模型构建 ───────────────────────────
@@ -456,8 +461,8 @@ def evaluate(model, eval_loader, device):
     all_preds, all_labels = [], []
 
     for batch in tqdm(eval_loader, desc="Evaluating", leave=False):
-        input_ids      = batch["input_ids"].to(device)
-        attention_mask = batch["attention_mask"].to(device)
+        input_ids      = batch["input_ids"].to(device, non_blocking=True)
+        attention_mask = batch["attention_mask"].to(device, non_blocking=True)
         labels         = batch["labels"]
 
         outputs = model(input_ids=input_ids, attention_mask=attention_mask)
@@ -477,6 +482,14 @@ def train(cfg: TrainingConfig):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.info(f"Using device: {device}")
 
+    # Opacus 仍接收 FP32 张量；A100 在底层使用 TF32 Tensor Core 加速矩阵乘法。
+    # 对速度优先配置通常有明显收益，只会引入很小的数值精度差异。
+    # if device.type == "cuda":
+    #     torch.set_float32_matmul_precision("high")
+    #     torch.backends.cuda.matmul.allow_tf32 = True
+    #     torch.backends.cudnn.allow_tf32 = True
+    #     logger.info("已启用 A100 TF32 矩阵运算加速（模型张量仍为 FP32）")
+
     # ── 初始化性能监控器 ──
     profiler = PerformanceProfiler(interval=1.0, output_dir=cfg.output_dir)
     profiler.start()
@@ -492,6 +505,15 @@ def train(cfg: TrainingConfig):
     t0 = profiler.begin_stage("data_load_tokenize")
     train_dataset, eval_dataset = load_and_tokenize(cfg, tokenizer)
     profiler.end_stage("data_load_tokenize", t0)
+
+    # 动态补齐到当前 batch 最长序列，并对齐到 8 以提高 Tensor Core 效率。
+    data_collator = DataCollatorWithPadding(
+        tokenizer=tokenizer,
+        padding="longest",
+        max_length=cfg.max_seq_length,
+        pad_to_multiple_of=8,
+        return_tensors="pt",
+    )
 
     # smoke_test：截断数据集 + 覆盖超参，几分钟内跑完整条流程
     if cfg.smoke_test:
@@ -513,20 +535,24 @@ def train(cfg: TrainingConfig):
     # 手动设置 drop_last=True 会触发 "Ignoring drop_last" 警告，改为 False
     train_loader = DataLoader(
         train_dataset,
-        batch_size=cfg.per_device_batch_size,
+        batch_size=cfg.logical_batch_size,
         shuffle=True,
         drop_last=False,
-        collate_fn=collate_fn,
+        collate_fn=data_collator,
         num_workers=cfg.dataloader_num_workers,
         pin_memory=True,
+        persistent_workers=cfg.dataloader_num_workers > 0,
+        prefetch_factor=4 if cfg.dataloader_num_workers > 0 else None,
     )
     eval_loader = DataLoader(
         eval_dataset,
         batch_size=cfg.per_device_batch_size * 4,
         shuffle=False,
-        collate_fn=collate_fn,
+        collate_fn=data_collator,
         num_workers=cfg.dataloader_num_workers,
         pin_memory=True,
+        persistent_workers=cfg.dataloader_num_workers > 0,
+        prefetch_factor=4 if cfg.dataloader_num_workers > 0 else None,
     )
 
     # ── 模型 ──
@@ -544,7 +570,9 @@ def train(cfg: TrainingConfig):
     )
 
     # ── 学习率调度 ──
-    total_steps = (len(train_loader) // (cfg.logical_batch_size // cfg.per_device_batch_size)) * cfg.num_epochs
+    # DPDataLoader 每次迭代对应一个逻辑 DP step；BMM 拆出的 micro-batch
+    # 不应重复计入 scheduler/global_step。
+    total_steps = len(train_loader) * cfg.num_epochs
     warmup_steps = int(total_steps * cfg.warmup_ratio)
     scheduler = get_linear_schedule_with_warmup(
         optimizer,
@@ -602,13 +630,22 @@ def train(cfg: TrainingConfig):
                 optimizer=optimizer,
             ) as memory_safe_loader:
 
-                pbar    = tqdm(memory_safe_loader, desc=f"Epoch {epoch+1}/{cfg.num_epochs}")
+                # Poisson sampling 会让少量逻辑 batch 超过物理上限并被拆分，
+                # 因此 micro-batch 数没有可靠的固定 total。进度按已完成的
+                # 逻辑 DP step 更新，避免出现 8420/8419 后仍继续运行。
+                pbar = tqdm(
+                    total=len(train_loader),
+                    desc=f"Epoch {epoch+1}/{cfg.num_epochs}",
+                    unit="logical_step",
+                )
                 step_t0 = time.perf_counter()
+                samples_since_logical_step = 0
 
-                for step, batch in enumerate(pbar):
-                    input_ids      = batch["input_ids"].to(device)
-                    attention_mask = batch["attention_mask"].to(device)
-                    labels         = batch["labels"].to(device)
+                for step, batch in enumerate(memory_safe_loader):
+                    input_ids      = batch["input_ids"].to(device, non_blocking=True)
+                    attention_mask = batch["attention_mask"].to(device, non_blocking=True)
+                    labels         = batch["labels"].to(device, non_blocking=True)
+                    samples_since_logical_step += len(labels)
 
                     outputs = model(input_ids=input_ids, attention_mask=attention_mask)
                     loss    = loss_fn(outputs.logits, labels)
@@ -630,18 +667,20 @@ def train(cfg: TrainingConfig):
                     if is_logical_step:
                         scheduler.step()
                         global_step += 1
+                        pbar.update(1)
                         step_elapsed = time.perf_counter() - step_t0
                         profiler.log_step(
                             global_step=global_step,
-                            samples_in_step=cfg.logical_batch_size,
+                            samples_in_step=samples_since_logical_step,
                             step_time_s=step_elapsed,
                         )
+                        samples_since_logical_step = 0
                         step_t0 = time.perf_counter()
 
                     epoch_loss    += loss.item()
                     epoch_batches += 1
 
-                    if global_step % cfg.logging_steps == 0 and global_step > 0:
+                    if is_logical_step and global_step % cfg.logging_steps == 0 and global_step > 0:
                         eps     = privacy_engine.get_epsilon(cfg.target_delta)
                         recent  = profiler.throughput_log[-cfg.logging_steps:]
                         avg_sps = np.mean([r["throughput_sps"] for r in recent]) if recent else 0.0
@@ -653,7 +692,7 @@ def train(cfg: TrainingConfig):
                             "gpu_MB": f"{profiler.cur_gpu_mb:.0f}",
                         })
 
-                    if global_step % cfg.eval_steps == 0 and global_step > 0:
+                    if is_logical_step and global_step % cfg.eval_steps == 0 and global_step > 0:
                         t_eval  = profiler.begin_stage("evaluation")
                         metrics = evaluate(model, eval_loader, device)
                         profiler.end_stage("evaluation", t_eval)
@@ -673,10 +712,12 @@ def train(cfg: TrainingConfig):
                             print(f"  ✓ Best model saved (acc={best_acc:.4f})", flush=True)
                         model.train()
 
-                    if global_step % cfg.save_steps == 0 and global_step > 0:
+                    if is_logical_step and global_step % cfg.save_steps == 0 and global_step > 0:
                         ckpt_path = os.path.join(cfg.output_dir, f"checkpoint-{global_step}")
                         model._module.save_pretrained(ckpt_path)  # type: ignore
                         tokenizer.save_pretrained(ckpt_path)
+
+                pbar.close()
 
             # ── epoch 完成 ──
             profiler.end_stage(f"epoch_{epoch+1}_train", t_epoch)

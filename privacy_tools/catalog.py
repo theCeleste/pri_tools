@@ -51,11 +51,11 @@ EVALUATION_METHOD_GROUPS: dict[str, dict[str, tuple[str, tuple[str, ...]]]] = {
     "explicit": {
         "gradient": ("梯度扰动", ("kal_dp", "zo_dpga")),
         "embedding": ("嵌入扰动", ("cliptext", "ptcds")),
-        "none": ("无扰动", ("none",)),
+        "none": ("无扰动（明文微调）", ("none",)),
     },
     "implicit": {
         "example": ("示例扰动", ("dadp_icl", "privsv")),
-        "none": ("无扰动", ("none",)),
+        "none": ("无扰动（明文微调）", ("none",)),
     },
 }
 
@@ -106,7 +106,7 @@ def clip_sanitize(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     return [python_step(
         settings,
         "cliptext",
-        "构造候选词并按指数机制生成脱敏 SST-2",
+        "构造候选集并按DP机制生成脱敏 SST-2",
         CLIP_ISOLATED_RUNNER,
         [
             "--source-root", CLIP_SST,
@@ -133,7 +133,7 @@ def clip_bert_utility(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     return [python_step(
         settings,
         "cliptext",
-        "ClipText 脱敏并进行 BERT 效用评估",
+        "ClipText 脱敏并进行效用评估",
         CLIP_ISOLATED_RUNNER,
         [
             "--source-root", CLIP_SST,
@@ -159,7 +159,7 @@ def clip_llama_utility(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     return [python_step(
         settings,
         "cliptext",
-        "用 LoRA 在脱敏文本上训练 Llama 分类器",
+        "ClipText 使用脱敏文本进行 Llama 微调",
         CLIP_ROOT / "dp" / "cliptext.py",
         [
             "--train_data_path", train_path,
@@ -337,7 +337,7 @@ def _ptcds_lora_train(settings: dict[str, Any], run_dir: Path, baseline: bool) -
     return [python_step(
         settings,
         "ptcds",
-        "基于原始数据进行 base LoRA 微调" if baseline else "基于 PTCDS 嵌入扰动方法进行 LoRA 微调",
+        "基于原始数据进行 base LoRA 微调" if baseline else "PTCDS 嵌入扰动方法",
         source,
         [
             "--model_name_or_path", _common_value(settings, "model_7b", "meta-llama/Llama-2-7b-hf"),
@@ -453,7 +453,7 @@ def ptcds_prefix_existing(settings: dict[str, Any], run_dir: Path) -> list[Step]
     return [python_step(
         settings,
         "ptcds",
-        "复核 PTCDS 专属历史前缀抽取结果",
+        "复核 PTCDS 历史前缀抽取结果",
         ATTACK_EVALUATOR,
         [
             "--samples", PTCDS_ATTACK / "results" / "extraction_temperature_decay_eps3.txt",
@@ -471,7 +471,7 @@ def ptcds_neighbour_existing(settings: dict[str, Any], run_dir: Path) -> list[St
     return [python_step(
         settings,
         "ptcds",
-        "复核 PTCDS 专属邻居成员推断结果",
+        "复核 PTCDS 邻居成员推断结果",
         NEIGHBOUR_ATTACK_EVALUATOR,
         [
             "--base-train-pkl", PTCDS_ATTACK / "wo_all_scores_sst2_roberta_0_train.pkl",
@@ -512,7 +512,7 @@ def _kal_train(settings: dict[str, Any], run_dir: Path, baseline: bool) -> list[
     return [python_step(
         settings,
         "kal_dp",
-        "DP-SGD 对照训练" if baseline else "Kalman 梯度过滤 + DP 训练",
+        "DP-SGD 对照训练" if baseline else "Kalman 梯度扰动方法",
         source,
         [
             "--batch_size", _method_value(settings, "kal_dp", "batch_size", 32),
@@ -548,7 +548,7 @@ def peft_train(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     return [python_step(
         settings,
         "kal_dp",
-        "非隐私 LoRA/PEFT 对照训练",
+        "非敏感信息保护的 LoRA/PEFT 对照训练",
         KAL_ROOT / "Peft.py",
         [
             "--train_data_path", SHARED_SST2_ROOT / "train.tsv",
@@ -564,7 +564,7 @@ def peft_train(settings: dict[str, Any], run_dir: Path) -> list[Step]:
 
 
 def _dpsgd_performance(settings: dict[str, Any], run_dir: Path, *, method_id: str, use_kal_script: bool = False) -> list[Step]:
-    """统一性能基线；Kal-DP/ZO-DPGA 复用 Kal-DP 原始 DP-SGD。"""
+    """统一性能基线；Kal-DP/ZO-DPGA 使用统一的 DP-SGD 对比。"""
     profile = "kal_dp" if use_kal_script else "dpsgd"
     if use_kal_script:
         source = KAL_ROOT / "dpsgd.py"
@@ -626,6 +626,19 @@ def kal_prefix_attack(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     )
 
 
+def _baseline_only_steps(steps: list[Step], markers: tuple[str, ...]) -> list[Step]:
+    """Keep only the baseline branch for no-perturbation evaluation."""
+    return [step for step in steps if any(marker in step.name for marker in markers)]
+
+
+def kal_no_perturbation_direct(settings: dict[str, Any], run_dir: Path) -> list[Step]:
+    return _baseline_only_steps(kal_prefix_attack(settings, run_dir), ("未保护",))
+
+
+def dadp_no_perturbation_direct(settings: dict[str, Any], run_dir: Path) -> list[Step]:
+    return _baseline_only_steps(dadp_direct_attack(settings, run_dir), ("原始示例", "原始提示"))
+
+
 def kal_prefix_existing(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     return _prefix_existing(settings, run_dir, "kal_dp", REFERENCE_ATTACK_ROOT)
 
@@ -640,7 +653,7 @@ def zo_reproduce(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     return [python_step(
         settings,
         "zo_dpga",
-        "复现冻结的 ZO-DPGA 8.58 配置",
+        " ZO-DPGA 以最佳参数运行",
         source,
         ["--output-dir", run_dir / "model_output", "--run"],
         run_dir,
@@ -881,6 +894,30 @@ def kal_indirect_attack(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     )
 
 
+def kal_no_perturbation_indirect(settings: dict[str, Any], run_dir: Path) -> list[Step]:
+    steps = _baseline_only_steps(kal_indirect_attack(settings, run_dir), ("非保护基线",))
+    steps.append(python_step(
+        settings,
+        "kal_dp",
+        "计算无扰动显式微调基准方法泄露风险",
+        NEIGHBOUR_ATTACK_EVALUATOR,
+        [
+            "--base-train-pkl", run_dir / "wo_all_scores_sst2_roberta_0_train.pkl",
+            "--base-test-pkl", run_dir / "wo_all_scores_sst2_roberta_0_test.pkl",
+            "--target-fprs", 0.025, 0.01,
+            "--pos-neg-ratio", 0.2,
+            "--seed", 0,
+            "--output", run_dir / "baseline_only_neighbour_mia.csv",
+            "--scope", "no_perturbation_explicit_baseline",
+            "--method-specific",
+            "--baseline-only",
+        ],
+        run_dir,
+        env=method_env(settings, KAL_ATTACK),
+    ))
+    return steps
+
+
 def zo_indirect_attack(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     return _native_adapter_indirect_attack(
         settings, run_dir, "zo_dpga", KAL_ATTACK,
@@ -904,7 +941,7 @@ def dadp_utility(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     return [python_step(
         settings,
         "dadp_icl",
-        "生成差分隐私示例并执行 SST-2 ICL 评估",
+        "DADP-ICL 示例扰动微调",
         source,
         args,
         run_dir,
@@ -1199,13 +1236,17 @@ def dadp_indirect_attack(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     return steps
 
 
+def dadp_no_perturbation_indirect(settings: dict[str, Any], run_dir: Path) -> list[Step]:
+    return _baseline_only_steps(dadp_indirect_attack(settings, run_dir), ("原始提示", "对比方法"))
+
+
 def privsv_utility(settings: dict[str, Any], run_dir: Path) -> list[Step]:
     layers = _method_value(settings, "privsv", "layers", [11, 12, 13, 14, 15])
     source = PRIVSV_ROOT / "run.py"
     return [python_step(
         settings,
         "privsv",
-        "训练私有 steering vector 并评估 SST-2",
+        "PrivSV引导向量微调",
         source,
         [
             "--model", _common_value(settings, "model_7b", "meta-llama/Llama-2-7b-hf"),
@@ -1429,11 +1470,11 @@ def embedding_methods() -> dict[str, Method]:
         "cliptext": Method(
             "cliptext",
             "ClipText",
-            "对输入词嵌入构造 top-k 候选集，并用指数机制替换词；可选择保留停用词。",
+            "基于语义近邻替换的嵌入扰动微调方法",
             CLIP_ROOT,
             [CLIP_SST / "main.py", CLIP_ROOT / "dp" / "cliptext.py", CLIP_ATTACK / "neighbour_attack.py", CLIP_ATTACK / "neighbour_attack_wo.py", ATTACK_EVALUATOR],
             [
-                Experiment("utility", "本微调方法", "在 ClipText 脱敏文本上进行微调，输出 Acc、内存、运行时间和吞吐率。", clip_llama_utility),
+                Experiment("utility", "当前微调方法", "使用 ClipText 进行微调，输出 Acc、内存、运行时间和吞吐率。", clip_llama_utility),
                 Experiment("baseline", "效用对比方法", "在原始 SST-2 文本上运行相同 LoRA 微调，仅输出准确率。", clip_baseline),
                 Experiment("performance_baseline", "性能对比方法", "运行统一 DP-SGD 性能基线，仅输出性能指标。", generic_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", clip_prefix_attack),
@@ -1445,7 +1486,7 @@ def embedding_methods() -> dict[str, Method]:
         "ptcds": Method(
             "ptcds",
             "PTCDS",
-            "根据当前数据集进行模型拆分的嵌入扰动微调。",
+            "基于模型拆分的嵌入扰动微调方法",
             PTCDS_ROOT,
             [
                 PTCDS_ROOT / "finetune_llama2_sst2_lora_data.py",
@@ -1456,7 +1497,7 @@ def embedding_methods() -> dict[str, Method]:
                 PTCDS_ATTACK / "all_scores_sst2_roberta_0_train.pkl",
             ],
             [
-                Experiment("utility", "本微调方法", "运行 PTCDS 微调，输出 Acc、内存、运行时间和吞吐率。", ptcds_train),
+                Experiment("utility", "当前微调方法", "运行 PTCDS 微调，输出 Acc、内存、运行时间和吞吐率。", ptcds_train),
                 Experiment("baseline", "效用对比方法", "在原始 SST-2 文本上运行 LoRA 对比微调，仅输出准确率。", ptcds_baseline),
                 Experiment("performance_baseline", "性能对比方法", "运行统一 DP-SGD 性能基线，仅输出性能指标。", generic_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", ptcds_prefix_attack),
@@ -1473,11 +1514,11 @@ def gradient_methods() -> dict[str, Method]:
         "kal_dp": Method(
             "kal_dp",
             "Kal-DP",
-            "对裁剪后的带噪梯度进行 Kalman 状态估计/降噪",
+            "基于卡尔曼滤波的自适应降噪梯度扰动微调方法",
             KAL_ROOT,
             [KAL_ROOT / "kal_dp.py", KAL_ROOT / "dpsgd.py", KAL_ATTACK / "neighbour_attack.py", KAL_ATTACK / "neighbour_attack_wo.py"],
             [
-                Experiment("utility", "本微调方法", "运行 Kal-DP 微调，输出 Acc、内存、运行时间和吞吐率。", kal_train),
+                Experiment("utility", "当前微调方法", "运行 Kal-DP 微调，输出 Acc、内存、运行时间和吞吐率。", kal_train),
                 Experiment("baseline", "效用对比方法", "运行非隐私 LoRA/PEFT 对比训练，仅输出准确率。", peft_train),
                 Experiment("performance_baseline", "性能对比方法", "运行 Kal-DP 原始 DP-SGD 性能基线，仅输出性能指标。", kal_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", kal_prefix_attack),
@@ -1488,11 +1529,11 @@ def gradient_methods() -> dict[str, Method]:
         "zo_dpga": Method(
             "zo_dpga",
             "ZO-DPGA",
-            "用零阶有限差分方向导数完成带隐私保护的更新，避免保存反向传播参数。",
+            "基于零阶优化的差分隐私梯度扰动微调方法",
             ZO_ROOT,
             [ZO_ROOT / "run_formal_experiment.py", ZO_REPRODUCTION, ZO_ROOT / "tests" / "validate_zo_math.py"],
             [
-                Experiment("utility", "本微调方法", "运行 ZO-DPGA 微调，输出 Acc、内存、运行时间和吞吐率。", zo_reproduce),
+                Experiment("utility", "当前微调方法", "运行 ZO-DPGA 微调，输出 Acc、内存、运行时间和吞吐率。", zo_reproduce),
                 Experiment("baseline", "效用对比方法", "运行 LoRA + MeZO 对比微调，仅输出准确率。", zo_baseline),
                 Experiment("performance_baseline", "性能对比方法", "运行 Kal-DP 原始 DP-SGD 性能基线，仅输出性能指标。", zo_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", zo_prefix_attack),
@@ -1512,7 +1553,7 @@ def example_methods() -> dict[str, Method]:
             DADP_ROOT,
             [DADP_ROOT / "run_exp_sst2_loca_monitor.py", DADP_ROOT / "direct_attack" / "member_test.py", DADP_ROOT / "Indirect_attack" / "neighbour_mia.py"],
             [
-                Experiment("utility", "本微调方法", "运行 DADP-ICL 私有示例生成与隐式微调，输出 Acc、内存、运行时间和吞吐率。", dadp_utility),
+                Experiment("utility", "当前微调方法", "运行 DADP-ICL 私有示例生成与隐式微调，输出 Acc、内存、运行时间和吞吐率。", dadp_utility),
                 Experiment("baseline", "效用对比方法", "关闭私有聚合并进行隐式微调，仅输出准确率。", dadp_nonprivate),
                 Experiment("performance_baseline", "性能对比方法", "运行统一 DP-SGD 性能基线，仅输出性能指标。", generic_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", dadp_direct_attack),
@@ -1527,7 +1568,7 @@ def example_methods() -> dict[str, Method]:
             PRIVSV_ROOT,
             [PRIVSV_ROOT / "run.py", PRIVSV_ROOT / "steering_wrapper.py", PRIVSV_ROOT / "direct_attack" / "member_test-sv.py", PRIVSV_ROOT / "Indirect_attack" / "neighbour_mia_sv.py"],
             [
-                Experiment("utility", "本微调方法", "训练私有引导向量并评估，输出 Acc、内存、运行时间和吞吐率。", privsv_utility),
+                Experiment("utility", "当前微调方法", "训练私有引导向量并评估，输出 Acc、内存、运行时间和吞吐率。", privsv_utility),
                 Experiment("baseline", "效用对比方法", "运行无噪声引导向量对比方法，仅输出准确率。", privsv_ablation),
                 Experiment("performance_baseline", "性能对比方法", "运行统一 DP-SGD 性能基线，仅输出性能指标。", generic_dpsgd_performance),
                 Experiment("direct_attack", "直接评估", "执行训练数据抽取评估并保存攻击命中指标。", privsv_direct_attack),

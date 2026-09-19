@@ -260,13 +260,33 @@ def train(
             max_physical_batch_size=max_physical_batch_size,
             optimizer=optimizer,
         ) as memory_safe_data_loader:
-            for step, batch in tqdm(
-                enumerate(memory_safe_data_loader), desc=f"Training epoch {epoch}: ", disable=not master_process
-            ):
-               # ========== 执行训练步骤 ==========
+            # Providing ``total`` lets tqdm calculate and display percentage,
+            # elapsed time, and the estimated time remaining (ETA).  The
+            # memory-safe loader is used here because it is the iterable that
+            # actually drives the training loop.
+            progress_bar = tqdm(
+                total=len(memory_safe_data_loader),
+                desc=f"Training epoch {epoch}",
+                unit="batch",
+                dynamic_ncols=True,
+                disable=not master_process,
+            )
+            for step, batch in enumerate(memory_safe_data_loader):
+                # BatchMemoryManager may yield one or more physical batches
+                # beyond the value reported by ``__len__`` (for example when
+                # the final logical batch is split).  Extend tqdm's total
+                # before updating it so it never reaches 100% prematurely.
+                if progress_bar.total is not None and step >= progress_bar.total:
+                    progress_bar.total = step + 1
+                    progress_bar.refresh()
+                progress_bar.update(1)
+
+                # ========== 执行训练步骤 ==========
                 loss = train_step(model, optimizer, criterion, batch, device)
                 current_step += 1
-                
+
+                if master_process:
+                    progress_bar.set_postfix(loss=f"{loss.item():.4f}")
 
                 current_batch_size = batch['input_ids'].size(0)
                 total_samples_since_last_log += current_batch_size
@@ -334,6 +354,8 @@ def train(
                     if stop_training_tensor.item() == 1:
                         break
 
+            progress_bar.close()
+
         # 保存每个 Epoch 的常规 Checkpoint
         if master_process:
             epoch_save_path = f"./lora_dp_sst2_model_epoch_{epoch}"
@@ -356,7 +378,7 @@ def launch(
     lora_rank: int = 8,
     learning_rate: float = 2e-5,
     max_grad_norm: float = 1.0,
-    epochs: int = 1,
+    epochs: int = 2,
     model_name: str = "meta-llama/Llama-2-7b-hf",
 ):
     # set the device for the current process

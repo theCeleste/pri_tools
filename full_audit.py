@@ -23,7 +23,7 @@ from privacy_tools.unified import CATEGORIES, METHOD_GROUPS, METHODS, _confirm_r
 EXPECTED_CHOICES = 30
 EXPECTED_KINDS = {"experiment": 30}
 EXPECTED_EXPERIMENTS = (
-    ("utility", "本微调方法"),
+    ("utility", "当前微调方法"),
     ("baseline", "效用对比方法"),
     ("performance_baseline", "性能对比方法"),
     ("direct_attack", "直接评估"),
