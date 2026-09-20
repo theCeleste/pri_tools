@@ -663,12 +663,18 @@ def interactive(settings: dict[str, Any]) -> int:
     if model is None or (selection.task_kind == "finetune" and dataset is None):
         print("已退出。")
         return 0
+    comparison_labels: dict[str, str] = {}
     if selection.task_kind == "finetune":
         current_method_title = METHODS[method_id].title
         baseline_finetune_type = "Prompt微调" if selection.perturbation_group == "example" else "PEFT微调"
+        comparison_labels = {
+            "utility": f"否，仅运行当前方法 {current_method_title}",
+            "baseline": f"是，运行效用对比方法 {baseline_finetune_type}",
+            "performance_baseline": "是，运行性能对比方法 DP-SGD",
+        }
         experiment_id = choose_from_menu(
             "请选择是否通过基线方法进行对比",
-            [("utility", f"否，仅运行当前方法 {current_method_title}"), ("baseline", f"是，运行效用对比方法 {baseline_finetune_type}"), ("performance_baseline", "是，运行性能对比方法 DP-SGD")],
+            list(comparison_labels.items()),
         )
         if experiment_id is None:
             return 0
@@ -694,8 +700,8 @@ def interactive(settings: dict[str, Any]) -> int:
         print("\n---------------- 任务确认 ----------------")
         print("任务：评估")
         print(f"评估类型：{'直接评估' if experiment_id == 'direct_attack' else '间接评估'}")
-        print(f"微调类型：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
-        print("扰动类型：无扰动")
+        print(f"微调方式：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
+        print("微调类型：无扰动微调")
         print(f"模型：{model}")
         print(f"模式：{'查看最近历史结果' if dry_run else '立即执行'}")
         return _run_chatglm_no_perturbation(selection)
@@ -713,12 +719,13 @@ def interactive(settings: dict[str, Any]) -> int:
     print(f"任务：{'微调' if selection.task_kind == 'finetune' else '评估'}")
     if not no_perturbation:
         print(f"方法：{method.title}（{method.id}）")
-    print(f"实验：{experiment.title}（{experiment.id}）")
-    if selection.task_kind == "evaluation":
+    if selection.task_kind == "finetune":
+        print(f"是否运行对比方法：{comparison_labels[experiment_id]}")
+    else:
         print(f"评估类型：{'直接评估' if selection.evaluation_type == 'direct_attack' else '间接评估'}")
-        print(f"微调类型：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
-        if no_perturbation:
-            print("扰动类型：无扰动")
+        print(f"微调方式：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
+        finetune_group_title = "无扰动微调" if no_perturbation else FINETUNE_METHOD_GROUPS[selection.perturbation_group][0]
+        print(f"微调类型：{finetune_group_title}")
     print(f"模型：{model}")
     if dataset is not None:
         print(f"数据集：{dataset}")
