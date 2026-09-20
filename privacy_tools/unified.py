@@ -63,9 +63,9 @@ CATEGORIES = {
 }
 
 METHOD_GROUPS: dict[str, tuple[str, tuple[str, ...]]] = {
-    "example": ("示例扰动", ("dadp_icl", "privsv")),
-    "embedding": ("嵌入扰动", ("cliptext", "ptcds")),
-    "gradient": ("梯度扰动", ("kal_dp", "zo_dpga")),
+    "example": ("示例扰动微调", ("dadp_icl", "privsv")),
+    "embedding": ("嵌入扰动微调", ("cliptext", "ptcds")),
+    "gradient": ("梯度扰动微调", ("kal_dp", "zo_dpga")),
 }
 
 
@@ -339,8 +339,8 @@ def _prepare_runtime(method_id: str, experiment_id: str, settings: dict[str, Any
     selected = Path(configured).expanduser()
     _set_nested(settings, f"python.{python_profile}", configured)
     if dry_run:
-        print(f"  安全预演使用默认配置的 Python环境：{configured}")
-        print("  安全预演不会安装依赖。")
+        print(f"  查看最近历史结果使用默认配置的 Python环境：{configured}")
+        print("  查看最近历史结果不会安装依赖。")
         return True
     if plan.level == "none":
         print(f"  {plan.explanation}")
@@ -370,7 +370,7 @@ def _prepare_assets(
     baseline_only: bool = False,
 ) -> bool:
     if dry_run:
-        print("  安全预演只检查命令结构，不下载模型或数据。")
+        print("  查看最近历史结果只检查命令结构，不下载模型或数据。")
         return True
 
     mapping_ready = False
@@ -553,11 +553,11 @@ def _choose_model_and_dataset(
 
 
 def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
-    task_kind = choose_from_menu("第一步：请选择执行的方法类型", [("finetune", "微调方法"), ("evaluation", "评估方法")])
+    task_kind = choose_from_menu("第一步：请选择执行的方法类型", [("finetune", "敏感信息保护的微调方法"), ("evaluation", "敏感信息泄露风险评估方法")])
     if task_kind is None:
         return None
     if task_kind == "finetune":
-        group = choose_from_menu("第二步：请选择敏感信息保护的微调方法", [(key, title) for key, (title, _) in FINETUNE_METHOD_GROUPS.items()])
+        group = choose_from_menu("第二步：请选择敏感信息保护的微调类型", [(key, title) for key, (title, _) in FINETUNE_METHOD_GROUPS.items()])
         if group is None:
             return None
         group_title, method_ids = FINETUNE_METHOD_GROUPS[group]
@@ -570,14 +570,14 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
         # 当前/对比方法的选择发生在模型和数据集确认之后。
         return TaskSelection("finetune", method_id, "", group)
 
-    evaluation_type = choose_from_menu("第二步：请选择泄露风险评估方法", [("direct_attack", "直接评估"), ("indirect_attack", "间接评估")])
+    evaluation_type = choose_from_menu("第二步：请选择敏感信息泄露风险评估方法", [("direct_attack", "直接评估"), ("indirect_attack", "间接评估")])
     if evaluation_type is None:
         return None
-    finetune_type = choose_from_menu("第三步：请选择评估模型的微调类型", [("explicit", "显式微调模型"), ("implicit", "隐式微调模型")])
+    finetune_type = choose_from_menu("第三步：请选择评估模型的微调方式", [("explicit", "显式微调"), ("implicit", "隐式微调")])
     if finetune_type is None:
         return None
     groups = EVALUATION_METHOD_GROUPS[finetune_type]
-    group = choose_from_menu("第四步：请选择扰动类型", [(key, title) for key, (title, _) in groups.items()])
+    group = choose_from_menu("第四步：请选择具体微调类型", [(key, title) for key, (title, _) in groups.items()])
     if group is None:
         return None
     group_title, method_ids = groups[group]
@@ -643,7 +643,7 @@ def interactive(settings: dict[str, Any]) -> int:
     print("\n=========================================================")
     print(" 具备敏感信息保护能力的大模型微调支撑工具集原型系统 v1.0")
     print("=========================================================")
-    print("  请按提示确定后续如何执行 ")
+    print("  请按提示进行后续操作 ")
     print("=========================================================")
     selection = _select_task(settings)
     if selection is None:
@@ -664,9 +664,11 @@ def interactive(settings: dict[str, Any]) -> int:
         print("已退出。")
         return 0
     if selection.task_kind == "finetune":
+        current_method_title = METHODS[method_id].title
+        baseline_finetune_type = "Prompt微调" if selection.perturbation_group == "example" else "PEFT微调"
         experiment_id = choose_from_menu(
-            "请选择执行当前方法还是对比方法",
-            [("utility", "当前方法"), ("baseline", "效用对比方法"), ("performance_baseline", "性能对比方法")],
+            "请选择是否通过基线方法进行对比",
+            [("utility", f"否，仅运行当前方法 {current_method_title}"), ("baseline", f"是，运行效用对比方法 {baseline_finetune_type}"), ("performance_baseline", "是，运行性能对比方法 DP-SGD")],
         )
         if experiment_id is None:
             return 0
@@ -684,7 +686,7 @@ def interactive(settings: dict[str, Any]) -> int:
             dadp_no_perturbation_indirect
         )
         experiment = Experiment(experiment.id, "无扰动基准评估", experiment.description, builder=builder)
-    mode = choose_from_menu("请选择执行模式", [("dry", "安全预演（推荐）"), ("run", "真实执行")])
+    mode = choose_from_menu("请选择执行模式", [("dry", "查看最近历史结果（推荐）"), ("run", "立即执行")])
     if mode is None:
         return 0
     dry_run = mode == "dry"
@@ -692,10 +694,10 @@ def interactive(settings: dict[str, Any]) -> int:
         print("\n---------------- 任务确认 ----------------")
         print("任务：评估")
         print(f"评估类型：{'直接评估' if experiment_id == 'direct_attack' else '间接评估'}")
-        print(f"微调类型：{'显式微调模型' if selection.finetune_type == 'explicit' else '隐式微调模型'}")
+        print(f"微调类型：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
         print("扰动类型：无扰动")
         print(f"模型：{model}")
-        print(f"模式：{'安全预演' if dry_run else '真实执行'}")
+        print(f"模式：{'查看最近历史结果' if dry_run else '立即执行'}")
         return _run_chatglm_no_perturbation(selection)
     all_specs = prompt_specs(method_id, experiment_id)
     specs = [spec for spec in all_specs if spec.key not in {"common.model_7b", "common.model_7b_chat"}]
@@ -714,13 +716,13 @@ def interactive(settings: dict[str, Any]) -> int:
     print(f"实验：{experiment.title}（{experiment.id}）")
     if selection.task_kind == "evaluation":
         print(f"评估类型：{'直接评估' if selection.evaluation_type == 'direct_attack' else '间接评估'}")
-        print(f"微调类型：{'显式微调模型' if selection.finetune_type == 'explicit' else '隐式微调模型'}")
+        print(f"微调类型：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
         if no_perturbation:
             print("扰动类型：无扰动")
     print(f"模型：{model}")
     if dataset is not None:
         print(f"数据集：{dataset}")
-    print(f"模式：{'安全预演' if dry_run else '真实执行'}")
+    print(f"模式：{'查看最近历史结果' if dry_run else '立即执行'}")
     # for spec, value in collected:
     #     print(f"{spec.label}：{_display_value(value)}")
     python_profile = "kal_dp" if experiment_id == "performance_baseline" and method_id in {"kal_dp", "zo_dpga"} else ("dpsgd" if experiment_id == "performance_baseline" else method_id)

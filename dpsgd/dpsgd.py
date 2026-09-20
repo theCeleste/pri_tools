@@ -36,7 +36,6 @@ from datasets import load_dataset
 from transformers import (
     AutoTokenizer,
     AutoModelForSequenceClassification,
-    DataCollatorWithPadding,
     get_linear_schedule_with_warmup,
     set_seed,
 )
@@ -270,8 +269,8 @@ class TrainingConfig:
     # 数据
     # SST-2 的句子绝大多数不超过 96 个 token；缩短固定 padding 可显著减少
     # LLaMA 前向/反向的激活量，同时保留足够的文本上下文。
-    # 速度优先配置：SST-2 文本很短，64 token 通常已覆盖绝大多数样本。
-    max_seq_length: int = 64
+    # SST-2 文本较短，48 token 可覆盖绝大多数样本，并减少固定 padding 的计算量。
+    max_seq_length: int = 48
     dataset_name: str = "sst2"
     dataset_path: str = ""
 
@@ -282,7 +281,7 @@ class TrainingConfig:
 
     # 训练
     num_epochs: int = 1
-    # 保持当前物理 batch 不变；主要通过动态 padding 和 TF32 缩短耗时。
+    # 保持当前物理 batch 不变；主要通过较短序列和 TF32 缩短耗时。
     per_device_batch_size: int = 8
     max_physical_batch_size: int = 8
     # DataLoader 的 batch 才是 Opacus 的逻辑/隐私 batch。保持为 8 可继续
@@ -375,9 +374,7 @@ def load_and_tokenize(cfg: TrainingConfig, tokenizer):
     def tokenize_fn(examples):
         return tokenizer(
             examples["sentence"],
-            # 不在预处理时统一补齐到 64；在 collate 时仅补齐到当前
-            # batch 的最长文本，减少 SST-2 短句上的无效计算。
-            padding=False,
+            padding="max_length",
             truncation=True,
             max_length=cfg.max_seq_length,
         )
@@ -398,6 +395,14 @@ def load_and_tokenize(cfg: TrainingConfig, tokenizer):
 
     logger.info(f"Train samples: {len(train_dataset)} | Eval samples: {len(eval_dataset)}")
     return train_dataset, eval_dataset
+
+
+def collate_fn(batch):
+    return {
+        "input_ids":      torch.stack([x["input_ids"]      for x in batch]),
+        "attention_mask": torch.stack([x["attention_mask"] for x in batch]),
+        "labels":         torch.tensor([x["label"]          for x in batch], dtype=torch.long),
+    }
 
 
 # ─────────────────────────── 模型构建 ───────────────────────────
@@ -483,11 +488,12 @@ def train(cfg: TrainingConfig):
     logger.info(f"Using device: {device}")
 
     # Opacus 仍接收 FP32 张量；A100 在底层使用 TF32 Tensor Core 加速矩阵乘法。
-    # 对速度优先配置通常有明显收益，只会引入很小的数值精度差异。
+    # cudnn benchmark 只选择卷积算法，对 LLaMA 影响有限但没有额外训练开销。
     # if device.type == "cuda":
     #     torch.set_float32_matmul_precision("high")
     #     torch.backends.cuda.matmul.allow_tf32 = True
     #     torch.backends.cudnn.allow_tf32 = True
+    #     torch.backends.cudnn.benchmark = True
     #     logger.info("已启用 A100 TF32 矩阵运算加速（模型张量仍为 FP32）")
 
     # ── 初始化性能监控器 ──
@@ -505,15 +511,6 @@ def train(cfg: TrainingConfig):
     t0 = profiler.begin_stage("data_load_tokenize")
     train_dataset, eval_dataset = load_and_tokenize(cfg, tokenizer)
     profiler.end_stage("data_load_tokenize", t0)
-
-    # 动态补齐到当前 batch 最长序列，并对齐到 8 以提高 Tensor Core 效率。
-    data_collator = DataCollatorWithPadding(
-        tokenizer=tokenizer,
-        padding="longest",
-        max_length=cfg.max_seq_length,
-        pad_to_multiple_of=8,
-        return_tensors="pt",
-    )
 
     # smoke_test：截断数据集 + 覆盖超参，几分钟内跑完整条流程
     if cfg.smoke_test:
@@ -538,7 +535,7 @@ def train(cfg: TrainingConfig):
         batch_size=cfg.logical_batch_size,
         shuffle=True,
         drop_last=False,
-        collate_fn=data_collator,
+        collate_fn=collate_fn,
         num_workers=cfg.dataloader_num_workers,
         pin_memory=True,
         persistent_workers=cfg.dataloader_num_workers > 0,
@@ -548,7 +545,7 @@ def train(cfg: TrainingConfig):
         eval_dataset,
         batch_size=cfg.per_device_batch_size * 4,
         shuffle=False,
-        collate_fn=data_collator,
+        collate_fn=collate_fn,
         num_workers=cfg.dataloader_num_workers,
         pin_memory=True,
         persistent_workers=cfg.dataloader_num_workers > 0,
@@ -652,7 +649,7 @@ def train(cfg: TrainingConfig):
 
                     if not torch.isfinite(loss):
                         print(f"[WARN] Step {step}: loss={loss.item()}, 跳过本 batch", flush=True)
-                        optimizer.zero_grad()
+                        optimizer.zero_grad(set_to_none=True)
                         step_t0 = time.perf_counter()
                         continue
 
@@ -662,7 +659,7 @@ def train(cfg: TrainingConfig):
 
                     # 必须在 zero_grad() 前读取，zero_grad() 会将其重置
                     is_logical_step = not optimizer._is_last_step_skipped
-                    optimizer.zero_grad()
+                    optimizer.zero_grad(set_to_none=True)
 
                     if is_logical_step:
                         scheduler.step()

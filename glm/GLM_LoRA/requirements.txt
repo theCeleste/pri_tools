@@ -1,0 +1,13 @@
+transformers==4.48.3
+peft==0.14.0
+accelerate==0.34.2
+datasets==2.21.0
+numpy==1.26.4
+pandas==2.3.3
+scikit-learn==1.7.2
+sentencepiece==0.2.1
+safetensors==0.5.3
+tokenizers==0.21.4
+huggingface-hub==0.36.2
+protobuf==5.29.6
+tqdm==4.67.3

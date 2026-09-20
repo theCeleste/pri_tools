@@ -42,20 +42,20 @@ DPSGD_SCRIPT = DPSGD_ROOT / "dpsgd.py"
 
 # User-facing task topology. Command builders remain registered on Method below.
 FINETUNE_METHOD_GROUPS: dict[str, tuple[str, tuple[str, ...]]] = {
-    "gradient": ("梯度扰动", ("kal_dp", "zo_dpga")),
-    "embedding": ("嵌入扰动", ("cliptext", "ptcds")),
-    "example": ("示例扰动", ("dadp_icl", "privsv")),
+    "gradient": ("梯度扰动微调", ("kal_dp", "zo_dpga")),
+    "embedding": ("嵌入扰动微调", ("cliptext", "ptcds")),
+    "example": ("示例扰动微调", ("dadp_icl", "privsv")),
 }
 
 EVALUATION_METHOD_GROUPS: dict[str, dict[str, tuple[str, tuple[str, ...]]]] = {
     "explicit": {
-        "gradient": ("梯度扰动", ("kal_dp", "zo_dpga")),
-        "embedding": ("嵌入扰动", ("cliptext", "ptcds")),
-        "none": ("无扰动（明文微调）", ("none",)),
+        "gradient": ("梯度扰动微调", ("kal_dp", "zo_dpga")),
+        "embedding": ("嵌入扰动微调", ("cliptext", "ptcds")),
+        "none": ("无扰动微调", ("none",)),
     },
     "implicit": {
-        "example": ("示例扰动", ("dadp_icl", "privsv")),
-        "none": ("无扰动（明文微调）", ("none",)),
+        "example": ("示例扰动微调", ("dadp_icl", "privsv")),
+        "none": ("无扰动微调", ("none",)),
     },
 }
 

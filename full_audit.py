@@ -432,7 +432,7 @@ def execute_lightweight() -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="穷举检查六种方法的全部运行项")
-    parser.add_argument("--execute-light", action="store_true", help="额外真实执行不加载大模型的轻量实验")
+    parser.add_argument("--execute-light", action="store_true", help="额外立即执行不加载大模型的轻量实验")
     args = parser.parse_args()
     code = structural_audit()
     if code != 0 or not args.execute_light:

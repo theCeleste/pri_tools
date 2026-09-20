@@ -110,7 +110,7 @@ def main() -> int:
     failures += 0 if run_interactive(
         "新 UI 微调路径",
         "1\n1\n1\n1\n1\n1\n1\ny\n",
-        ("任务：微调", "实验：当前微调方法", "Llama-2-7b", "sst2", "安全预演使用默认配置的 Python环境", "数据集路径："),
+        ("任务：微调", "实验：当前微调方法", "Llama-2-7b", "sst2", "查看最近历史结果使用默认配置的 Python环境", "数据集路径："),
         removed_prompts,
     ) else 1
     failures += 0 if run_interactive(

@@ -817,7 +817,7 @@ def run_experiment(
         artifacts.extend(path for path in discover_artifacts(integration_root) if path not in artifacts)
     artifacts.extend(path for path in discover_artifacts(run_dir) if path not in artifacts)
     if dry_run:
-        print("\n安全预演完成，当前输出结果为历史运行结果。")
+        print("\n查看最近历史结果完成，当前输出结果为历史运行结果。")
     elif experiment.id in {"utility", "baseline", "performance_baseline"}:
         result_path = write_metrics_result(run_dir, method, experiment, return_code, started_at, artifacts, settings)
         print(f"\n训练指标结果：{result_path}")
