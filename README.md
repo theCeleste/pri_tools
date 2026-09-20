@@ -149,6 +149,12 @@ ClipText 默认参数随包提供预计算映射，不会默认下载大型 GloV
 python3 privacy_tool.py list
 ```
 
+按“任务 → 扰动/评估类型 → 方法 → 实验”层级列出所有分支会使用的模型、数据集、adapter、checkpoint 等路径选项及其当前配置值：
+
+```bash
+python3 privacy_tool.py paths
+```
+
 检查某个方法：
 
 ```bash

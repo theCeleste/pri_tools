@@ -1549,7 +1549,7 @@ def example_methods() -> dict[str, Method]:
         "dadp_icl": Method(
             "dadp_icl",
             "DADP-ICL",
-            "把私有示例分组聚合，再加噪生成合成示例，用于上下文学习隐式微调。",
+            "基于本地差分隐私的上下文示例扰动微调方法",
             DADP_ROOT,
             [DADP_ROOT / "run_exp_sst2_loca_monitor.py", DADP_ROOT / "direct_attack" / "member_test.py", DADP_ROOT / "Indirect_attack" / "neighbour_mia.py"],
             [
@@ -1564,7 +1564,7 @@ def example_methods() -> dict[str, Method]:
         "privsv": Method(
             "privsv",
             "PrivSV",
-            "从正负示例中学习引导向量，经裁剪和拉普拉斯噪声保护后进行隐式微调。",
+            "基于本地差分隐私的引导向量示例扰动微调方法",
             PRIVSV_ROOT,
             [PRIVSV_ROOT / "run.py", PRIVSV_ROOT / "steering_wrapper.py", PRIVSV_ROOT / "direct_attack" / "member_test-sv.py", PRIVSV_ROOT / "Indirect_attack" / "neighbour_mia_sv.py"],
             [

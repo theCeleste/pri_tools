@@ -583,7 +583,7 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
     group_title, method_ids = groups[group]
     if group == "none":
         model = choose_from_menu(
-            "请选择无扰动评估模型",
+            "请选择待评估模型",
             [("llama", "Llama-2-7b"), ("chatglm", "ChatGLM3-6b")],
         )
         if model is None:
@@ -692,7 +692,7 @@ def interactive(settings: dict[str, Any]) -> int:
             dadp_no_perturbation_indirect
         )
         experiment = Experiment(experiment.id, "无扰动基准评估", experiment.description, builder=builder)
-    mode = choose_from_menu("请选择执行模式", [("dry", "查看最近历史结果（推荐）"), ("run", "立即执行")])
+    mode = choose_from_menu("请选择执行模式", [("dry", "查看最近历史结果"), ("run", "立即执行")])
     if mode is None:
         return 0
     dry_run = mode == "dry"
@@ -720,7 +720,12 @@ def interactive(settings: dict[str, Any]) -> int:
     if not no_perturbation:
         print(f"方法：{method.title}（{method.id}）")
     if selection.task_kind == "finetune":
-        print(f"是否运行对比方法：{comparison_labels[experiment_id]}")
+        comparison_confirmation = {
+            "utility": "否",
+            "baseline": f"是，运行 {baseline_finetune_type}",
+            "performance_baseline": "是，运行 DP-SGD",
+        }
+        print(f"是否运行对比方法：{comparison_confirmation[experiment_id]}")
     else:
         print(f"评估类型：{'直接评估' if selection.evaluation_type == 'direct_attack' else '间接评估'}")
         print(f"微调方式：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
@@ -754,6 +759,68 @@ def interactive(settings: dict[str, Any]) -> int:
     )
 
 
+def _is_path_option(spec: PromptSpec) -> bool:
+    """识别菜单中要求路径或模型标识的选项。"""
+    return (
+        spec.kind == "str"
+        and ("路径" in spec.label or spec.key.endswith(("_path", ".model_7b", ".model_7b_chat", ".model_13b", ".mask_model")))
+    )
+
+
+def list_path_options(settings: dict[str, Any]) -> None:
+    """遍历所有可选菜单分支，展示其中实际使用的路径配置。"""
+    print("路径选项总览")
+    print("  配置来源：内置默认配置，可用 --config/--set 覆盖")
+    common_keys = ("results_dir", "historical_results_dir", "common.dataset_path")
+    print("\n├─ 全局路径")
+    for index, key in enumerate(common_keys):
+        value = get_nested(settings, key, "") if "." in key else settings.get(key, "")
+        print(f"│  {'└─' if index == len(common_keys) - 1 else '├─'} {key}: {value}")
+
+    seen: set[tuple[str, str, str]] = set()
+    groups = (("微调", FINETUNE_METHOD_GROUPS), ("评估", EVALUATION_METHOD_GROUPS))
+    for task_title, task_groups in groups:
+        print(f"\n├─ {task_title}")
+        if task_title == "微调":
+            branches = ((group_id, title, methods) for group_id, (title, methods) in task_groups.items())
+            for group_id, group_title, method_ids in branches:
+                print(f"│  ├─ {group_title}")
+                for method_id in method_ids:
+                    method = METHODS[method_id]
+                    print(f"│  │  ├─ {method.title} ({method_id})")
+                    for experiment in method.experiments:
+                        specs = [spec for spec in prompt_specs(method_id, experiment.id) if _is_path_option(spec)]
+                        if not specs:
+                            continue
+                        print(f"│  │  │  └─ {experiment.title} ({experiment.id})")
+                        for spec in specs:
+                            key = (method_id, experiment.id, spec.key)
+                            if key in seen:
+                                continue
+                            seen.add(key)
+                            print(f"│  │  │     ├─ {spec.label} [{spec.key}]: {get_nested(settings, spec.key, '<未配置>')}")
+        else:
+            for evaluation_type, evaluation_groups in task_groups.items():
+                evaluation_title = "直接评估" if evaluation_type == "explicit" else "间接评估"
+                print(f"│  ├─ {evaluation_title}")
+                for group_id, (group_title, method_ids) in evaluation_groups.items():
+                    print(f"│  │  ├─ {group_title}")
+                    for method_id in method_ids:
+                        if method_id == "none":
+                            print("│  │  │  └─ 无扰动（使用对应评估接口配置）")
+                            continue
+                        method = METHODS[method_id]
+                        print(f"│  │  │  ├─ {method.title} ({method_id})")
+                        experiment_id = "direct_attack" if evaluation_type == "explicit" else "indirect_attack"
+                        specs = [spec for spec in prompt_specs(method_id, experiment_id) if _is_path_option(spec)]
+                        for spec in specs:
+                            key = (method_id, experiment_id, spec.key)
+                            if key in seen:
+                                continue
+                            seen.add(key)
+                            print(f"│  │  │     ├─ {spec.label} [{spec.key}]: {get_nested(settings, spec.key, '<未配置>')}")
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="具备敏感信息保护能力的大模型微调支撑工具集")
     parser.add_argument("--config", help="JSON 配置文件；不填则使用内置默认配置")
@@ -762,6 +829,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     list_parser = subparsers.add_parser("list", help="列出六种方法及其全部实验")
     list_parser.add_argument("--method", choices=METHODS.keys())
+
+    subparsers.add_parser(
+        "paths",
+        help="遍历全部菜单分支，按层次列出会使用的路径选项",
+    )
 
     doctor_parser = subparsers.add_parser("doctor", help="检查代码、Python、模型和数据集")
     doctor_parser.add_argument("--method", choices=METHODS.keys())
@@ -784,6 +856,9 @@ def main(argv: Iterable[str] | None = None) -> int:
         return interactive(settings)
     if args.action == "list":
         list_catalog(METHODS, args.method)
+        return 0
+    if args.action == "paths":
+        list_path_options(settings)
         return 0
     if args.action == "doctor":
         selected = [METHODS[args.method]] if args.method else list(METHODS.values())
