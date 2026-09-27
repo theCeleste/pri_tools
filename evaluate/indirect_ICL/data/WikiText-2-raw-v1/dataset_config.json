@@ -1,0 +1,28 @@
+{
+  "dataset": "wikitext2",
+  "config": "wikitext-2-raw-v1",
+  "source": "wikitext",
+  "counts": {
+    "train": {
+      "input": 36718,
+      "kept": 21547,
+      "short_or_blank": 13171,
+      "duplicates": 2000
+    },
+    "validation": {
+      "input": 3760,
+      "kept": 2208,
+      "short_or_blank": 1306,
+      "duplicates": 246
+    },
+    "test": {
+      "input": 4358,
+      "kept": 2583,
+      "short_or_blank": 1508,
+      "duplicates": 267
+    }
+  },
+  "filter": "len(text.strip()) > 10",
+  "deduplication": "whitespace-normalized, train/validation/test priority",
+  "label": "internal constant 0; no semantic class labels"
+}

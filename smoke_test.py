@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -35,7 +36,7 @@ REQUIRED_PATHS = [
 def run(label: str, command: list[str]) -> bool:
     print(f"\n[TEST] {label}")
     print("       " + " ".join(command))
-    result = subprocess.run(command, cwd=ROOT)
+    result = subprocess.run(command, cwd=ROOT, env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
     if result.returncode == 0:
         print(f"[ OK ] {label}")
         return True
@@ -56,6 +57,7 @@ def run_interactive(
         input=user_input,
         text=True,
         capture_output=True,
+        env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"},
     )
     output = result.stdout + result.stderr
     missing = [text for text in expected if text not in output]
@@ -69,6 +71,20 @@ def run_interactive(
     if unexpected:
         print(f"       不应出现：{unexpected}")
     return False
+
+
+def indirect_menu_checks() -> int:
+    """Safe menu smoke: only preview/history, never launch a GPU job."""
+    failures = 0
+    for model, title in (("1", "ChatGLM3-6b"), ("2", "FM9G-7B（九格大模型）")):
+        for kind, group, backend in (("1", "3", "indirect_LoRA"), ("2", "2", "indirect_ICL")):
+            prefix = f"2\n2\n{kind}\n{group}\n{model}\n"
+            failures += 0 if run_interactive(
+                f"{title}/{backend} 新版预览", prefix + "3\n",
+                (f"模型：{title}", "命令预览", f"evaluate/{backend}"),
+                ("glm/GLM_", "无扰动评估接口待后续实现。"),
+            ) else 1
+    return failures
 
 
 def main() -> int:
@@ -121,28 +137,23 @@ def main() -> int:
     ) else 1
     failures += 0 if run_interactive(
         "ChatGLM 显式无扰动评估接口",
-        "2\n1\n1\n3\n2\n1\n",
+        "2\n1\n1\n3\n1\n1\n",
         ("模型：ChatGLM3-6b", "ChatGLM3-6b 显式微调无扰动评估接口已预留"),
         ("请选择模型\n", "方法：Kal-DP", "方法：DADP-ICL"),
     ) else 1
     failures += 0 if run_interactive(
-        "Llama 显式无扰动直接评估",
-        "2\n1\n1\n3\n1\n1\ny\n",
-        ("模型：Llama-2-7b", "扰动类型：无扰动", "===== 显式微调 直接评估结果 =====", "基准方法"),
-        ("请选择模型\n", "方法：Kal-DP", "本方法\n"),
+        "FM9G 无扰动直接评估继续预留",
+        "2\n1\n1\n3\n2\n",
+        ("FM9G-7B（九格大模型）无扰动直接评估接口待后续实现。",),
     ) else 1
     failures += 0 if run_interactive(
-        "Llama 隐式无扰动间接评估",
-        "2\n2\n2\n2\n1\n1\ny\n",
-        ("模型：Llama-2-7b", "扰动类型：无扰动", "===== 隐式微调 间接评估结果 =====", "基准方法"),
-        ("请选择模型\n", "方法：DADP-ICL", "本方法\n"),
+        "ChatGLM 隐式无扰动直接评估继续预留",
+        "2\n1\n2\n2\n1\n",
+        ("ChatGLM3-6b 隐式微调无扰动评估接口已预留",),
     ) else 1
-    failures += 0 if run_interactive(
-        "Llama 隐式无扰动直接评估",
-        "2\n1\n2\n2\n1\n1\ny\n",
-        ("按原始说明用原始示例提示执行前缀抽取", "按原始 member_test 统计原始提示攻击命中率"),
-        ("按原始说明用合成示例提示执行前缀抽取", "统计合成提示攻击命中率"),
-    ) else 1
+    failures += indirect_menu_checks()
+    failures += 0 if run("新版间接评估集成测试", [sys.executable, "-B", "-m", "unittest",
+        "discover", "-s", "privacy_tools/tests", "-p", "test_indirect_evaluation.py"]) else 1
 
     for method in ("cliptext", "ptcds", "kal_dp", "zo_dpga", "dadp_icl", "privsv"):
         for experiment in ("utility", "baseline", "performance_baseline", "direct_attack", "indirect_attack"):

@@ -46,6 +46,8 @@ python privacy_tool.py
 → JSON 配置中的模型
 ```
 
+选择“无扰动微调”时，待评估模型仅提供 ChatGLM3-6b 和 FM9G-7B（九格大模型）。两种模型的显式/隐式间接评估统一使用 evaluate/ 下的新版实现，直接评估继续预留；现有 Llama 评估接口保留在代码中，但不再通过该菜单提供选择。其他扰动分支仍使用 Llama 评估。
+
 模型和数据集菜单只提供 JSON 中已配置的值，不提供自定义输入。其他实验参数和 Python 解释器不再询问，直接读取 JSON。立即执行前输入小写 `run`；输入 `0` 可取消。
 
 ## 六种方法的对比项
@@ -90,7 +92,7 @@ python3 privacy_tool.py
 → 1 配置模型
 → 1 配置数据集
 → 1 当前方法
-→ 1 查看最近历史结果
+→ 2 查看最近历史结果
 → 确认
 ```
 
@@ -180,3 +182,5 @@ python3 full_audit.py
 ```
 
 六份源码顶层目录固定为 `ClipText/`、`PTCDS/`、`Kal-DP/`、`ZO-DPGA/`、`DADP-ICL/` 和 `PrivSV/`。配置中的本地文件使用项目相对路径，因此整个顶层目录移动到其他 Linux 服务器后仍可由统一入口解析。
+
+ChatGLM / FM9G 间接评估配置、命令预览与离线重算见 [接入说明](privacy_tools/INDIRECT_EVALUATION.md)。

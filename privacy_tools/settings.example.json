@@ -2,12 +2,12 @@
   "results_dir": "privacy_tools/results",
   "historical_results_dir": "privacy_tools/historical_results",
   "common": {
-    "gpu": "1",
+    "gpu": "2",
     "dataset": "sst2",
     "dataset_path": "privacy_tools/datasets/sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
     "model_7b_chat": "meta-llama/Llama-2-7b-chat-hf",
-    "chatglm3_6b": "THUDM/chatglm3-6b",
+    "chatglm3_6b": null,
     "model_13b": "meta-llama/Llama-2-13b-hf",
     "mask_model": "/home/zjs/llm/roberta-base",
     "hf_endpoint": "https://hf-mirror.com"
@@ -20,11 +20,13 @@
     "zo_dpga": "/home/zjs/anaconda3/envs/dpzero/bin/python",
     "dadp_icl": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
     "privsv": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
-    "dpsgd": "/home/zjs/anaconda3/envs/dpsgd/bin/python"
+    "dpsgd": "/home/zjs/anaconda3/envs/dpsgd/bin/python",
+    "indirect_lora": "python3",
+    "indirect_icl": "python3"
   },
   "dpsgd": {
     "target_epsilon": 8.0,
-    "target_delta": 0.00001,
+    "target_delta": 1e-05,
     "max_grad_norm": 1.0,
     "num_epochs": 1,
     "per_device_batch_size": 8,
@@ -56,7 +58,7 @@
     },
     "kal_dp": {
       "epsilon": 8.0,
-      "delta": 0.000005,
+      "delta": 5e-06,
       "batch_size": 32,
       "max_physical_batch_size": 16,
       "dpsgd_max_physical_batch_size": 12,
@@ -101,7 +103,13 @@
     },
     "privsv": {
       "dataset": "sst2",
-      "layers": [11, 12, 13, 14, 15],
+      "layers": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
       "noise_multiplier": 0.06,
       "clip": 18,
       "attack_samples": 20,
@@ -111,6 +119,47 @@
       "native_member_data_path": "PrivSV/Indirect_attack/sst2_train.json",
       "native_attack_samples": 20,
       "native_attack_neighbors": 10
+    }
+  },
+  "evaluation": {
+    "indirect": {
+      "models": {
+        "chatglm3": {
+          "base_model": null,
+          "adapters": {
+            "sst2": "/home/zjs/llm/glm-lora",
+            "wikitext2": null
+          },
+          "training_manifests": {
+            "sst2": null,
+            "wikitext2": null
+          }
+        },
+        "fm9g": {
+          "base_model": null,
+          "adapters": {
+            "sst2": null,
+            "wikitext2": null
+          },
+          "training_manifests": {
+            "sst2": null,
+            "wikitext2": null
+          }
+        }
+      },
+      "lora": {
+        "neighbor_model": "/home/zjs/llm/roberta-base"
+      },
+      "icl": {
+        "proposal_model": "evaluate/indirect_ICL/resources/bert-base-uncased",
+        "input_json": null
+      },
+      "datasets": {
+        "wikitext2": {
+          "lora_dir": "evaluate/indirect_LoRA/data/wikitext2",
+          "icl_dir": "evaluate/indirect_ICL/data/WikiText-2-raw-v1"
+        }
+      }
     }
   }
 }

@@ -318,7 +318,7 @@ def _yes_no(prompt: str, default: bool = True) -> bool:
 def _confirm_real_run() -> bool:
     """Require an explicit, retryable confirmation before a real experiment."""
     while True:
-        confirm = input("真实实验可能耗时较长。请输入 run 确认；输入 0 取消：").strip().lower()
+        confirm = input("方法运行可能耗时较长。请输入 run 确认；输入 0 取消：").strip().lower()
         if confirm == "run":
             return True
         if confirm in {"0", "q", "quit", "cancel", "取消"}:
@@ -553,11 +553,11 @@ def _choose_model_and_dataset(
 
 
 def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
-    task_kind = choose_from_menu("第一步：请选择执行的方法类型", [("finetune", "敏感信息保护的微调方法"), ("evaluation", "敏感信息泄露风险评估方法")])
+    task_kind = choose_from_menu("第一步：请选择待执行方法类型", [("finetune", "敏感信息保护微调方法"), ("evaluation", "敏感信息泄露风险评估方法")])
     if task_kind is None:
         return None
     if task_kind == "finetune":
-        group = choose_from_menu("第二步：请选择敏感信息保护的微调类型", [(key, title) for key, (title, _) in FINETUNE_METHOD_GROUPS.items()])
+        group = choose_from_menu("第二步：请选择敏感信息保护微调类型", [(key, title) for key, (title, _) in FINETUNE_METHOD_GROUPS.items()])
         if group is None:
             return None
         group_title, method_ids = FINETUNE_METHOD_GROUPS[group]
@@ -573,7 +573,7 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
     evaluation_type = choose_from_menu("第二步：请选择敏感信息泄露风险评估方法", [("direct_attack", "直接评估"), ("indirect_attack", "间接评估")])
     if evaluation_type is None:
         return None
-    finetune_type = choose_from_menu("第三步：请选择评估模型的微调方式", [("explicit", "显式微调"), ("implicit", "隐式微调")])
+    finetune_type = choose_from_menu("第三步：请选择待评估模型的微调方式", [("explicit", "显式微调"), ("implicit", "隐式微调")])
     if finetune_type is None:
         return None
     groups = EVALUATION_METHOD_GROUPS[finetune_type]
@@ -584,7 +584,7 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
     if group == "none":
         model = choose_from_menu(
             "请选择待评估模型",
-            [("llama", "Llama-2-7b"), ("chatglm", "ChatGLM3-6b")],
+            [("chatglm", "ChatGLM3-6b"), ("fm9g", "FM9G-7B（九格大模型）")],
         )
         if model is None:
             return None
@@ -592,7 +592,9 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
         return TaskSelection(
             "evaluation", "none", evaluation_type, "none", evaluation_type, finetune_type,
             evaluation_model=model,
-            evaluation_model_title="Llama-2-7b" if model == "llama" else "ChatGLM3-6b",
+            evaluation_model_title=(
+                "ChatGLM3-6b" if model == "chatglm" else "FM9G-7B（九格大模型）"
+            ),
             backend_method_id="kal_dp" if explicit else "dadp_icl",
             display_method_title="显式微调" if explicit else "隐式微调",
         )
@@ -611,32 +613,29 @@ def _chatglm_explicit_direct_attack() -> int:
     return 0
 
 
-def _chatglm_explicit_indirect_attack() -> int:
-    print("\n===== 显式微调 间接评估结果 =====")
-    print("ChatGLM3-6b 显式微调无扰动评估接口已预留，具体评估方法待补充。")
-    return 0
-
-
 def _chatglm_implicit_direct_attack() -> int:
     print("\n===== 隐式微调 直接评估结果 =====")
     print("ChatGLM3-6b 隐式微调无扰动评估接口已预留，具体评估方法待补充。")
     return 0
 
 
-def _chatglm_implicit_indirect_attack() -> int:
-    print("\n===== 隐式微调 间接评估结果 =====")
-    print("ChatGLM3-6b 隐式微调无扰动评估接口已预留，具体评估方法待补充。")
-    return 0
-
-
-def _run_chatglm_no_perturbation(selection: TaskSelection) -> int:
-    handlers = {
-        ("explicit", "direct_attack"): _chatglm_explicit_direct_attack,
-        ("explicit", "indirect_attack"): _chatglm_explicit_indirect_attack,
-        ("implicit", "direct_attack"): _chatglm_implicit_direct_attack,
-        ("implicit", "indirect_attack"): _chatglm_implicit_indirect_attack,
-    }
-    return handlers[(selection.finetune_type, selection.experiment_id)]()
+def _run_model_evaluation(selection: TaskSelection, settings: dict[str, Any]) -> int:
+    """Route before resolving the legacy Kal-DP/DADP method identity."""
+    from .indirect_evaluation import run_indirect
+    print(f"模型：{selection.evaluation_model_title}")
+    print(f"微调方式：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
+    if selection.experiment_id == "direct_attack":
+        if selection.evaluation_model == "fm9g":
+            print("FM9G-7B（九格大模型）无扰动直接评估接口待后续实现。")
+            return 0
+        return (_chatglm_explicit_direct_attack if selection.finetune_type == "explicit"
+                else _chatglm_implicit_direct_attack)()
+    print("任务：评估；评估类型：间接评估；微调类型：无扰动微调")
+    mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
+                           ("history", "查看最近历史结果"), ("preview", "预览评估命令")])
+    if mode is None:
+        return 0
+    return run_indirect(settings, selection.evaluation_model, selection.finetune_type, mode=mode)
 
 
 def interactive(settings: dict[str, Any]) -> int:
@@ -649,6 +648,8 @@ def interactive(settings: dict[str, Any]) -> int:
     if selection is None:
         print("已退出。")
         return 0
+    if selection.evaluation_model in {"chatglm", "fm9g"}:
+        return _run_model_evaluation(selection, settings)
     no_perturbation = selection.perturbation_group == "none"
     method_id = selection.backend_method_id or selection.method_id
     if no_perturbation:
@@ -668,12 +669,13 @@ def interactive(settings: dict[str, Any]) -> int:
         current_method_title = METHODS[method_id].title
         baseline_finetune_type = "Prompt微调" if selection.perturbation_group == "example" else "PEFT微调"
         comparison_labels = {
-            "utility": f"否，仅运行当前方法 {current_method_title}",
+            # "utility": f"否，运行当前方法 {current_method_title}",
+            "utility": f"否，运行当前方法",
             "baseline": f"是，运行效用对比方法 {baseline_finetune_type}",
-            "performance_baseline": "是，运行性能对比方法 DP-SGD",
+            "performance_baseline": "是，运行性能对比方法 DP-SGD微调",
         }
         experiment_id = choose_from_menu(
-            "请选择是否通过基线方法进行对比",
+            "请选择是否运行基准微调方法进行对比",
             list(comparison_labels.items()),
         )
         if experiment_id is None:
@@ -692,25 +694,16 @@ def interactive(settings: dict[str, Any]) -> int:
             dadp_no_perturbation_indirect
         )
         experiment = Experiment(experiment.id, "无扰动基准评估", experiment.description, builder=builder)
-    mode = choose_from_menu("请选择执行模式", [("dry", "查看最近历史结果"), ("run", "立即执行")])
+    mode = choose_from_menu("请选择执行模式", [("run", "立即执行"), ("dry", "查看最近历史结果")])
     if mode is None:
         return 0
     dry_run = mode == "dry"
-    if selection.evaluation_model == "chatglm":
-        print("\n---------------- 任务确认 ----------------")
-        print("任务：评估")
-        print(f"评估类型：{'直接评估' if experiment_id == 'direct_attack' else '间接评估'}")
-        print(f"微调方式：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
-        print("微调类型：无扰动微调")
-        print(f"模型：{model}")
-        print(f"模式：{'查看最近历史结果' if dry_run else '立即执行'}")
-        return _run_chatglm_no_perturbation(selection)
     all_specs = prompt_specs(method_id, experiment_id)
     specs = [spec for spec in all_specs if spec.key not in {"common.model_7b", "common.model_7b_chat"}]
     # 其他参数设置菜单暂时关闭，全部直接采用 JSON 配置值。
     collected: list[tuple[PromptSpec, Any]] = [(spec, get_nested(settings, spec.key)) for spec in specs]
     if specs:
-        print("其他实验参数：直接使用默认值")
+        print("其他实验参数：使用默认值")
     if not _prepare_runtime(method_id, experiment_id, settings, dry_run):
         return 1
     if not _prepare_assets(method_id, experiment_id, settings, all_specs, dry_run, baseline_only=no_perturbation):
@@ -735,6 +728,7 @@ def interactive(settings: dict[str, Any]) -> int:
     if dataset is not None:
         print(f"数据集：{dataset}")
     print(f"模式：{'查看最近历史结果' if dry_run else '立即执行'}")
+    evaluation_display_title = "Llama" if selection.task_kind == "evaluation" else None
     # for spec, value in collected:
     #     print(f"{spec.label}：{_display_value(value)}")
     python_profile = "kal_dp" if experiment_id == "performance_baseline" and method_id in {"kal_dp", "zo_dpga"} else ("dpsgd" if experiment_id == "performance_baseline" else method_id)
@@ -743,7 +737,10 @@ def interactive(settings: dict[str, Any]) -> int:
         settings,
         check_dataset=selection.task_kind == "finetune",
         python_profile=python_profile,
-        display_title=selection.display_method_title if no_perturbation else None,
+        display_title=(
+            evaluation_display_title
+            or (selection.display_method_title if no_perturbation else None)
+        ),
     )
     if check_code and not dry_run:
         return check_code
@@ -754,7 +751,10 @@ def interactive(settings: dict[str, Any]) -> int:
         return 0
     return run_experiment(
         CATEGORIES[method_id], method, experiment, settings, dry_run=dry_run,
-        display_title=selection.display_method_title if no_perturbation else None,
+        display_title=(
+            evaluation_display_title
+            or (selection.display_method_title if no_perturbation else None)
+        ),
         historical_baseline_only=no_perturbation,
     )
 
