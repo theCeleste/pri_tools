@@ -21,8 +21,8 @@
     "dadp_icl": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
     "privsv": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
     "dpsgd": "/home/zjs/anaconda3/envs/dpsgd/bin/python",
-    "indirect_lora": "python3",
-    "indirect_icl": "python3"
+    "indirect_lora": "/home/zjs/anaconda3/envs/mia/bin/python",
+    "indirect_icl": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python"
   },
   "dpsgd": {
     "target_epsilon": 8.0,
@@ -125,10 +125,10 @@
     "indirect": {
       "models": {
         "chatglm3": {
-          "base_model": null,
+          "base_model": "/home/zjs/llm/chatglm3-6b/",
           "adapters": {
-            "sst2": "/home/zjs/llm/glm-lora",
-            "wikitext2": null
+            "sst2": "evaluate/indirect_LoRA/weights/chatglm3/sst2",
+            "wikitext2": "evaluate/indirect_LoRA/weights/chatglm3/wikitext2"
           },
           "training_manifests": {
             "sst2": null,
@@ -136,10 +136,10 @@
           }
         },
         "fm9g": {
-          "base_model": null,
+          "base_model": "/home/zjs/llm/9G7B_MHA/",
           "adapters": {
-            "sst2": null,
-            "wikitext2": null
+            "sst2": "evaluate/indirect_LoRA/weights/fm9g/sst2",
+            "wikitext2": "evaluate/indirect_LoRA/weights/fm9g/wikitext2"
           },
           "training_manifests": {
             "sst2": null,

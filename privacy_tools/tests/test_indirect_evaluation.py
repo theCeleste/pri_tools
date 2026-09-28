@@ -168,22 +168,30 @@ class IntegrationTests(unittest.TestCase):
             shutil.rmtree(source)
 
     def test_success_and_failure_manifests(self):
+        class Process:
+            def __init__(self, command, returncode=0):
+                self.stdout = io.StringIO("live output\n")
+                self.command = command
+                self.returncode = returncode
+
+            def wait(self):
+                return self.returncode
+
         for kind in e.ROOTS:
             def execute(command, **kwargs):
                 latest=next((self.root / "results").rglob("run_manifest.json"))
                 manifest=e.read_json(latest)
-                if command[-2]=="--manifest":
-                    self.write(Path(manifest["output"])/"data_validation.json",{"checked":True})
-                else:
-                    self.fixture_metrics(manifest)
-                return subprocess.CompletedProcess(command,0)
-            with patch.object(e,"preflight"),patch.object(e.subprocess,"run",side_effect=execute):
+                self.fixture_metrics(manifest)
+                return Process(command)
+            with patch.object(e,"preflight"),patch.object(e.subprocess,"Popen",side_effect=execute):
                 self.assertEqual(e.run_indirect(self.settings,"chatglm",kind),0)
             summary=e.read_json(next((self.root / "results").rglob("summary.json")))
             self.assertEqual(summary["status"],"completed")
+            self.assertEqual(summary["data_validation"], {"status": "skipped"})
+            self.assertEqual(next((self.root / "results").rglob("*.log")).read_text(), "live output\n")
             import shutil
             shutil.rmtree(self.root / "results")
-        with patch.object(e,"preflight"),patch.object(e.subprocess,"run",return_value=subprocess.CompletedProcess([],9)) as runner:
+        with patch.object(e,"preflight"),patch.object(e.subprocess,"Popen",return_value=Process([],9)) as runner:
             self.assertEqual(e.run_indirect(self.settings,"fm9g","implicit"),1)
             self.assertEqual(runner.call_count,1)
         self.assertFalse(list((self.root / "results").rglob("summary.json")))

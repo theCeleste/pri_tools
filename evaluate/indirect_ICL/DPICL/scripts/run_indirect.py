@@ -126,10 +126,16 @@ def main():
         start = time.monotonic()
         print(f'START {name}; log: {root / (name + ".log")}', flush=True)
         with (root / (name + '.log')).open('w', encoding='utf-8') as log:
-            result = subprocess.run(command, cwd=PROJECT_DIR, stdout=log, stderr=subprocess.STDOUT)
-        timings.append(dict(stage=name, seconds=time.monotonic() - start, returncode=result.returncode))
+            process = subprocess.Popen(command, cwd=PROJECT_DIR, stdout=subprocess.PIPE,
+                                       stderr=subprocess.STDOUT, text=True, bufsize=1)
+            for line in process.stdout:
+                print(line, end='', flush=True)
+                log.write(line)
+                log.flush()
+            returncode = process.wait()
+        timings.append(dict(stage=name, seconds=time.monotonic() - start, returncode=returncode))
         (root / 'stage_timings.json').write_text(json.dumps(timings, indent=2), encoding='utf-8')
-        if result.returncode:
+        if returncode:
             raise RuntimeError(f'{name} failed; inspect its log; subsequent stages were not started')
         print(f'DONE {name}: {timings[-1]["seconds"]:.1f}s', flush=True)
     print(f'All stages completed: {root}', flush=True)

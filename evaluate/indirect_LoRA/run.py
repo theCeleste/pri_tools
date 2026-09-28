@@ -172,12 +172,17 @@ def main():
         print(f"START {stage}; log: {log}", flush=True)
         start = time.monotonic()
         with log.open("w") as stream:
-            result = subprocess.run(command, cwd=ROOT, env=env, stdout=stream,
-                                    stderr=subprocess.STDOUT)
-        timings[stage] = dict(seconds=time.monotonic() - start, returncode=result.returncode)
+            process = subprocess.Popen(command, cwd=ROOT, env=env, stdout=subprocess.PIPE,
+                                       stderr=subprocess.STDOUT, text=True, bufsize=1)
+            for line in process.stdout:
+                print(line, end="", flush=True)
+                stream.write(line)
+                stream.flush()
+            returncode = process.wait()
+        timings[stage] = dict(seconds=time.monotonic() - start, returncode=returncode)
         (output / "stage_timings.json").write_text(json.dumps(timings, indent=2) + "\n")
-        if result.returncode:
-            raise RuntimeError(f"{stage} failed (exit {result.returncode}); see {log}")
+        if returncode:
+            raise RuntimeError(f"{stage} failed (exit {returncode}); see {log}")
         print(f"DONE {stage}: {timings[stage]['seconds']:.1f}s", flush=True)
     print(f"Completed: {output}", flush=True)
 

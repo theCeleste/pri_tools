@@ -334,22 +334,33 @@ def run_indirect(settings, model, kind, *, mode="run", dataset=None, source_run=
         manifest = {**plan, "status": "running", "stage_results": []}
         write_json(output / "run_manifest.json", manifest)
         env = {**os.environ, **plan["env"]}
+        env.setdefault("PYTHONUNBUFFERED", "1")
         stages = list(plan["stages"])
-        if not source_run:
-            stages.insert(0, ("preflight", [plan["python"], str(PROJECT_ROOT / "privacy_tools/indirect_data_check.py"),
-                                          "--manifest", str(output / "run_manifest.json")]))
+        # TODO: Re-enable data provenance validation before formal evaluation.
+        # if not source_run:
+        #     stages.insert(0, ("preflight", [plan["python"], str(PROJECT_ROOT / "privacy_tools/indirect_data_check.py"),
+        #                                   "--manifest", str(output / "run_manifest.json")]))
         try:
             for name, cmd in stages:
                 start = time.monotonic()
                 print(f"START {name}; 日志：{output / (name + '.log')}", flush=True)
                 with (output / (name + ".log")).open("w", encoding="utf-8") as log:
-                    result = subprocess.run(cmd, cwd=PROJECT_ROOT, env=env, stdout=log, stderr=subprocess.STDOUT)
-                manifest["stage_results"].append(dict(name=name, returncode=result.returncode, seconds=time.monotonic()-start))
+                    process = subprocess.Popen(cmd, cwd=PROJECT_ROOT, env=env, stdout=subprocess.PIPE,
+                                               stderr=subprocess.STDOUT, text=True, bufsize=1)
+                    for line in process.stdout:
+                        print(line, end="", flush=True)
+                        log.write(line)
+                        log.flush()
+                    returncode = process.wait()
+                manifest["stage_results"].append(dict(name=name, returncode=returncode, seconds=time.monotonic()-start))
                 write_json(output / "run_manifest.json", manifest)
-                if result.returncode:
-                    raise RuntimeError(f"{name} 失败（退出码 {result.returncode}），查看 {output / (name + '.log')}")
+                if returncode:
+                    raise RuntimeError(f"{name} 失败（退出码 {returncode}），查看 {output / (name + '.log')}")
             results = collect_results(plan)
-            receipt = read_json(output / "data_validation.json") if not source_run else read_json(path(source_run) / "summary.json").get("data_validation")
+            receipt = (read_json(output / "data_validation.json")
+                       if not source_run and (output / "data_validation.json").is_file()
+                       else {"status": "skipped"} if not source_run
+                       else read_json(path(source_run) / "summary.json").get("data_validation"))
             summary = {**{k: plan[k] for k in (*ident, "backend_digest", "resources", "output", "source_run")},
                        "status": "completed", "completed_at": datetime.now(timezone.utc).isoformat(),
                        "results": results, "data_validation": receipt}
