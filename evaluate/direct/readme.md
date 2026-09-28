@@ -4,7 +4,7 @@
 
 ### 1. 生成候选样本（temperature_chatglm.py）
 
-按temperature / top_p / max_new_tokens采样，生成1000条候选样本，计算每条样本的 PPL 和 Zlib 压缩率，按 PPL/Zlib 对数比值排序，取前100条
+按temperature 采样，生成1000条候选样本，计算每条样本的 PPL 和 Zlib 压缩率，按 PPL/Zlib 对数比值排序，取前100条
 
 生成1000条样本与前100条样本
 
@@ -30,7 +30,7 @@ python temperature_chatglm.py \
 - `chatglm_sst2_all.txt` / `_all.json`：全部 1000 条
 - `chatglm_sst2_top100.txt`：前 100 条（按 ratio 升序）
 
-`--dataset` 可选 `sst2` / `agnews` / `wikitext`，需搭配对应 LoRA。
+`--dataset` 可选 `sst2` / `wikitext`，需搭配对应 LoRA。
 
 ### 2. 记忆检测（sst2_member_test.py）
 
@@ -79,7 +79,7 @@ python 你的脚本文件名.py \
 - `chatglm_sst2_all.txt` / `_all.json`：全部 1000 条
 - `chatglm_sst2_top100.txt`：前 100 条（按 ratio 升序）
 
-`--dataset` 可选 `sst2` / `agnews` / `wikitext`，需搭配对应 LoRA。
+`--dataset` 可选 `sst2` / `wikitext`，需搭配对应 LoRA。
 
 ### 2.记忆检测
 
