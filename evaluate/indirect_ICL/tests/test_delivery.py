@@ -76,7 +76,7 @@ class DeliveryTests(unittest.TestCase):
     def test_prompt_and_generated_examples(self):
         data = [dict(original_text=f"original {i}", synthetic_text=f"synthetic {i}",
                      label=["positive"]) for i in range(10)]
-        for field in ("original_text", "synthetic_text"):
+        for field in ("original_text",):
             expected = "Example:\n" + "".join(
                 f"Text:{item[field]}.Label:['positive']\n" for item in data[5:10]
             ) + "\nPlease analyze this text:"
@@ -187,7 +187,7 @@ class DeliveryTests(unittest.TestCase):
                     self.assertIn("--num-valid 10", result.stdout)
                     self.assertIn("--limit 500", result.stdout)
                     self.assertIn("--proposal-model resources/bert-base-uncased", result.stdout)
-                    self.assertIn(f"--input-json {output / 'generated/synthetic_text_results.json'}",
+                    self.assertIn(f"--input-json {output / 'generated/original_text_results.json'}",
                                   result.stdout)
                     self.assertIn(f"--max-length {512 if dataset == 'sst2' else 2048}", result.stdout)
                     self.assertEqual(result.stdout.count('prepare_data:'), int(dataset == 'wikitext2'))
@@ -199,7 +199,7 @@ class DeliveryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             p = Path(directory)
             for dataset in ("sst2", "wikitext2"):
-                for field in ("original_text", "synthetic_text"):
+                for field in ("original_text",):
                     source = p / dataset / "input" / field
                     source.mkdir(parents=True)
                     for name, values in (("other", [.9, .7]), (dataset, [.8, .1])):
@@ -210,7 +210,7 @@ class DeliveryTests(unittest.TestCase):
                                          "--output", str(p / dataset / "output")],
                                         cwd=directory, env=env, capture_output=True, text=True)
                 self.assertEqual(result.returncode, 0, result.stderr)
-                for field in ("original_text", "synthetic_text"):
+                for field in ("original_text",):
                     metrics = json.loads((p / dataset / "output" / field / "evaluation/metrics.json").read_text())
                     self.assertAlmostEqual(metrics["AUC"], .75)
                     self.assertEqual(metrics["member_count"], 2)

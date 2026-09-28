@@ -649,6 +649,7 @@ def _main(
     task_dataset: Annotated[str, typer.Option()] = 'sst2',
     wikitext2_dir: Annotated[str, typer.Option()] = None,
     wikitext2_config: Annotated[str, typer.Option()] = 'wikitext-2-raw-v1',
+    original_only: Annotated[bool, typer.Option()] = False,
 ):
     global labels, label_dict
     if task_dataset not in ('sst2', 'wikitext2'):
@@ -696,7 +697,7 @@ def _main(
             raise ValueError("Zero-noise mode uses probability averaging, not exponential normalization")
         destination = project_path(output_dir)
         destination.mkdir(parents=True, exist_ok=True)
-        output_file = destination / "synthetic_text_results.json"
+        output_file = destination / ("original_text_results.json" if original_only else "synthetic_text_results.json")
         if output_file.exists():
             raise FileExistsError(f"Refusing to overwrite {output_file}; choose a new --output-dir")
         dataset_counts = None
@@ -736,6 +737,27 @@ def _main(
         )
         queryset = data["train"].shuffle(seed=eval_seed, keep_in_memory=True)
         query_subset = select_uniform_n_shots_over_labels(queryset, num_valid)
+
+        if original_only:
+            results = []
+            for i, test_datum in enumerate(query_subset, 1):
+                result = {
+                    "idx": i,
+                    "original_text": test_datum["sentence"],
+                    "label": label_dict[test_datum["label"]] if task_dataset == 'sst2' else [],
+                }
+                if task_dataset == 'wikitext2':
+                    result['task_dataset'] = task_dataset
+                results.append(result)
+            with output_file.open('w', encoding='utf-8') as f:
+                json.dump(results, f, ensure_ascii=False, indent=2)
+            with (destination / "generation_config.json").open("w", encoding="utf-8") as f:
+                json.dump({"original_only": True, "eval_seed": eval_seed,
+                           "num_valid": num_valid, "task_dataset": task_dataset,
+                           "sst2_dir": sst2_dir, "wikitext2_dir": wikitext2_dir,
+                           "wikitext2_config": wikitext2_config}, f, indent=2)
+            print(f"Wrote {len(results)} original-text examples to {output_file}")
+            return
 
         if use_dp_prompts:
             synthetic_examples = []

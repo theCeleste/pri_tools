@@ -123,7 +123,6 @@ def validate_data(plan):
         for row in examples:
             if text_key(row["original_text"]) not in train_keys:
                 raise ValueError("示例 original_text 不属于所配置的数据集采样池")
-            text_key(row["synthetic_text"])
         files[r["input_json"]] = digest(r["input_json"])
     return {"nonmember_count": 500, "requested_demonstrations": 10,
             "membership_definition": "original_text_records_context_protocol",

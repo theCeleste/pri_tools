@@ -69,7 +69,7 @@ case "$MODE" in
         INPUT=()
         if [[ "$MODE" == attack ]]; then
             if [[ -z "$INPUT_JSON" ]]; then
-                printf '%s\n' 'attack requires --input-json path/to/synthetic_text_results.json' >&2; exit 2
+                printf '%s\n' 'attack requires --input-json path/to/original_text_results.json' >&2; exit 2
             fi
             if [[ "$INPUT_JSON" != /* ]]; then INPUT_JSON="$ROOT/$INPUT_JSON"; fi
             [[ -f "$INPUT_JSON" ]] || { printf 'Input JSON not found: %s\n' "$INPUT_JSON" >&2; exit 2; }
@@ -96,13 +96,13 @@ case "$MODE" in
         if [[ -e "$OUTPUT" ]]; then
             printf 'Refusing to overwrite existing output: %s\n' "$OUTPUT" >&2; exit 73
         fi
-        for FIELD in original_text synthetic_text; do
+        for FIELD in original_text; do
             for SOURCE in other "$DATASET"; do
                 FILE="$RESULTS/$FIELD/attack_results_${SOURCE}_bert_0_${FIELD}.csv"
                 [[ -f "$FILE" ]] || { printf 'Attack CSV not found: %s\n' "$FILE" >&2; exit 2; }
             done
         done
-        for FIELD in original_text synthetic_text; do
+        for FIELD in original_text; do
             "$PYTHON" "$ROOT/DPICL/Indirect_attack/combine.py" \
                 --member-file "$RESULTS/$FIELD/attack_results_other_bert_0_${FIELD}.csv" \
                 --nonmember-file "$RESULTS/$FIELD/attack_results_${DATASET}_bert_0_${FIELD}.csv" \

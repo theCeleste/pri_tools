@@ -22,7 +22,7 @@ ROOTS = {"explicit": PROJECT_ROOT / "evaluate/indirect_LoRA",
          "implicit": PROJECT_ROOT / "evaluate/indirect_ICL"}
 MODEL_INFO = {"chatglm3": ("CHATGLM_MODEL_DIR", "chatglm3-6b", "chatglm3_6b"),
               "fm9g": ("FM9G_MODEL_DIR", "9G7B_MHA", "fm9g_7b")}
-FIELDS = ("original_text", "synthetic_text")
+FIELDS = ("original_text",)
 TARGETS = (1.0, .5, .1, .01, .001, .0001)
 
 

@@ -63,7 +63,7 @@ def main():
         parser.error('Prompt range must be nonempty and within --num-demonstrations')
     root = project_path(args.run_dir)
     generated = root / 'generated'
-    input_json = project_path(args.input_json) if args.input_json else generated / 'synthetic_text_results.json'
+    input_json = project_path(args.input_json) if args.input_json else generated / 'original_text_results.json'
     stages = []
     def stage(name, script, options):
         stages.append((name, [sys.executable, '-u', str(DPICL_DIR / script), *map(str, options)]))
@@ -87,8 +87,9 @@ def main():
                    '--add-noise' if args.add_noise else '--no-add-noise', *wiki_options, *trust]
         if args.sst2_dir:
             options += ['--sst2-dir', args.sst2_dir]
+        options += ['--original-only']
         stage('generation', 'run_exp_sst2_local.py', options)
-    for field in ['original_text', 'synthetic_text']:
+    for field in ['original_text']:
         destination = root / field
         nonmember_dataset = args.task_dataset
         for dataset in ['other', nonmember_dataset]:

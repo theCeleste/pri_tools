@@ -162,7 +162,7 @@ class IntegrationTests(unittest.TestCase):
             source=self.source(kind)
             plan=self.plan(kind=kind,source_run=source)
             self.assertNotIn("CUDA_VISIBLE_DEVICES",plan["env"])
-            self.assertEqual(len(plan["stages"]),1 if kind=="explicit" else 4)
+            self.assertEqual(len(plan["stages"]),1 if kind=="explicit" else 2)
             with self.assertRaises(ValueError): self.plan(model="fm9g",kind=kind,source_run=source)
             import shutil
             shutil.rmtree(source)
@@ -204,7 +204,7 @@ class IntegrationTests(unittest.TestCase):
             self.fixture_metrics(plan)
             self.assertTrue(e.collect_results(plan))
             if kind=="implicit":
-                file=Path(plan["backend"])/"synthetic_text/evaluation/metrics.json"
+                file=Path(plan["backend"])/"original_text/evaluation/metrics.json"
                 metrics=e.read_json(file); metrics['member_count']=9; self.write(file,metrics)
                 with self.assertRaises(ValueError): e.collect_results(plan)
 
