@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+runs/
+9g/sst2_memorize_final/
+chatglm/chatglm3_sst2_memorize_final/

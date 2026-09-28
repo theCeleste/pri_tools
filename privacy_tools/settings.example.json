@@ -7,7 +7,7 @@
     "dataset_path": "privacy_tools/datasets/sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
     "model_7b_chat": "meta-llama/Llama-2-7b-chat-hf",
-    "chatglm3_6b": null,
+    "chatglm3_6b": "/home/zjs/llm/chatglm3-6b",
     "model_13b": "meta-llama/Llama-2-13b-hf",
     "mask_model": "/home/zjs/llm/roberta-base",
     "hf_endpoint": "https://hf-mirror.com"
@@ -22,7 +22,7 @@
     "privsv": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
     "dpsgd": "/home/zjs/anaconda3/envs/dpsgd/bin/python",
     "indirect_lora": "/home/zjs/anaconda3/envs/mia/bin/python",
-    "indirect_icl": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python"
+    "indirect_icl": "/home/zjs/anaconda3/envs/few-shot/bin/python"
   },
   "dpsgd": {
     "target_epsilon": 8.0,
