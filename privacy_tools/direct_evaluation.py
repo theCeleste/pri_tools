@@ -169,8 +169,12 @@ def build_plan(settings: dict, model: str, kind: str, dataset: str, output: str 
                 args += ["--decode_mode", str(_option(settings, "generation.decode_mode", "sample"))]
             stages.append(("generation", [py, str(GENERATOR[model]), *args]))
         else:
+            num_valid = _option(settings, "generation.num_valid", None)
+            if num_valid is None:
+                # Keep compatibility with the pre-existing configuration key.
+                num_valid = _option(settings, "generation.num_demonstrations", 100)
             args = ["--sigma", "0", "--openai-model", str(base), "--task", SCRIPT_DATASETS[dataset], "--data-dir", str(data),
-                    "--device", logical_device, "--output-file", str(generated_json), "--num-valid", str(_option(settings, "generation.num_demonstrations", 4)),
+                    "--device", logical_device, "--output-file", str(generated_json), "--num-valid", str(num_valid),
                     "--num-test", str(_option(settings, "generation.num_queries", 100)), "--max-token-per-text", str(_option(settings, "generation.max_new_tokens", 100)),
                     "--synth-seed", str(seed), "--eval-seed", str(seed), "--num-private-train", "0", "--num-private-train-splits", "0", "--no-noise"]
             stages.append(("generation_no_noise", [py, str(ROOT / "DPICL/run_exp_sst2_local.py"), *args]))

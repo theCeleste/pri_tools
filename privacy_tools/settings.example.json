@@ -164,7 +164,7 @@
         "decode_mode": "sample",
         "dtype": "auto",
         "min_chars": 20,
-        "num_demonstrations": 4,
+        "num_valid": 100,
         "num_queries": 100
       },
       "matching": {
