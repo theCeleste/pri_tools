@@ -7,6 +7,7 @@
 
 import argparse
 import asyncio
+import csv
 import math
 import re
 import torch
@@ -28,7 +29,7 @@ import numpy as np
 import scipy.special
 import tqdm
 import typer
-from datasets import DatasetDict, load_dataset, load_from_disk
+from datasets import Dataset, DatasetDict, load_dataset, load_from_disk
 
 # --- REPLACED IMPORTS: use local compatibility shim instead of dp_few_shot_generation.lm ---
 # from lmapi.lm import LM, CompletionsSettings
@@ -93,13 +94,25 @@ label_dict = {0: ["negative"], 1: ["positive"]}
 def load_task_dataset(task: str, data_dir: str):
     """Load a task from an explicit local path where possible."""
     if task == "sst2":
-        local_sst2 = (
-            data_dir
-            if os.path.exists(os.path.join(data_dir, "dataset_dict.json"))
-            else os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/sst2"))
-        )
+        local_sst2 = data_dir
         if os.path.exists(os.path.join(local_sst2, "dataset_dict.json")):
             return cast(DatasetDict, load_from_disk(local_sst2))
+        split_files = {
+            split: os.path.join(local_sst2, filename)
+            for split, filename in (("train", "train.tsv"), ("validation", "dev.tsv"), ("test", "test.tsv"))
+            if os.path.isfile(os.path.join(local_sst2, filename))
+        }
+        if "train" in split_files:
+            # The repository's train/dev files contain ``sentence`` and
+            # ``label``, while test.tsv contains ``index`` and ``sentence``.
+            # Loading all three through one CSV builder makes datasets infer
+            # one schema and fail on test.tsv.  Parse each split independently
+            # and normalize to the task schema instead.
+            datasets = {split: _load_sst2_tsv(file, require_label=split != "test") for split, file in split_files.items()}
+            return DatasetDict(datasets)
+        fallback = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/sst2"))
+        if os.path.exists(os.path.join(fallback, "dataset_dict.json")):
+            return cast(DatasetDict, load_from_disk(fallback))
         return cast(DatasetDict, load_dataset("glue", "sst2"))
     if task == "wikitext":
         if not os.path.isdir(data_dir):
@@ -115,6 +128,34 @@ def load_task_dataset(task: str, data_dir: str):
             )
         return cast(DatasetDict, load_dataset("parquet", data_files=files))
     raise ValueError(f"Unsupported task: {task}. Choose sst2 or wikitext.")
+
+
+def _load_sst2_tsv(file_path: str, *, require_label: bool) -> Dataset:
+    sentences: list[str] = []
+    labels: list[int] = []
+    with open(file_path, "r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle, delimiter="\t")
+        if not reader.fieldnames or "sentence" not in reader.fieldnames:
+            raise ValueError(f"SST-2 文件缺少 sentence 列：{file_path}")
+        for line_number, row in enumerate(reader, start=2):
+            sentence = str(row.get("sentence") or "").strip()
+            if not sentence:
+                continue
+            raw_label = row.get("label")
+            if raw_label in (None, ""):
+                if require_label:
+                    raise ValueError(f"SST-2 训练/验证文件第 {line_number} 行缺少 label：{file_path}")
+                label = -1
+            else:
+                try:
+                    label = int(raw_label)
+                except (TypeError, ValueError) as exc:
+                    raise ValueError(f"SST-2 文件第 {line_number} 行 label 无效：{raw_label!r}") from exc
+            sentences.append(sentence)
+            labels.append(label)
+    if not sentences:
+        raise ValueError(f"SST-2 文件没有有效文本：{file_path}")
+    return Dataset.from_dict({"sentence": sentences, "label": labels})
 
 
 def default_result_file(model_path: str, task: str) -> str:
@@ -853,7 +894,14 @@ def _main(
     synth_seed: Annotated[int, typer.Option()] = 0,
     # random seed for n-shot demonstrations sampling in evaluation
     eval_seed: Annotated[int, typer.Option()] = 0,
+    no_noise: bool = False,
 ):
+    if no_noise:
+        # Direct evaluation has an explicit, auditable no-perturbation path.
+        sigma = 0.0
+        num_private_train = 0
+        num_private_train_splits = 0
+        print("DIRECT_EVALUATION_NO_NOISE=true; Gaussian/Exponential noise disabled")
     async def main():
         if (num_private_train == 0) != (num_private_train_splits == 0):
             raise ValueError(
@@ -879,7 +927,7 @@ def _main(
             num_public_train = set_num_public_train
 
         if device == "auto":
-            device_name = "cuda:0" if torch.cuda.is_available() else "cpu"
+            device_name = "cuda" if torch.cuda.is_available() else "cpu"
         elif device.startswith("cuda"):
             cuda_available = torch.cuda.is_available()
             try:
@@ -1051,7 +1099,7 @@ def _main(
                 .select(range(num_test), keep_in_memory=True)
             )
             test_labels = [test_example["label"] for test_example in test_subset]
-            print("开始基准评估！输出测试样本检测...")
+            # print("开始基准评估！输出测试样本检测...")
 
             content_free_inputs = [{"sentence": ""},{"sentence": "N/A"},{"sentence": "..."}]
 
@@ -1075,8 +1123,8 @@ def _main(
                 p_cf=p_cf_wout_DP,
             )
 
-            print(f"Accuracy (original) without DP: {acc_original_wout_DP}")
-            print(f"Accuracy (calibrated) without DP: {acc_calibrated_wout_DP}")
+            # print(f"Accuracy (original) without DP: {acc_original_wout_DP}")
+            # print(f"Accuracy (calibrated) without DP: {acc_calibrated_wout_DP}")
 
             if use_dp_prompts:
                 p_cf_w_DP = get_p_content_free(
@@ -1097,8 +1145,8 @@ def _main(
                     all_label_probs_w_DP, test_labels, mode="diagonal_W", p_cf=p_cf_w_DP
                 )
 
-                print(f"Accuracy (original) with DP: {acc_original_w_DP}")
-                print(f"Accuracy (calibrated) with DP: {acc_calibrated_w_DP}")
+                # print(f"Accuracy (original) with DP: {acc_original_w_DP}")
+                # print(f"Accuracy (calibrated) with DP: {acc_calibrated_w_DP}")
 
     try:
         asyncio.run(main())
@@ -1140,6 +1188,7 @@ def _parse_args():
     parser.add_argument("--top-p", type=float, default=1.0)
     parser.add_argument("--synth-seed", type=int, default=0)
     parser.add_argument("--eval-seed", type=int, default=0)
+    parser.add_argument("--no-noise", action="store_true", help="Disable all private-prompt noise for direct evaluation")
     return parser.parse_args()
 
 

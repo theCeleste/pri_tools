@@ -6,9 +6,6 @@
 
 import os
 
-# 必须放在 import torch 之前
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
-
 import argparse
 import math
 import zlib
@@ -434,6 +431,8 @@ def load_chatglm_with_lora(base_model_path, lora_path, device, dtype_mode="auto"
 
     model.config.use_cache = False
 
+    if not lora_path or lora_path == "None" or not os.path.isdir(lora_path):
+        raise FileNotFoundError(f"LoRA path is required for direct evaluation: {lora_path}")
     if lora_path and lora_path != "None" and os.path.exists(lora_path):
         print(f"Loading LoRA from: {lora_path}")
 
@@ -732,7 +731,7 @@ def main(args):
     print("Loading tokenizer and ChatGLM3 + LoRA")
     print("=" * 80)
 
-    tokenizer = load_tokenizer_for_causal_lm(args.base_model_path)
+    tokenizer = load_tokenizer_for_causal_lm(args.tokenizer_path or args.base_model_path)
 
     print(
         f"Tokenizer: vocab_size={tokenizer.vocab_size}, "
@@ -941,6 +940,8 @@ if __name__ == "__main__":
         type=str,
     )
 
+    parser.add_argument("--tokenizer_path", default="", type=str)
+
     parser.add_argument(
         "--lora_path",
         default="/home/wym/projects/ExtractingModel/Extractingcode/finetune/train/output2/chatglm3_sst2_memorize_final",
@@ -1011,6 +1012,8 @@ if __name__ == "__main__":
         action="store_true",
     )
 
+    parser.add_argument("--seed", default=0, type=int)
+
     parser.add_argument(
         "--outfile",
         default="./save/results/chatglm_sst2",
@@ -1019,6 +1022,10 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
 
     print("=" * 80)
     print("Configuration:")

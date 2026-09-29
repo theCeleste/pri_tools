@@ -1,5 +1,23 @@
 # lora微调
 
+## 统一直接评估入口
+
+ChatGLM3-6B 与 FM9G-7B 的 SST-2/WikiText-2 直接评估由
+`privacy_tools.direct_evaluation` 统一编排。预览不会加载模型或创建结果目录：
+
+```bash
+python -m privacy_tools.direct_evaluation \
+  --model chatglm3 --finetune explicit --dataset sst2 --mode preview
+```
+
+正式运行将候选、匹配结果、配置、命令、环境和 `summary.json` 保存到
+`privacy_tools/results/direct_evaluation/<model>/<finetune>/<dataset>/<run_id>/`。
+历史查询使用 `--mode history`；对已有运行目录离线重算使用
+`--mode evaluate --source-run <run_dir>`。
+
+直接评估使用独立解释器配置：显式 LoRA 读取 `python.direct_lora`，隐式 ICL
+读取 `python.direct_icl`；两者可分别指向与间接评估对应的不同环境。
+
 ## chatglm
 
 ### 1. 生成候选样本（temperature_chatglm.py）

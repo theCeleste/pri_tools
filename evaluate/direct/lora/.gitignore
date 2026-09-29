@@ -3,3 +3,5 @@ __pycache__/
 runs/
 9g/sst2_memorize_final/
 chatglm/chatglm3_sst2_memorize_final/
+9g/9g_wikitext
+chatglm/chatglm3_wikitext

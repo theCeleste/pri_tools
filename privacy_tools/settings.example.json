@@ -2,12 +2,13 @@
   "results_dir": "privacy_tools/results",
   "historical_results_dir": "privacy_tools/historical_results",
   "common": {
-    "gpu": "2",
+    "gpu": "1",
     "dataset": "sst2",
     "dataset_path": "privacy_tools/datasets/sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
     "model_7b_chat": "meta-llama/Llama-2-7b-chat-hf",
     "chatglm3_6b": "/home/zjs/llm/chatglm3-6b",
+    "fm9g_7b": "/home/zjs/llm/9G7B_MHA",
     "model_13b": "meta-llama/Llama-2-13b-hf",
     "mask_model": "/home/zjs/llm/roberta-base",
     "hf_endpoint": "https://hf-mirror.com"
@@ -22,7 +23,9 @@
     "privsv": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
     "dpsgd": "/home/zjs/anaconda3/envs/dpsgd/bin/python",
     "indirect_lora": "/home/zjs/anaconda3/envs/mia/bin/python",
-    "indirect_icl": "/home/zjs/anaconda3/envs/few-shot/bin/python"
+    "indirect_icl": "/home/zjs/anaconda3/envs/few-shot/bin/python",
+    "direct_lora": "/home/zjs/anaconda3/envs/mia/bin/python",
+    "direct_icl": "/home/zjs/anaconda3/envs/few-shot/bin/python"
   },
   "dpsgd": {
     "target_epsilon": 8.0,
@@ -122,6 +125,55 @@
     }
   },
   "evaluation": {
+    "direct": {
+      "seed": 0,
+      "models": {
+        "chatglm3": {
+          "base_model": "/home/zjs/llm/chatglm3-6b",
+          "adapters": {
+            "sst2": "evaluate/direct/lora/chatglm/chatglm3_sst2_memorize_final",
+            "wikitext2": "evaluate/direct/lora/chatglm/chatglm3_wikitext"
+          },
+          "tokenizers": {
+            "sst2": "/home/zjs/llm/chatglm3-6b",
+            "wikitext2": "/home/zjs/llm/chatglm3-6b"
+          }
+        },
+        "fm9g": {
+          "base_model": "/home/zjs/llm/9G7B_MHA",
+          "adapters": {
+            "sst2": "evaluate/direct/lora/9g/sst2_memorize_final/checkpoint-32000",
+            "wikitext2": "evaluate/direct/lora/9g/9g_wikitext"
+          },
+          "tokenizers": {
+            "sst2": "/home/zjs/llm/9G7B_MHA",
+            "wikitext2": "/home/zjs/llm/9G7B_MHA"
+          }
+        }
+      },
+      "datasets": {
+        "sst2": {"path": "privacy_tools/datasets/sst2"},
+        "wikitext2": {"path": "evaluate/direct/data/wikitext2"}
+      },
+      "generation": {
+        "candidates": 100,
+        "batch_size": 5,
+        "max_new_tokens": 180,
+        "top_p": 0.6,
+        "top_k": 20,
+        "decode_mode": "sample",
+        "dtype": "auto",
+        "min_chars": 20,
+        "num_demonstrations": 4,
+        "num_queries": 100
+      },
+      "matching": {
+        "fuzzy_threshold": 0.85,
+        "contains_min_chars": 50,
+        "min_chars": 1,
+        "window_min_tokens": 8
+      }
+    },
     "indirect": {
       "models": {
         "chatglm3": {

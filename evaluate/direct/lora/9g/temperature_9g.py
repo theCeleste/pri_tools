@@ -6,12 +6,6 @@
 
 import os
 
-# ============================================================
-# GPU 控制：必须放在 import torch 之前
-# ============================================================
-
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
-
 import argparse
 import math
 import zlib
@@ -332,6 +326,8 @@ def load_model_with_lora(
 
     base_model.config.use_cache = False
 
+    if not lora_path or lora_path == "None" or not os.path.isdir(lora_path):
+        raise FileNotFoundError(f"LoRA path is required for direct evaluation: {lora_path}")
     if lora_path and lora_path != "None" and os.path.exists(lora_path):
         print(f"Loading LoRA weights from: {lora_path}")
         model = PeftModel.from_pretrained(base_model, lora_path)
@@ -471,7 +467,7 @@ def ensure_directory_exists(filepath):
 def main(args):
     print("Loading FM9G / 9G model with LoRA support...")
 
-    tokenizer = load_tokenizer_for_causal_lm(args.base_model_path)
+    tokenizer = load_tokenizer_for_causal_lm(args.tokenizer_path or args.base_model_path)
 
     print("\n=== Loading Model ===")
     model = load_model_with_lora(
@@ -723,6 +719,8 @@ if __name__ == "__main__":
         type=str,
     )
 
+    parser.add_argument("--tokenizer_path", default="", type=str)
+
     parser.add_argument(
         "--lora_path",
         default="/home/wym/projects/ExtractingModel/Extractingcode/finetune/train/output_fm9g/ag_news_class0_1_memorize_stable_lr1e4/final_checkpoint",
@@ -800,6 +798,8 @@ if __name__ == "__main__":
         action="store_true",
     )
 
+    parser.add_argument("--seed", default=0, type=int)
+
     parser.add_argument(
         "--outfile",
         default="./save/results/9g_agnews",
@@ -808,6 +808,10 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
 
     print("=" * 80)
     print("Configuration:")

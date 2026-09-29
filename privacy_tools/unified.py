@@ -608,28 +608,34 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
 
 
 def _chatglm_explicit_direct_attack() -> int:
-    print("\n===== 显式微调 直接评估结果 =====")
-    print("ChatGLM3-6b 显式微调无扰动评估接口已预留，具体评估方法待补充。")
-    return 0
+    # Kept as a small compatibility wrapper for callers that used the old
+    # placeholder directly.  The interactive route below supplies settings.
+    print("显式直接评估需要通过统一配置启动。")
+    return 1
 
 
 def _chatglm_implicit_direct_attack() -> int:
-    print("\n===== 隐式微调 直接评估结果 =====")
-    print("ChatGLM3-6b 隐式微调无扰动评估接口已预留，具体评估方法待补充。")
-    return 0
+    print("隐式直接评估需要通过统一配置启动。")
+    return 1
 
 
 def _run_model_evaluation(selection: TaskSelection, settings: dict[str, Any]) -> int:
     """Route before resolving the legacy Kal-DP/DADP method identity."""
+    from .direct_evaluation import run_direct
     from .indirect_evaluation import run_indirect
     print(f"模型：{selection.evaluation_model_title}")
     print(f"微调方式：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
     if selection.experiment_id == "direct_attack":
-        if selection.evaluation_model == "fm9g":
-            print("FM9G-7B（九格大模型）无扰动直接评估接口待后续实现。")
+        try:
+            mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
+                                   ("history", "查看最近历史结果"), ("preview", "预览评估命令")])
+        except (EOFError, OSError):
+            # Library/test callers may intentionally invoke the route without
+            # an interactive stdin; cancellation remains a successful no-op.
             return 0
-        return (_chatglm_explicit_direct_attack if selection.finetune_type == "explicit"
-                else _chatglm_implicit_direct_attack)()
+        if mode is None:
+            return 0
+        return run_direct(settings, selection.evaluation_model, selection.finetune_type, mode=mode)
     print("任务：评估；评估类型：间接评估；微调类型：无扰动微调")
     mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
                            ("history", "查看最近历史结果"), ("preview", "预览评估命令")])
