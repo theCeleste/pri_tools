@@ -117,6 +117,38 @@ def load_generated_candidates(path, field):
 def load_text_records(path, task):
     """Load SST-2 sentences or WikiText paragraphs from local datasets."""
     if os.path.isdir(path):
+        # The unified direct evaluator stores SST-2 as ordinary TSV files,
+        # while older standalone runs used a HuggingFace Dataset directory.
+        # Prefer the lightweight tabular form when it is present.
+        if task == "sst2":
+            train_files = [
+                os.path.join(path, name)
+                for name in ("train.tsv", "train.csv", "train.json", "train.jsonl")
+                if os.path.isfile(os.path.join(path, name))
+            ]
+            if train_files:
+                path = train_files[0]
+        if os.path.isfile(path):
+            records = []
+            if path.endswith((".json", ".jsonl")):
+                with open(path, "r", encoding="utf-8") as handle:
+                    if path.endswith(".jsonl"):
+                        rows = [json.loads(line) for line in handle if line.strip()]
+                    else:
+                        value = json.load(handle)
+                        rows = value if isinstance(value, list) else value.get("train", [])
+            else:
+                with open(path, "r", encoding="utf-8", newline="") as handle:
+                    rows = list(csv.DictReader(handle, delimiter="\t" if path.endswith(".tsv") else ","))
+            for row in rows:
+                text = str(row.get("sentence", row.get("text", ""))).strip()
+                if text:
+                    try:
+                        label = int(row.get("label", -1))
+                    except (TypeError, ValueError):
+                        label = -1
+                    records.append({"idx": len(records), "text": text, "label": label})
+            return records
         try:
             from datasets import load_dataset, load_from_disk
 
@@ -284,6 +316,48 @@ def run_member_test(args):
         handle.write(f"fuzzy threshold: {args.fuzzy_threshold}\n")
         for match_type, count in sorted(Counter(item["match_type"] for item in results).items()):
             handle.write(f"{match_type}: {count}\n")
+
+    # Stable names are consumed by privacy_tools.direct_evaluation.  Keep the
+    # timestamped files above for compatibility with standalone callers.
+    match_counts = Counter(item["match_type"] for item in results)
+    canonical_results = []
+    for item in results:
+        is_matched = item["match_type"] != "unmatched"
+        canonical_results.append({
+            "candidate_index": item["candidate_id"],
+            "text": item["generated"],
+            "matched": is_matched,
+            "match_type": item["match_type"],
+            "reason": item.get("reason", ""),
+            "score": item["score"],
+            "train_index": item.get("train_idx"),
+            "matched_text": item.get("gold"),
+            "label": item.get("label"),
+            "metadata": item.get("metadata", {}),
+        })
+    canonical_summary = {
+        "candidate_count": len(results),
+        "matched_count": len(matched),
+        "match_rate": len(matched) / len(results) if results else 0.0,
+        "match_type_counts": dict(match_counts),
+        "fuzzy_threshold": args.fuzzy_threshold,
+        "contains_min_chars": args.contains_min_chars,
+        "min_chars": args.min_chars,
+        "window_min_tokens": args.window_min_tokens,
+        "dataset": args.task,
+        "empty_candidates": sum(not item["generated"].strip() for item in results),
+    }
+    with open(os.path.join(output_dir, "matches.json"), "w", encoding="utf-8") as handle:
+        json.dump(canonical_results, handle, ensure_ascii=False, indent=2)
+    with open(os.path.join(output_dir, "summary.json"), "w", encoding="utf-8") as handle:
+        json.dump(canonical_summary, handle, ensure_ascii=False, indent=2)
+    with open(os.path.join(output_dir, "matches.csv"), "w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=(
+            "candidate_index", "text", "matched", "match_type", "reason", "score",
+            "train_index", "matched_text", "label",
+        ))
+        writer.writeheader()
+        writer.writerows({key: row.get(key) for key in writer.fieldnames} for row in canonical_results)
     print(f"Candidates: {len(results)}")
     print(f"Matched: {len(matched)} ({len(matched) / len(results):.2%})")
     print(f"JSON: {json_path}")

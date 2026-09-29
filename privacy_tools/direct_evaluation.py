@@ -71,7 +71,7 @@ def backend_digest(kind: str) -> str:
     if kind == "explicit":
         files.extend(GENERATOR.values())
     else:
-        files.append(ROOT / "DPICL/run_exp_sst2_local.py")
+        files.extend((ROOT / "DPICL/run_exp_sst2_local.py", ROOT / "DPICL/member_test_current.py"))
     h = hashlib.sha256()
     for file in files:
         if file.is_file():
@@ -174,12 +174,27 @@ def build_plan(settings: dict, model: str, kind: str, dataset: str, output: str 
                     "--num-test", str(_option(settings, "generation.num_queries", 100)), "--max-token-per-text", str(_option(settings, "generation.max_new_tokens", 100)),
                     "--synth-seed", str(seed), "--eval-seed", str(seed), "--num-private-train", "0", "--num-private-train-splits", "0", "--no-noise"]
             stages.append(("generation_no_noise", [py, str(ROOT / "DPICL/run_exp_sst2_local.py"), *args]))
-    match_cmd = [py, "-m", "privacy_tools.direct_evaluation", "--match", "--dataset", dataset,
-                 "--generated", resources["candidate_file"], "--train-data", str(data), "--output-dir", str(match_dir),
-                 "--fuzzy-threshold", str(_option(settings, "matching.fuzzy_threshold", 0.85)),
-                 "--contains-min-chars", str(_option(settings, "matching.contains_min_chars", 50)),
-                 "--min-chars", str(_option(settings, "matching.min_chars", 1)),
-                 "--window-min-tokens", str(_option(settings, "matching.window_min_tokens", 8))]
+    if kind == "implicit":
+        # Keep implicit matching on the original DPICL member-test path.  The
+        # script writes the canonical matches/summary files consumed below.
+        candidate_field = "generated_text" if dataset == "wikitext2" else "synthetic_text"
+        match_cmd = [py, str(ROOT / "DPICL/member_test_current.py"),
+                     "--task", SCRIPT_DATASETS[dataset],
+                     "--generated-json", resources["candidate_file"],
+                     "--train-data", str(data),
+                     "--candidate-field", candidate_field,
+                     "--output-dir", str(match_dir),
+                     "--fuzzy-threshold", str(_option(settings, "matching.fuzzy_threshold", 0.85)),
+                     "--contains-min-chars", str(_option(settings, "matching.contains_min_chars", 50)),
+                     "--min-chars", str(_option(settings, "matching.min_chars", 1)),
+                     "--window-min-tokens", str(_option(settings, "matching.window_min_tokens", 8))]
+    else:
+        match_cmd = [py, "-m", "privacy_tools.direct_evaluation", "--match", "--dataset", dataset,
+                     "--generated", resources["candidate_file"], "--train-data", str(data), "--output-dir", str(match_dir),
+                     "--fuzzy-threshold", str(_option(settings, "matching.fuzzy_threshold", 0.85)),
+                     "--contains-min-chars", str(_option(settings, "matching.contains_min_chars", 50)),
+                     "--min-chars", str(_option(settings, "matching.min_chars", 1)),
+                     "--window-min-tokens", str(_option(settings, "matching.window_min_tokens", 8))]
     stages.append(("matching", match_cmd))
     return {**ident, "backend_digest": backend_digest(kind), "output": str(output), "backend": str(backend), "python": py,
             "env": env, "resources": resources, "warnings": warnings, "stages": stages,
