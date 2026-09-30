@@ -1,0 +1,61 @@
+{
+  "model": "chatglm3",
+  "finetune_type": "implicit",
+  "dataset": "sst2",
+  "engine": "evaluate-direct-v1",
+  "backend_digest": "eac1aa8d6a54c6eabfa5f513b62ab091ffc85eadc0fb870b5ad80dbec69dd4a4",
+  "resources": {
+    "base_model": "/home/zjs/llm/chatglm3-6b",
+    "adapter": "/home/zjs/code/x73/x73-privacy-tool/evaluate/direct/lora/chatglm/chatglm3_sst2_memorize_final",
+    "tokenizer": "/home/zjs/llm/chatglm3-6b",
+    "dataset": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2",
+    "candidate_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/implicit/sst2/20260929_210958_008000_30d994ed/backend/generated.json",
+    "generated_json": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/implicit/sst2/20260929_210958_008000_30d994ed/backend/generated.json",
+    "match_dir": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/implicit/sst2/20260929_210958_008000_30d994ed/backend/matching",
+    "physical_gpu": "3",
+    "logical_device": "cuda:0",
+    "python": "/home/zjs/anaconda3/envs/few-shot/bin/python"
+  },
+  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/implicit/sst2/20260929_210958_008000_30d994ed",
+  "source_run": null,
+  "schema_version": 1,
+  "baseline_type": "no_perturbation",
+  "evaluation_type": "direct",
+  "status": "completed",
+  "completed_at": "2026-09-29T13:11:15.151684+00:00",
+  "updated_at": "2026-09-29T13:11:15.151684+00:00",
+  "matching": {
+    "candidate_count": 20,
+    "matched_count": 10,
+    "match_rate": 0.5,
+    "match_type_counts": {
+      "contains": 10,
+      "unmatched": 10
+    },
+    "fuzzy_threshold": 0.85,
+    "contains_min_chars": 50,
+    "min_chars": 1,
+    "window_min_tokens": 8,
+    "dataset": "sst2",
+    "empty_candidates": 0
+  },
+  "results": {
+    "candidate_count": 20,
+    "matched_count": 10,
+    "match_rate": 0.5,
+    "match_type_counts": {
+      "contains": 10,
+      "unmatched": 10
+    },
+    "fuzzy_threshold": 0.85,
+    "contains_min_chars": 50,
+    "min_chars": 1,
+    "window_min_tokens": 8,
+    "dataset": "sst2",
+    "empty_candidates": 0
+  },
+  "no_noise": true,
+  "candidate_count": 20,
+  "matched_count": 10,
+  "match_rate": 0.5
+}

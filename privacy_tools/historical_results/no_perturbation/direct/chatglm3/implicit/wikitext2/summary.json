@@ -1,0 +1,59 @@
+{
+  "model": "chatglm3",
+  "finetune_type": "implicit",
+  "dataset": "wikitext2",
+  "engine": "evaluate-direct-v1",
+  "backend_digest": "56a4df5f95212d0913f4abbffb4b592941b70d4f794e1fba19f9f01c086bb66e",
+  "resources": {
+    "base_model": "/home/zjs/llm/chatglm3-6b",
+    "adapter": "/home/zjs/code/x73/x73-privacy-tool/evaluate/direct/lora/chatglm/chatglm3_wikitext",
+    "tokenizer": "/home/zjs/llm/chatglm3-6b",
+    "dataset": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/WikiText-2-raw-v1",
+    "candidate_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/implicit/wikitext2/20260929_232622_121524_6177ca7a/backend/generated.json",
+    "generated_json": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/implicit/wikitext2/20260929_232622_121524_6177ca7a/backend/generated.json",
+    "match_dir": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/implicit/wikitext2/20260929_232622_121524_6177ca7a/backend/matching",
+    "physical_gpu": "2",
+    "logical_device": "cuda:0",
+    "python": "/home/zjs/anaconda3/envs/few-shot/bin/python"
+  },
+  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/implicit/wikitext2/20260929_232622_121524_6177ca7a",
+  "source_run": null,
+  "schema_version": 1,
+  "baseline_type": "no_perturbation",
+  "evaluation_type": "direct",
+  "status": "completed",
+  "completed_at": "2026-09-29T15:50:55.699222+00:00",
+  "updated_at": "2026-09-29T15:50:55.699222+00:00",
+  "matching": {
+    "candidate_count": 20,
+    "matched_count": 0,
+    "match_rate": 0.0,
+    "match_type_counts": {
+      "unmatched": 20
+    },
+    "fuzzy_threshold": 0.85,
+    "contains_min_chars": 50,
+    "min_chars": 1,
+    "window_min_tokens": 8,
+    "dataset": "wikitext",
+    "empty_candidates": 0
+  },
+  "results": {
+    "candidate_count": 20,
+    "matched_count": 0,
+    "match_rate": 0.0,
+    "match_type_counts": {
+      "unmatched": 20
+    },
+    "fuzzy_threshold": 0.85,
+    "contains_min_chars": 50,
+    "min_chars": 1,
+    "window_min_tokens": 8,
+    "dataset": "wikitext",
+    "empty_candidates": 0
+  },
+  "no_noise": true,
+  "candidate_count": 20,
+  "matched_count": 0,
+  "match_rate": 0.0
+}

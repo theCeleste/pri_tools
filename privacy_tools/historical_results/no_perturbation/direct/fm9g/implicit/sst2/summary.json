@@ -1,0 +1,59 @@
+{
+  "model": "fm9g",
+  "finetune_type": "implicit",
+  "dataset": "sst2",
+  "engine": "evaluate-direct-v1",
+  "backend_digest": "eac1aa8d6a54c6eabfa5f513b62ab091ffc85eadc0fb870b5ad80dbec69dd4a4",
+  "resources": {
+    "base_model": "/home/zjs/llm/9G7B_MHA",
+    "adapter": "/home/zjs/code/x73/x73-privacy-tool/evaluate/direct/lora/9g/sst2_memorize_final/checkpoint-32000",
+    "tokenizer": "/home/zjs/llm/9G7B_MHA",
+    "dataset": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2",
+    "candidate_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/implicit/sst2/20260929_211306_472268_e7cddfab/backend/generated.json",
+    "generated_json": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/implicit/sst2/20260929_211306_472268_e7cddfab/backend/generated.json",
+    "match_dir": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/implicit/sst2/20260929_211306_472268_e7cddfab/backend/matching",
+    "physical_gpu": "3",
+    "logical_device": "cuda:0",
+    "python": "/home/zjs/anaconda3/envs/few-shot/bin/python"
+  },
+  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/implicit/sst2/20260929_211306_472268_e7cddfab",
+  "source_run": null,
+  "schema_version": 1,
+  "baseline_type": "no_perturbation",
+  "evaluation_type": "direct",
+  "status": "completed",
+  "completed_at": "2026-09-29T13:14:34.527671+00:00",
+  "updated_at": "2026-09-29T13:14:34.527671+00:00",
+  "matching": {
+    "candidate_count": 20,
+    "matched_count": 0,
+    "match_rate": 0.0,
+    "match_type_counts": {
+      "unmatched": 20
+    },
+    "fuzzy_threshold": 0.85,
+    "contains_min_chars": 50,
+    "min_chars": 1,
+    "window_min_tokens": 8,
+    "dataset": "sst2",
+    "empty_candidates": 0
+  },
+  "results": {
+    "candidate_count": 20,
+    "matched_count": 0,
+    "match_rate": 0.0,
+    "match_type_counts": {
+      "unmatched": 20
+    },
+    "fuzzy_threshold": 0.85,
+    "contains_min_chars": 50,
+    "min_chars": 1,
+    "window_min_tokens": 8,
+    "dataset": "sst2",
+    "empty_candidates": 0
+  },
+  "no_noise": true,
+  "candidate_count": 20,
+  "matched_count": 0,
+  "match_rate": 0.0
+}

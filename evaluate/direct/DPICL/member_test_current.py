@@ -128,6 +128,14 @@ def load_text_records(path, task):
             ]
             if train_files:
                 path = train_files[0]
+        else:
+            train_files = [
+                os.path.join(path, name)
+                for name in ("train.json", "train.jsonl", "train.txt")
+                if os.path.isfile(os.path.join(path, name))
+            ]
+            if train_files:
+                path = train_files[0]
         if os.path.isfile(path):
             records = []
             if path.endswith((".json", ".jsonl")):
@@ -136,18 +144,21 @@ def load_text_records(path, task):
                         rows = [json.loads(line) for line in handle if line.strip()]
                     else:
                         value = json.load(handle)
-                        rows = value if isinstance(value, list) else value.get("train", [])
+                        rows = value if isinstance(value, list) else value.get("train", value.get("data", value.get("rows", [])))
+            elif path.endswith(".txt"):
+                with open(path, "r", encoding="utf-8") as handle:
+                    rows = [line.strip() for line in handle if line.strip()]
             else:
                 with open(path, "r", encoding="utf-8", newline="") as handle:
                     rows = list(csv.DictReader(handle, delimiter="\t" if path.endswith(".tsv") else ","))
             for row in rows:
-                text = str(row.get("sentence", row.get("text", ""))).strip()
+                text = str(row.get("sentence", row.get("text", row.get("content", ""))) if isinstance(row, dict) else row).strip()
                 if text:
                     try:
-                        label = int(row.get("label", -1))
+                        label = int(row.get("label", -1)) if isinstance(row, dict) else -1
                     except (TypeError, ValueError):
                         label = -1
-                    records.append({"idx": len(records), "text": text, "label": label})
+                    records.append({"idx": len(records), "text": text, "label": label if task == "sst2" else None})
             return records
         try:
             from datasets import load_dataset, load_from_disk
@@ -176,7 +187,7 @@ def load_text_records(path, task):
             raise RuntimeError(f"Could not load {task} dataset from {path}: {exc}") from exc
 
     if task != "sst2":
-        raise ValueError("WikiText training data must be a local datasets directory or parquet directory")
+        raise ValueError("WikiText training data must be a local JSON, text, DatasetDict, or parquet directory")
     records = []
     with open(path, "r", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle, delimiter="\t")

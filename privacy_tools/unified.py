@@ -588,9 +588,16 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
         )
         if model is None:
             return None
+        dataset = choose_from_menu(
+            "请选择微调所用的数据集",
+            [("sst2", "SST-2"), ("wikitext2", "WikiText-2")],
+        )
+        if dataset is None:
+            return None
         explicit = finetune_type == "explicit"
         return TaskSelection(
             "evaluation", "none", evaluation_type, "none", evaluation_type, finetune_type,
+            dataset=dataset,
             evaluation_model=model,
             evaluation_model_title=(
                 "ChatGLM3-6b" if model == "chatglm" else "FM9G-7B（九格大模型）"
@@ -623,8 +630,11 @@ def _run_model_evaluation(selection: TaskSelection, settings: dict[str, Any]) ->
     """Route before resolving the legacy Kal-DP/DADP method identity."""
     from .direct_evaluation import run_direct
     from .indirect_evaluation import run_indirect
+    dataset = selection.dataset or str(get_nested(settings, "common.dataset", "sst2") or "sst2")
+    dataset_title = {"sst2": "SST-2", "wikitext2": "WikiText-2"}.get(dataset, dataset)
     print(f"模型：{selection.evaluation_model_title}")
     print(f"微调方式：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
+    print(f"微调数据集：{dataset_title}")
     if selection.experiment_id == "direct_attack":
         try:
             mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
@@ -635,13 +645,19 @@ def _run_model_evaluation(selection: TaskSelection, settings: dict[str, Any]) ->
             return 0
         if mode is None:
             return 0
-        return run_direct(settings, selection.evaluation_model, selection.finetune_type, mode=mode)
+        return run_direct(
+            settings, selection.evaluation_model, selection.finetune_type,
+            mode=mode, dataset=dataset,
+        )
     print("任务：评估；评估类型：间接评估；微调类型：无扰动微调")
     mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
                            ("history", "查看最近历史结果"), ("preview", "预览评估命令")])
     if mode is None:
         return 0
-    return run_indirect(settings, selection.evaluation_model, selection.finetune_type, mode=mode)
+    return run_indirect(
+        settings, selection.evaluation_model, selection.finetune_type,
+        mode=mode, dataset=dataset,
+    )
 
 
 def interactive(settings: dict[str, Any]) -> int:

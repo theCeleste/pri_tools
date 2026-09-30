@@ -1,0 +1,8 @@
+模型：chatglm3，微调方式：implicit，数据集：wikitext2
+original_text: AUC=0.648000, member=10, nonmember=500
+  TPR@100%: 1.000000
+  TPR@50%: 0.800000
+  TPR@10%: 0.200000
+  TPR@1%: 0.000000
+  TPR@0.1%: 0.000000
+  TPR@0.01%: 0.000000

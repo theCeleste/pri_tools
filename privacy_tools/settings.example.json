@@ -2,7 +2,7 @@
   "results_dir": "privacy_tools/results",
   "historical_results_dir": "privacy_tools/historical_results",
   "common": {
-    "gpu": "1",
+    "gpu": "2",
     "dataset": "sst2",
     "dataset_path": "privacy_tools/datasets/sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
@@ -153,7 +153,7 @@
       },
       "datasets": {
         "sst2": {"path": "privacy_tools/datasets/sst2"},
-        "wikitext2": {"path": "evaluate/direct/data/wikitext2"}
+        "wikitext2": {"path": "privacy_tools/datasets/WikiText-2-raw-v1"}
       },
       "generation": {
         "candidates": 100,
@@ -164,8 +164,8 @@
         "decode_mode": "sample",
         "dtype": "auto",
         "min_chars": 20,
-        "num_valid": 100,
-        "num_queries": 100
+        "num_valid": 20,
+        "num_queries": 20
       },
       "matching": {
         "fuzzy_threshold": 0.85,

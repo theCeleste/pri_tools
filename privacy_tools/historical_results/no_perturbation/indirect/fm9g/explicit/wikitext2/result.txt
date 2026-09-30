@@ -1,0 +1,8 @@
+模型：fm9g，微调方式：explicit，数据集：wikitext2
+lora: AUC=0.567036, member=1200, nonmember=1200
+  TPR@FPR=1: 0.999167 (实际 FPR=1)
+  TPR@FPR=0.5: 0.585833 (实际 FPR=0.5)
+  TPR@FPR=0.1: 0.137500 (实际 FPR=0.1)
+  TPR@FPR=0.01: 0.010833 (实际 FPR=0.01)
+  TPR@FPR=0.001: 0.000833 (实际 FPR=0.000833333)
+  TPR@FPR=0.0001: 0.000833 (实际 FPR=0)

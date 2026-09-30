@@ -25,6 +25,7 @@ from collections import Counter
 from uuid import uuid4
 
 from .core import PROJECT_ROOT, configured_python, get_nested, load_settings, project_path
+from .evaluation_history import archive_result, load_result
 
 ENGINE = "evaluate-direct-v1"
 ROOT = PROJECT_ROOT / "evaluate/direct"
@@ -244,8 +245,14 @@ def require_dataset(dataset: str, value: str | Path) -> None:
             return
         if not any((folder / name).is_file() for name in ("train.tsv", "train.csv", "train.json", "train.jsonl", "dataset_dict.json")):
             raise ValueError(f"SST-2 数据集缺少 train 文件：{folder}")
-    elif not (folder.is_file() or any(folder.rglob("*.txt")) or any(folder.rglob("*.parquet"))):
-        raise ValueError(f"WikiText-2 数据集缺少文本或 parquet 文件：{folder}")
+    elif not (
+        folder.is_file()
+        or (folder / "dataset_dict.json").is_file()
+        or any((folder / name).is_file() for name in ("train.json", "train.jsonl"))
+        or any(folder.rglob("*.txt"))
+        or any(folder.rglob("*.parquet"))
+    ):
+        raise ValueError(f"WikiText-2 数据集缺少 train.json、文本或 parquet 文件：{folder}")
 
 
 def preflight(plan: dict) -> None:
@@ -344,9 +351,13 @@ def load_training_records(dataset: str, source: str | Path) -> list[dict]:
     if root.is_dir() and not any((root / name).is_file() for name in ("train.tsv", "train.csv", "train.json", "train.jsonl")):
         parquet_files = sorted(root.rglob("*.parquet"))
         if parquet_files:
+            train_files = [
+                file for file in parquet_files
+                if file.name.startswith("train") or "train" in file.relative_to(root).parts[:-1]
+            ]
             try:
                 from datasets import load_dataset
-                loaded = load_dataset("parquet", data_files={"train": [str(file) for file in parquet_files]})
+                loaded = load_dataset("parquet", data_files={"train": [str(file) for file in (train_files or parquet_files)]})
                 return _records_from_rows(dataset, list(loaded["train"]))
             except (ImportError, OSError, ValueError):
                 pass
@@ -355,7 +366,11 @@ def load_training_records(dataset: str, source: str | Path) -> list[dict]:
         if dataset == "sst2":
             files = [root / name for name in ("train.tsv", "train.csv", "train.json", "train.jsonl") if (root / name).is_file()]
         else:
-            files = sorted(root.rglob("*.txt")) + sorted(root.rglob("*.json")) + sorted(root.rglob("*.jsonl"))
+            files = [root / name for name in ("train.json", "train.jsonl") if (root / name).is_file()]
+            if not files:
+                text_files = sorted(root.rglob("*.txt"))
+                train_text_files = [file for file in text_files if "train" in file.name.lower()]
+                files = train_text_files or text_files
     rows: list[dict] = []
     for file in files:
         for row in _read_rows(file):
@@ -473,28 +488,28 @@ def run_match(args) -> int:
     return 0
 
 
-def print_summary(summary: dict) -> None:
-    print(f"模型：{summary['model']}，微调方式：{summary['finetune_type']}，数据集：{summary['dataset']}")
+def format_summary(summary: dict, *, include_output: bool = True) -> str:
+    lines = [f"模型：{summary['model']}，微调方式：{summary['finetune_type']}，数据集：{summary['dataset']}"]
     metrics = summary.get("matching", {})
-    print(f"候选数：{metrics.get('candidate_count', 0)}，匹配数：{metrics.get('matched_count', 0)}，匹配率：{metrics.get('match_rate', 0):.4%}")
-    print(f"结果目录：{summary['output']}")
+    lines.append(f"候选数：{metrics.get('candidate_count', 0)}，匹配数：{metrics.get('matched_count', 0)}，匹配率：{metrics.get('match_rate', 0):.4%}")
+    if include_output:
+        lines.append(f"结果目录：{summary['output']}")
+    return "\n".join(lines)
+
+
+def print_summary(summary: dict) -> None:
+    print(format_summary(summary))
 
 
 def show_history(settings: dict, ident: dict) -> int:
-    roots = [result_root(settings, ident), path(settings.get("historical_results_dir", "privacy_tools/historical_results")) / "direct_evaluation" / ident["model"] / ident["finetune_type"] / ident["dataset"]]
-    found = []
-    for root in roots:
-        for file in root.glob("*/summary.json"):
-            try:
-                value = read_json(file)
-                if all(value.get(key) == val for key, val in ident.items()) and value.get("status") == "completed" and value.get("backend_digest") == backend_digest(ident["finetune_type"]):
-                    found.append(value)
-            except (OSError, ValueError, TypeError):
-                continue
-    if not found:
-        print("未找到当前模型、微调方式、数据集及后端版本匹配的历史结果。")
+    history = load_result(settings, "direct", ident)
+    if history is None:
+        print("未找到当前模型、微调方式和数据集的无扰动历史结果。")
         return 0
-    print_summary(max(found, key=lambda item: item.get("completed_at", "")))
+    if history["kind"] == "text":
+        print(history["text"], end="")
+    else:
+        print_summary(history["summary"])
     return 0
 
 
@@ -540,8 +555,15 @@ def run_direct(settings: dict, model: str, kind: str, *, mode: str = "preview", 
                 if returncode:
                     raise RuntimeError(f"{name} 失败（退出码 {returncode}），查看 {output / (name + '.log')}")
             matching = read_json(Path(plan["resources"]["match_dir"]) / "summary.json")
-            summary = {**{key: plan[key] for key in (*ident, "backend_digest", "resources", "output", "source_run")}, "status": "completed", "completed_at": datetime.now(timezone.utc).isoformat(), "matching": matching, "no_noise": plan["no_noise"], "candidate_count": matching.get("candidate_count", 0), "matched_count": matching.get("matched_count", 0), "match_rate": matching.get("match_rate", 0.0)}
+            completed_at = datetime.now(timezone.utc).isoformat()
+            summary = {**{key: plan[key] for key in (*ident, "backend_digest", "resources", "output", "source_run")},
+                       "schema_version": 1, "baseline_type": "no_perturbation", "evaluation_type": "direct",
+                       "status": "completed", "completed_at": completed_at, "updated_at": completed_at,
+                       "matching": matching, "results": matching, "no_noise": plan["no_noise"],
+                       "candidate_count": matching.get("candidate_count", 0),
+                       "matched_count": matching.get("matched_count", 0), "match_rate": matching.get("match_rate", 0.0)}
             write_json(output / "summary.json", summary)
+            archive_result(settings, "direct", summary, format_summary(summary, include_output=False))
             manifest["status"] = "completed"
             print_summary(summary)
         except (Exception, KeyboardInterrupt) as exc:

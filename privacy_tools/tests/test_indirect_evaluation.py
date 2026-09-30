@@ -113,16 +113,27 @@ class IntegrationTests(unittest.TestCase):
                     self.assertEqual(e.run_indirect(self.settings, model, kind, mode="history"), 0)
         self.assertFalse((self.root / "results").exists())
 
-    def test_history_filters_model_backend_and_status(self):
+    def test_history_accepts_completed_result_from_previous_backend(self):
         ident = e.identity("fm9g", "implicit", "sst2")
-        root = e.result_root(self.settings, ident)
-        value = {**ident, "status": "completed", "backend_digest": e.backend_digest("implicit"), "completed_at": "2026-09-27", "results": {}, "output": "selected"}
-        self.write(root / "valid/summary.json", value)
-        for name, changes in (("failed", {"status":"failed"}), ("legacy", {"engine":"old"}), ("wrong", {"model":"chatglm3"})):
-            self.write(root / name / "summary.json", {**value, **changes, "completed_at":"9999"})
+        root = self.root / "history" / "no_perturbation" / "indirect" / "fm9g" / "implicit" / "sst2"
+        value = {**ident, "schema_version": 1, "baseline_type": "no_perturbation",
+                 "evaluation_type": "indirect", "status": "completed",
+                 "backend_digest": "old-but-readable", "completed_at": "2026-09-27",
+                 "updated_at": "2026-09-27", "results": {}, "output": "selected"}
+        self.write(root / "summary.json", value)
         with patch.object(e, "print_summary") as display:
             self.assertEqual(e.show_history(self.settings, ident), 0)
             self.assertEqual(display.call_args.args[0]["output"], "selected")
+
+    def test_history_falls_back_to_raw_text(self):
+        ident = e.identity("fm9g", "implicit", "sst2")
+        root = self.root / "history" / "no_perturbation" / "indirect" / "fm9g" / "implicit" / "sst2"
+        root.mkdir(parents=True)
+        (root / "summary.json").write_text("{broken", encoding="utf-8")
+        expected = "历史结果原样内容\n不做解析"
+        (root / "result.txt").write_text(expected, encoding="utf-8")
+        self.assertEqual(e.show_history(self.settings, ident), 0)
+        self.assertTrue(self.capture._new_target.getvalue().endswith(expected))
 
     def test_invalid_gpu_and_combinations(self):
         self.settings["common"]["gpu"] = "0,1"
@@ -133,10 +144,30 @@ class IntegrationTests(unittest.TestCase):
         for model in ("chatglm", "fm9g"):
             for kind in ("explicit", "implicit"):
                 selection = ui.TaskSelection("evaluation", "none", "indirect_attack", "none", "indirect_attack", kind,
-                     evaluation_model=model, evaluation_model_title=model, backend_method_id="nonexistent")
+                     dataset="wikitext2", evaluation_model=model, evaluation_model_title=model,
+                     backend_method_id="nonexistent")
                 with patch.object(ui, "_select_task", return_value=selection), patch.object(ui, "choose_from_menu", return_value="preview"), patch.object(e, "run_indirect", return_value=0) as run:
                     self.assertEqual(ui.interactive(self.settings), 0)
-                    run.assert_called_once_with(self.settings, model, kind, mode="preview")
+                    run.assert_called_once_with(self.settings, model, kind, mode="preview", dataset="wikitext2")
+
+    def test_no_perturbation_menu_selects_finetuning_dataset_after_model(self):
+        answers = iter(("evaluation", "indirect_attack", "explicit", "none", "fm9g", "wikitext2"))
+        prompts = []
+
+        def choose(prompt, options):
+            prompts.append((prompt, options))
+            return next(answers)
+
+        with patch.object(ui, "choose_from_menu", side_effect=choose):
+            selection = ui._select_task(self.settings)
+
+        self.assertEqual(selection.evaluation_model, "fm9g")
+        self.assertEqual(selection.dataset, "wikitext2")
+        self.assertEqual(prompts[-2][0], "请选择待评估模型")
+        self.assertEqual(prompts[-1], (
+            "请选择微调所用的数据集",
+            [("sst2", "SST-2"), ("wikitext2", "WikiText-2")],
+        ))
 
     def test_cancel_and_direct_placeholder_never_run(self):
         for model in ("chatglm", "fm9g"):
@@ -187,6 +218,9 @@ class IntegrationTests(unittest.TestCase):
                 self.assertEqual(e.run_indirect(self.settings,"chatglm",kind),0)
             summary=e.read_json(next((self.root / "results").rglob("summary.json")))
             self.assertEqual(summary["status"],"completed")
+            history_root = self.root / "history" / "no_perturbation" / "indirect" / summary["model"] / summary["finetune_type"] / summary["dataset"]
+            self.assertTrue((history_root / "summary.json").is_file())
+            self.assertTrue((history_root / "result.txt").is_file())
             self.assertEqual(summary["data_validation"], {"status": "skipped"})
             self.assertEqual(next((self.root / "results").rglob("*.log")).read_text(), "live output\n")
             import shutil
@@ -249,12 +283,14 @@ class IntegrationTests(unittest.TestCase):
         env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}
         for model in ('1','2'):
             for kind,group in (('1','3'),('2','2')):
-                result=subprocess.run([sys.executable,'-B',str(e.PROJECT_ROOT/'privacy_tool.py')],
-                     input=f'2\n2\n{kind}\n{group}\n{model}\n3\n',text=True,capture_output=True,env=env)
-                self.assertEqual(result.returncode,0,result.stderr)
-                self.assertIn('命令预览',result.stdout)
-                self.assertIn('evaluate/indirect_',result.stdout)
-                self.assertNotIn('glm/GLM_',result.stdout)
+                for dataset, dataset_name in (('1', 'sst2'), ('2', 'wikitext2')):
+                    result=subprocess.run([sys.executable,'-B',str(e.PROJECT_ROOT/'privacy_tool.py')],
+                         input=f'2\n2\n{kind}\n{group}\n{model}\n{dataset}\n3\n',text=True,capture_output=True,env=env)
+                    self.assertEqual(result.returncode,0,result.stderr)
+                    self.assertIn('命令预览',result.stdout)
+                    self.assertIn('evaluate/indirect_',result.stdout)
+                    self.assertIn(f'/{"explicit" if kind == "1" else "implicit"}/{dataset_name}/', result.stdout)
+                    self.assertNotIn('glm/GLM_',result.stdout)
 
 
 if __name__=='__main__':

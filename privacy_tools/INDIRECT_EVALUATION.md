@@ -5,7 +5,7 @@
 
 ## 菜单
 
-运行 python -B privacy_tool.py，选择：评估 → 间接评估 → 显式/隐式 → 无扰动微调 → ChatGLM/FM9G。
+运行 python -B privacy_tool.py，选择：评估 → 间接评估 → 显式/隐式 → 无扰动微调 → ChatGLM/FM9G → SST-2/WikiText-2。
 执行模式分为“立即执行”“查看最近历史结果”“预览评估命令”。历史查询和预览不启动计算、不创建结果目录。
 离线重算使用下面的模块命令。
 
@@ -78,7 +78,10 @@ ICL 的实验规模和 seed 固定遵守交付方法，不继承旧 chatglm_icl 
 
 ## 输出与方法
 
-外层目录为 results_dir/indirect_evaluation/<model>/<explicit|implicit>/<dataset>/<run_id>/。
+运行目录为 `results_dir/indirect_evaluation/<model>/<explicit|implicit>/<dataset>/<run_id>/`。
+成功运行的最新历史结果单独保存在
+`historical_results_dir/no_perturbation/indirect/<model>/<explicit|implicit>/<dataset>/`，目录内固定包含
+`summary.json` 和 `result.txt`，不使用 `<run_id>`。
 
 - run_manifest.json：实际命令、白名单环境变量、资源、阶段日志位置、退出码与耗时、成功/失败状态。
 - data_validation.json：运行前的数据指纹及成员来源检查记录。
@@ -87,7 +90,8 @@ ICL 的实验规模和 seed 固定遵守交付方法，不继承旧 chatglm_icl 
 
 正式样本规模：LoRA 1200+1200、seed=42；ICL 10+500、seed=0。ICL 分开显示 original_text 与 synthetic_text，默认不加噪声，不声称差分隐私保证。
 ICL 的 num-test=20 是 SST-2 分类效用测试数，不是攻击样本数。WikiText-2 不运行情感分类效用测试。
-历史查询同时匹配模型、微调方式、数据集和后端源码指纹，忽略失败、旧版本及 legacy 结果。
+历史查询按模型、微调方式和数据集直接定位唯一目录，优先读取 `summary.json`；摘要缺失、损坏或字段不兼容时原样输出 `result.txt`。
+`backend_digest` 仅作为来源信息，不再因为后端版本变化隐藏已经完成的历史结果。旧的 legacy 结果不自动导入新的无扰动目录。
 
 ## 验证与当前资源限制
 

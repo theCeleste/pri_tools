@@ -12,11 +12,16 @@ python -m privacy_tools.direct_evaluation \
 
 正式运行将候选、匹配结果、配置、命令、环境和 `summary.json` 保存到
 `privacy_tools/results/direct_evaluation/<model>/<finetune>/<dataset>/<run_id>/`。
-历史查询使用 `--mode history`；对已有运行目录离线重算使用
+成功运行还会把最新摘要和文本兜底写入
+`privacy_tools/historical_results/no_perturbation/direct/<model>/<finetune>/<dataset>/`，其中包含
+`summary.json` 和 `result.txt`，不使用 `<run_id>`。
+历史查询使用 `--mode history`，优先读取历史目录的 `summary.json`，文件缺失或无效时原样输出 `result.txt`；对已有运行目录离线重算使用
 `--mode evaluate --source-run <run_dir>`。
 
 直接评估使用独立解释器配置：显式 LoRA 读取 `python.direct_lora`，隐式 ICL
 读取 `python.direct_icl`；两者可分别指向与间接评估对应的不同环境。
+`evaluation.direct.datasets.wikitext2.path` 支持本地 DatasetDict、
+`train/validation/test.json`（或 JSONL）、文本文件以及 parquet 分片；成员匹配只读取训练划分。
 
 ## chatglm
 

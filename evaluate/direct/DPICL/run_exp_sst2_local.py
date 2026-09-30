@@ -91,6 +91,30 @@ labels = ["negative", "positive"]
 label_dict = {0: ["negative"], 1: ["positive"]}
 
 
+def _load_wikitext_json(file_path: str, split: str) -> Dataset:
+    """Load the local WikiText snapshot format used by the evaluation bundle."""
+    with open(file_path, "r", encoding="utf-8") as handle:
+        if file_path.endswith(".jsonl"):
+            rows = [json.loads(line) for line in handle if line.strip()]
+        else:
+            value = json.load(handle)
+            if isinstance(value, dict):
+                rows = value.get(split, value.get("data", value.get("rows", [])))
+            else:
+                rows = value
+    if not isinstance(rows, list):
+        raise ValueError(f"WikiText {split} JSON must contain a list: {file_path}")
+    texts = [
+        row if isinstance(row, str) else row.get("text", row.get("sentence", ""))
+        for row in rows
+        if isinstance(row, (str, dict))
+    ]
+    texts = [str(text).strip() for text in texts if str(text or "").strip()]
+    if not texts:
+        raise ValueError(f"WikiText {split} JSON contains no usable text: {file_path}")
+    return Dataset.from_dict({"text": texts})
+
+
 def load_task_dataset(task: str, data_dir: str):
     """Load a task from an explicit local path where possible."""
     if task == "sst2":
@@ -117,16 +141,30 @@ def load_task_dataset(task: str, data_dir: str):
     if task == "wikitext":
         if not os.path.isdir(data_dir):
             data_dir = os.path.join(os.path.dirname(__file__), data_dir)
-        files = {
+        if os.path.exists(os.path.join(data_dir, "dataset_dict.json")):
+            return cast(DatasetDict, load_from_disk(data_dir))
+        parquet_files = {
             split: os.path.join(data_dir, f"{split}-00000-of-00001.parquet")
             for split in ("train", "validation", "test")
         }
-        missing = [path for path in files.values() if not os.path.exists(path)]
-        if missing:
-            raise FileNotFoundError(
-                "WikiText files not found: " + ", ".join(missing)
-            )
-        return cast(DatasetDict, load_dataset("parquet", data_files=files))
+        if all(os.path.isfile(file) for file in parquet_files.values()):
+            return cast(DatasetDict, load_dataset("parquet", data_files=parquet_files))
+        json_files = {}
+        for split in ("train", "validation", "test"):
+            json_files[split] = next((
+                os.path.join(data_dir, f"{split}{suffix}")
+                for suffix in (".json", ".jsonl")
+                if os.path.isfile(os.path.join(data_dir, f"{split}{suffix}"))
+            ), "")
+        if all(json_files.values()):
+            return DatasetDict({
+                split: _load_wikitext_json(file, split)
+                for split, file in json_files.items()
+            })
+        raise FileNotFoundError(
+            f"WikiText files not found in {data_dir}; expected a DatasetDict, "
+            "train/validation/test JSON files, or train/validation/test parquet files"
+        )
     raise ValueError(f"Unsupported task: {task}. Choose sst2 or wikitext.")
 
 

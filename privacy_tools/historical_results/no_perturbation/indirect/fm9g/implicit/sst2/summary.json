@@ -1,0 +1,39 @@
+{
+  "model": "fm9g",
+  "finetune_type": "implicit",
+  "dataset": "sst2",
+  "engine": "evaluate-indirect-v1",
+  "backend_digest": "fee922f5aad76576447b9e662d573a771793936ed9faa50c584b03592cd20d9a",
+  "resources": {
+    "base_model": "/home/zjs/llm/9G7B_MHA",
+    "physical_gpu": 2,
+    "python": "/home/zjs/anaconda3/envs/few-shot/bin/python",
+    "neighbor_model": "/home/zjs/code/x73/x73-privacy-tool/evaluate/indirect_ICL/resources/bert-base-uncased",
+    "dataset_dir": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2"
+  },
+  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/fm9g/implicit/sst2/20260930_101020_159941_4e7d9a10",
+  "source_run": null,
+  "schema_version": 1,
+  "baseline_type": "no_perturbation",
+  "evaluation_type": "indirect",
+  "status": "completed",
+  "completed_at": "2026-09-30T02:35:14.391962+00:00",
+  "updated_at": "2026-09-30T02:35:14.391962+00:00",
+  "results": {
+    "original_text": {
+      "AUC": 0.8160000000000001,
+      "member_count": 10,
+      "nonmember_count": 500,
+      "TPR@100%": 1.0,
+      "TPR@50%": 0.8,
+      "TPR@10%": 0.7,
+      "TPR@1%": 0.6,
+      "TPR@0.1%": 0.4,
+      "TPR@0.01%": 0.4,
+      "metrics_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/fm9g/implicit/sst2/20260930_101020_159941_4e7d9a10/backend/original_text/evaluation/metrics.json"
+    }
+  },
+  "data_validation": {
+    "status": "skipped"
+  }
+}

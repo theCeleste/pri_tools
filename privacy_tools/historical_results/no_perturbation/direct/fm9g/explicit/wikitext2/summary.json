@@ -1,0 +1,63 @@
+{
+  "model": "fm9g",
+  "finetune_type": "explicit",
+  "dataset": "wikitext2",
+  "engine": "evaluate-direct-v1",
+  "backend_digest": "3b36b5aac8d5b2ecf59e1c0fd60e2e398b2aee3c81ce2882215c7d4b8d16dc54",
+  "resources": {
+    "base_model": "/home/zjs/llm/9G7B_MHA",
+    "adapter": "/home/zjs/code/x73/x73-privacy-tool/evaluate/direct/lora/9g/9g_wikitext",
+    "tokenizer": "/home/zjs/llm/9G7B_MHA",
+    "dataset": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/WikiText-2-raw-v1",
+    "candidate_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/wikitext2/20260929_215838_114184_5177adbb/backend/candidates_top100.txt",
+    "generated_json": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/wikitext2/20260929_215838_114184_5177adbb/backend/candidates_all.json",
+    "match_dir": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/wikitext2/20260929_215838_114184_5177adbb/backend/matching",
+    "physical_gpu": "2",
+    "logical_device": "cuda:0",
+    "python": "/home/zjs/anaconda3/envs/mia/bin/python"
+  },
+  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/wikitext2/20260929_215838_114184_5177adbb",
+  "source_run": null,
+  "schema_version": 1,
+  "baseline_type": "no_perturbation",
+  "evaluation_type": "direct",
+  "status": "completed",
+  "completed_at": "2026-09-29T14:57:35.304927+00:00",
+  "updated_at": "2026-09-29T14:57:35.304927+00:00",
+  "matching": {
+    "candidate_count": 89,
+    "matched_count": 75,
+    "match_rate": 0.8426966292134831,
+    "match_type_counts": {
+      "unmatched": 14,
+      "contains": 67,
+      "window_fuzzy": 8
+    },
+    "fuzzy_threshold": 0.85,
+    "contains_min_chars": 50,
+    "min_chars": 1,
+    "window_min_tokens": 8,
+    "dataset": "wikitext2",
+    "empty_candidates": 0
+  },
+  "results": {
+    "candidate_count": 89,
+    "matched_count": 75,
+    "match_rate": 0.8426966292134831,
+    "match_type_counts": {
+      "unmatched": 14,
+      "contains": 67,
+      "window_fuzzy": 8
+    },
+    "fuzzy_threshold": 0.85,
+    "contains_min_chars": 50,
+    "min_chars": 1,
+    "window_min_tokens": 8,
+    "dataset": "wikitext2",
+    "empty_candidates": 0
+  },
+  "no_noise": false,
+  "candidate_count": 89,
+  "matched_count": 75,
+  "match_rate": 0.8426966292134831
+}

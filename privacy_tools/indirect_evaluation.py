@@ -16,6 +16,7 @@ import time
 from uuid import uuid4
 
 from .core import PROJECT_ROOT, configured_python, get_nested, load_settings, project_path
+from .evaluation_history import archive_result, load_result
 
 ENGINE = "evaluate-indirect-v1"
 ROOTS = {"explicit": PROJECT_ROOT / "evaluate/indirect_LoRA",
@@ -258,37 +259,35 @@ def collect_results(plan):
     return results
 
 
-def print_summary(summary):
-    print(f"模型：{summary['model']}，微调方式：{summary['finetune_type']}，数据集：{summary['dataset']}")
+def format_summary(summary, *, include_output=True):
+    lines = [f"模型：{summary['model']}，微调方式：{summary['finetune_type']}，数据集：{summary['dataset']}"]
     for field, metrics in summary["results"].items():
-        print(f"{field}: AUC={metrics.get('auc', metrics.get('AUC')):.6f}, member={metrics['member_count']}, nonmember={metrics['nonmember_count']}")
+        lines.append(f"{field}: AUC={metrics.get('auc', metrics.get('AUC')):.6f}, member={metrics['member_count']}, nonmember={metrics['nonmember_count']}")
         if "rows" in metrics:
             for row in metrics["rows"]:
-                print(f"  TPR@FPR={row['target_fpr']:g}: {row['tpr']:.6f} (实际 FPR={row['actual_fpr']:g})")
+                lines.append(f"  TPR@FPR={row['target_fpr']:g}: {row['tpr']:.6f} (实际 FPR={row['actual_fpr']:g})")
         else:
             for k, v in metrics.items():
                 if k.startswith("TPR@"):
-                    print(f"  {k}: {v:.6f}")
-    print(f"结果目录：{summary['output']}")
+                    lines.append(f"  {k}: {v:.6f}")
+    if include_output:
+        lines.append(f"结果目录：{summary['output']}")
+    return "\n".join(lines)
+
+
+def print_summary(summary):
+    print(format_summary(summary))
 
 
 def show_history(settings, ident):
-    roots = [result_root(settings, ident)]
-    history = path(settings.get("historical_results_dir", "privacy_tools/historical_results")) / "indirect_evaluation" / ident["model"] / ident["finetune_type"] / ident["dataset"]
-    roots.append(history)
-    candidates = []
-    for root in roots:
-        for file in root.glob("*/summary.json"):
-            try:
-                value = read_json(file)
-                if all(value.get(k) == v for k, v in ident.items()) and value.get("status") == "completed" and value.get("backend_digest") == backend_digest(ident["finetune_type"]):
-                    candidates.append((value["completed_at"], value))
-            except (OSError, ValueError, KeyError, TypeError):
-                continue
-    if not candidates:
-        print("未找到当前模型、微调方式、数据集及后端版本匹配的历史结果。")
+    history = load_result(settings, "indirect", ident)
+    if history is None:
+        print("未找到当前模型、微调方式和数据集的无扰动历史结果。")
         return 0
-    print_summary(max(candidates, key=lambda item: item[0])[1])
+    if history["kind"] == "text":
+        print(history["text"], end="")
+    else:
+        print_summary(history["summary"])
     return 0
 
 
@@ -361,10 +360,13 @@ def run_indirect(settings, model, kind, *, mode="run", dataset=None, source_run=
                        if not source_run and (output / "data_validation.json").is_file()
                        else {"status": "skipped"} if not source_run
                        else read_json(path(source_run) / "summary.json").get("data_validation"))
+            completed_at = datetime.now(timezone.utc).isoformat()
             summary = {**{k: plan[k] for k in (*ident, "backend_digest", "resources", "output", "source_run")},
-                       "status": "completed", "completed_at": datetime.now(timezone.utc).isoformat(),
+                       "schema_version": 1, "baseline_type": "no_perturbation", "evaluation_type": "indirect",
+                       "status": "completed", "completed_at": completed_at, "updated_at": completed_at,
                        "results": results, "data_validation": receipt}
             write_json(output / "summary.json", summary)
+            archive_result(settings, "indirect", summary, format_summary(summary, include_output=False))
             manifest["status"] = "completed"
             print_summary(summary)
         except (Exception, KeyboardInterrupt) as exc:

@@ -1,0 +1,61 @@
+{
+  "model": "chatglm3",
+  "finetune_type": "explicit",
+  "dataset": "sst2",
+  "engine": "evaluate-direct-v1",
+  "backend_digest": "7774aaaa2ffcc486c77cb58cb406f62cf7903aef221d4e0c7ea373df0105c47d",
+  "resources": {
+    "base_model": "/home/zjs/llm/chatglm3-6b",
+    "adapter": "/home/zjs/code/x73/x73-privacy-tool/evaluate/direct/lora/chatglm/chatglm3_sst2_memorize_final",
+    "tokenizer": "/home/zjs/llm/chatglm3-6b",
+    "dataset": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2",
+    "candidate_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/explicit/sst2/20260929_210728_096359_76fc3534/backend/candidates_top100.txt",
+    "generated_json": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/explicit/sst2/20260929_210728_096359_76fc3534/backend/candidates_all.json",
+    "match_dir": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/explicit/sst2/20260929_210728_096359_76fc3534/backend/matching",
+    "physical_gpu": "1",
+    "logical_device": "cuda:0",
+    "python": "/home/zjs/anaconda3/envs/mia/bin/python"
+  },
+  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/chatglm3/explicit/sst2/20260929_210728_096359_76fc3534",
+  "source_run": null,
+  "schema_version": 1,
+  "baseline_type": "no_perturbation",
+  "evaluation_type": "direct",
+  "status": "completed",
+  "completed_at": "2026-09-29T13:25:54.457362+00:00",
+  "updated_at": "2026-09-29T13:25:54.457362+00:00",
+  "matching": {
+    "candidate_count": 100,
+    "matched_count": 99,
+    "match_rate": 0.99,
+    "match_type_counts": {
+      "contains": 99,
+      "unmatched": 1
+    },
+    "fuzzy_threshold": 0.85,
+    "contains_min_chars": 50,
+    "min_chars": 1,
+    "window_min_tokens": 8,
+    "dataset": "sst2",
+    "empty_candidates": 0
+  },
+  "results": {
+    "candidate_count": 100,
+    "matched_count": 99,
+    "match_rate": 0.99,
+    "match_type_counts": {
+      "contains": 99,
+      "unmatched": 1
+    },
+    "fuzzy_threshold": 0.85,
+    "contains_min_chars": 50,
+    "min_chars": 1,
+    "window_min_tokens": 8,
+    "dataset": "sst2",
+    "empty_candidates": 0
+  },
+  "no_noise": false,
+  "candidate_count": 100,
+  "matched_count": 99,
+  "match_rate": 0.99
+}
