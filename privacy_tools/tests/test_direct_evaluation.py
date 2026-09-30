@@ -48,6 +48,15 @@ class DirectHistoryTests(unittest.TestCase):
         self.assertEqual((target / "result.txt").read_text(encoding="utf-8"), "新结果")
         self.assertEqual(len(list(target.iterdir())), 2)
 
+    def test_summary_uses_evaluation_method_and_chinese_finetune_type(self):
+        text = e.format_summary(self.summary())
+        self.assertTrue(text.startswith(
+            "方法：直接评估 模型：chatglm3，微调方式：显式，数据集：sst2"
+        ))
+        implicit = self.summary()
+        implicit["finetune_type"] = "implicit"
+        self.assertIn("微调方式：隐式", e.format_summary(implicit))
+
     def test_history_reads_text_verbatim_when_summary_is_invalid(self):
         target = Path(self.settings["historical_results_dir"]) / "no_perturbation/direct/chatglm3/explicit/sst2"
         target.mkdir(parents=True)
@@ -73,11 +82,17 @@ class DirectHistoryTests(unittest.TestCase):
             "evaluation", "none", "direct_attack", "none", "direct_attack", "explicit",
             dataset="wikitext2", evaluation_model="chatglm", evaluation_model_title="ChatGLM3-6b",
         )
+        output = io.StringIO()
         with patch.object(ui, "choose_from_menu", return_value="preview"), \
-                patch.object(e, "run_direct", return_value=0) as run:
+                patch.object(e, "run_direct", return_value=0) as run, \
+                contextlib.redirect_stdout(output):
             self.assertEqual(ui._run_model_evaluation(selection, self.settings), 0)
         run.assert_called_once_with(
             self.settings, "chatglm", "explicit", mode="preview", dataset="wikitext2",
+        )
+        self.assertIn(
+            "方法：直接评估 模型：chatglm3，微调方式：显式，数据集：wikitext2",
+            output.getvalue(),
         )
 
     def test_wikitext_json_snapshot_passes_preflight_and_loads_train_only(self):

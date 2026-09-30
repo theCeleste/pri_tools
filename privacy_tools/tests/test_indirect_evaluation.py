@@ -53,7 +53,7 @@ class IntegrationTests(unittest.TestCase):
             for field in e.FIELDS:
                 self.write(root / field / "evaluation/metrics.json", {
                     "AUC": .75, "member_count": 10, "nonmember_count": 500,
-                    **{f"TPR@{p}%": .5 for p in (100, 50, 10, 1, .1, .01)}})
+                    **{f"TPR@{p}%": .5 for p in (1, .1, .01)}})
 
     def source(self, kind):
         plan = self.plan(kind=kind)
@@ -241,6 +241,30 @@ class IntegrationTests(unittest.TestCase):
                 file=Path(plan["backend"])/"original_text/evaluation/metrics.json"
                 metrics=e.read_json(file); metrics['member_count']=9; self.write(file,metrics)
                 with self.assertRaises(ValueError): e.collect_results(plan)
+
+    def test_summary_format_and_legacy_high_fpr_filtering(self):
+        explicit = self.plan()
+        self.fixture_metrics(explicit)
+        results = e.collect_results(explicit)
+        legacy_row = dict(results["lora"]["rows"][0])
+        legacy_row.update(target_fpr=1.0, tpr=.9)
+        results["lora"]["rows"].insert(0, legacy_row)
+        text = e.format_summary({**explicit, "results": results})
+        self.assertTrue(text.startswith(
+            "方法：间接评估 模型：chatglm3，微调方式：显式，数据集：sst2"
+        ))
+        self.assertIn("TPR@1%FPR: 50.00%", text)
+        self.assertIn("TPR@0.1%FPR: 50.00%", text)
+        self.assertIn("TPR@0.01%FPR: 50.00%", text)
+        self.assertNotIn("TPR@100%FPR", text)
+
+        implicit = self.plan(kind="implicit")
+        self.fixture_metrics(implicit)
+        metrics = e.read_json(Path(implicit["backend"]) / "original_text/evaluation/metrics.json")
+        metrics.update({"TPR@100%": 1.0, "TPR@50%": .8, "TPR@10%": .7})
+        text = e.format_summary({**implicit, "results": {"original_text": metrics}})
+        self.assertIn("微调方式：隐式", text)
+        self.assertNotIn("TPR@100%", text)
 
     def test_missing_resources_and_bert_validation(self):
         with self.assertRaisesRegex(ValueError,"模型配置"): e.preflight(self.plan())

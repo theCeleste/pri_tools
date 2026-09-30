@@ -137,6 +137,8 @@ def evaluate(
     target_fprs: Sequence[float],
     output_csv: str,
 ) -> pd.DataFrame:
+    if any(target_fpr <= 0 or target_fpr > 0.01 for target_fpr in target_fprs):
+        raise ValueError("Target FPRs must be greater than 0 and no greater than 0.01.")
     print("=" * 80)
     print("Neighbour MIA evaluation")
     print("=" * 80)
@@ -188,13 +190,7 @@ def evaluate(
             "nonmember_count": int(len(nonmember_scores)),
         }
         rows.append(row)
-        print(
-            f"target_fpr={target_fpr:.6g} "
-            f"actual_fpr={fpr:.6g} "
-            f"tpr={tpr:.6g} "
-            f"threshold={threshold:.6f} "
-            f"tp/fp/tn/fn={tp}/{fp}/{tn}/{fn}"
-        )
+        print(f"TPR@{target_fpr * 100:g}%FPR: {tpr:.2%}")
 
     frame = pd.DataFrame(rows)
     output = Path(output_csv)

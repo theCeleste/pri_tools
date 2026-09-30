@@ -96,9 +96,9 @@ class WikiTextTests(unittest.TestCase):
             self.assertIn('--no-add-noise', text)
             self.assertIn('--proposal-model resources/bert-base-uncased', text)
             self.assertIn('attack_results_other_bert_0_original_text.csv', text)
-            self.assertIn(f'attack_results_{task}_bert_0_synthetic_text.csv', text)
+            self.assertIn(f'attack_results_{task}_bert_0_original_text.csv', text)
             self.assertEqual(text.count('prepare_data:'), int(task == 'wikitext2'))
-            self.assertEqual(len(text.splitlines()), 10 if task == 'wikitext2' else 9)
+            self.assertEqual(len(text.splitlines()), 6 if task == 'wikitext2' else 5)
 
     def test_generation_attack_combine_evaluate_on_cpu(self):
         torch.manual_seed(0)
@@ -176,9 +176,9 @@ class WikiTextTests(unittest.TestCase):
                 np.testing.assert_allclose(frame.diff_score, frame.orig_logprob - frame.mean_neigh_logprob)
                 self.assertEqual(metrics['member_count'], 10)
                 self.assertEqual(metrics['nonmember_count'], 3)
-                self.assertEqual(metrics['TPR@100%'], 1.)
-                for name in ('50%', '10%', '1%', '0.1%', '0.01%'):
+                for name in ('1%', '0.1%', '0.01%'):
                     self.assertIn(f'TPR@{name}', metrics)
+                self.assertFalse({'TPR@100%', 'TPR@50%', 'TPR@10%'} & set(metrics))
                 self.assertTrue((destination / 'evaluation/roc.csv').exists())
 
 

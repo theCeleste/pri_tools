@@ -24,7 +24,9 @@ ROOTS = {"explicit": PROJECT_ROOT / "evaluate/indirect_LoRA",
 MODEL_INFO = {"chatglm3": ("CHATGLM_MODEL_DIR", "chatglm3-6b", "chatglm3_6b"),
               "fm9g": ("FM9G_MODEL_DIR", "9G7B_MHA", "fm9g_7b")}
 FIELDS = ("original_text",)
-TARGETS = (1.0, .5, .1, .01, .001, .0001)
+TARGETS = (.01, .001, .0001)
+TARGET_LABELS = ((.01, "1%"), (.001, "0.1%"), (.0001, "0.01%"))
+FINETUNE_LABELS = {"explicit": "显式", "implicit": "隐式"}
 
 
 def path(value):
@@ -228,7 +230,7 @@ def collect_results(plan):
         file = root / "mia_evaluation_results.csv"
         with file.open(newline="", encoding="utf-8") as f:
             rows = list(csv.DictReader(f))
-        if len(rows) != 6 or {float(r["target_fpr"]) for r in rows} != set(TARGETS):
+        if len(rows) != len(TARGETS) or {float(r["target_fpr"]) for r in rows} != set(TARGETS):
             raise ValueError("LoRA 指标缺少目标 FPR 行")
         for row in rows:
             for key in ("target_fpr", "actual_fpr", "tpr", "auc", "member_count", "nonmember_count", "tp", "fp", "tn", "fn"):
@@ -250,7 +252,7 @@ def collect_results(plan):
         for field in FIELDS:
             file = root / field / "evaluation/metrics.json"
             metrics = read_json(file)
-            for key in ("AUC", "TPR@100%", "TPR@50%", "TPR@10%", "TPR@1%", "TPR@0.1%", "TPR@0.01%"):
+            for key in ("AUC", "TPR@1%", "TPR@0.1%", "TPR@0.01%"):
                 if not 0 <= finite_number(metrics[key]) <= 1:
                     raise ValueError(f"ICL 指标越界：{key}")
             if metrics["member_count"] != 10 or metrics["nonmember_count"] != 500:
@@ -260,16 +262,20 @@ def collect_results(plan):
 
 
 def format_summary(summary, *, include_output=True):
-    lines = [f"模型：{summary['model']}，微调方式：{summary['finetune_type']}，数据集：{summary['dataset']}"]
+    finetune = FINETUNE_LABELS.get(summary["finetune_type"], summary["finetune_type"])
+    lines = [f"方法：间接评估 模型：{summary['model']}，微调方式：{finetune}，数据集：{summary['dataset']}"]
     for field, metrics in summary["results"].items():
         lines.append(f"{field}: AUC={metrics.get('auc', metrics.get('AUC')):.6f}, member={metrics['member_count']}, nonmember={metrics['nonmember_count']}")
         if "rows" in metrics:
-            for row in metrics["rows"]:
-                lines.append(f"  TPR@FPR={row['target_fpr']:g}: {row['tpr']:.6f} (实际 FPR={row['actual_fpr']:g})")
+            rows = {float(row["target_fpr"]): row for row in metrics["rows"]}
+            for target, label in TARGET_LABELS:
+                if target in rows:
+                    lines.append(f"TPR@{label}FPR: {rows[target]['tpr']:.2%}")
         else:
-            for k, v in metrics.items():
-                if k.startswith("TPR@"):
-                    lines.append(f"  {k}: {v:.6f}")
+            for _, label in TARGET_LABELS:
+                key = f"TPR@{label}"
+                if key in metrics:
+                    lines.append(f"TPR@{label}FPR: {metrics[key]:.2%}")
     if include_output:
         lines.append(f"结果目录：{summary['output']}")
     return "\n".join(lines)

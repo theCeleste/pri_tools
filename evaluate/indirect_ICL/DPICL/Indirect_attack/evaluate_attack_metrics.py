@@ -60,7 +60,7 @@ def compute_metrics(csv_file, csv_file_nonmember=None, positive_ratio=None, plot
       3) 否则，如果提供 positive_ratio -> 按比例在 csv 中构造（不推荐，需谨慎）
       4) 否则 抛错
 
-    返回: dict(AUC, TPR@1%, TPR@0.1%)
+    返回: dict(AUC, TPR@1%, TPR@0.1%, TPR@0.01%)
     """
     df = pd.read_csv(csv_file)
     if 'diff_score' not in df.columns:
@@ -118,12 +118,9 @@ def compute_metrics(csv_file, csv_file_nonmember=None, positive_ratio=None, plot
             return 0.0
         return float(tpr[idx[-1]])
 
-    tpr_1 = get_tpr_at_fpr(0.01)
-    tpr_01 = get_tpr_at_fpr(0.001)
     metrics = {"AUC": float(auc_val), "member_count": int((y_true == 1).sum()),
                "nonmember_count": int((y_true == 0).sum())}
-    for name, target in [("100%", 1), ("50%", .5), ("10%", .1),
-                         ("1%", .01), ("0.1%", .001), ("0.01%", .0001)]:
+    for name, target in [("1%", .01), ("0.1%", .001), ("0.01%", .0001)]:
         metrics[f"TPR@{name}"] = get_tpr_at_fpr(target)
     destination = project_path(output_dir) if output_dir else None
     if destination:
@@ -132,21 +129,9 @@ def compute_metrics(csv_file, csv_file_nonmember=None, positive_ratio=None, plot
             raise FileExistsError(destination / 'metrics.json')
         (destination / 'metrics.json').write_text(json.dumps(metrics, indent=2), encoding='utf-8')
         pd.DataFrame({'fpr': fpr, 'tpr': tpr, 'threshold': thresholds}).to_csv(destination / 'roc.csv', index=False)
-    for name in ['100%', '50%', '10%', '0.01%']:
-        print(f"TPR@{name}FPR = {metrics[f'TPR@{name}'] * 100:.2f}%")
-    
-    # 计算FNR (False Negative Rate) = 1 - TPR
-    fnr_1 = 1 - tpr_1
-    fnr_01 = 1 - tpr_01
-
-    # epsilon = epsilon_empirical(0.01, fnr_1, 5)
-    # print(f"Empirical epsilon ≈ {epsilon:.3f}")
-
     print(f"AUC = {auc_val:.4f}")
-    print(f"TPR@1%FPR = {tpr_1*100:.2f}%")
-    # print(f"FNR@1%FPR = {fnr_1*100:.2f}%")
-    print(f"TPR@0.1%FPR = {tpr_01*100:.2f}%")
-    # print(f"FNR@0.1%FPR = {fnr_01*100:.2f}%")
+    for name in ('1%', '0.1%', '0.01%'):
+        print(f"TPR@{name}FPR: {metrics[f'TPR@{name}']:.2%}")
 
     if plot:
         plt.figure(figsize=(6,6))
@@ -164,7 +149,7 @@ def compute_metrics(csv_file, csv_file_nonmember=None, positive_ratio=None, plot
             plt.savefig(destination / 'roc.png', dpi=160, bbox_inches='tight')
         plt.close()
 
-    return {**metrics, "FNR@1%": fnr_1, "FNR@0.1%": fnr_01}
+    return metrics
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

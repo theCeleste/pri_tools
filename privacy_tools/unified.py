@@ -631,10 +631,10 @@ def _run_model_evaluation(selection: TaskSelection, settings: dict[str, Any]) ->
     from .direct_evaluation import run_direct
     from .indirect_evaluation import run_indirect
     dataset = selection.dataset or str(get_nested(settings, "common.dataset", "sst2") or "sst2")
-    dataset_title = {"sst2": "SST-2", "wikitext2": "WikiText-2"}.get(dataset, dataset)
-    print(f"模型：{selection.evaluation_model_title}")
-    print(f"微调方式：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
-    print(f"微调数据集：{dataset_title}")
+    evaluation_label = "直接评估" if selection.experiment_id == "direct_attack" else "间接评估"
+    model = "chatglm3" if selection.evaluation_model == "chatglm" else selection.evaluation_model
+    finetune_label = "显式" if selection.finetune_type == "explicit" else "隐式"
+    print(f"方法：{evaluation_label} 模型：{model}，微调方式：{finetune_label}，数据集：{dataset}")
     if selection.experiment_id == "direct_attack":
         try:
             mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
@@ -649,7 +649,6 @@ def _run_model_evaluation(selection: TaskSelection, settings: dict[str, Any]) ->
             settings, selection.evaluation_model, selection.finetune_type,
             mode=mode, dataset=dataset,
         )
-    print("任务：评估；评估类型：间接评估；微调类型：无扰动微调")
     mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
                            ("history", "查看最近历史结果"), ("preview", "预览评估命令")])
     if mode is None:

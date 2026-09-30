@@ -51,7 +51,7 @@ bash run.sh --mode attack --model fm9g --dataset wikitext2 --gpu 3 \
 bash run.sh --mode evaluate --dataset wikitext2 --results runs/fm9g_wiki
 ```
 
-输出AUC、ROC以及TPR@100%、50%、10%、1%、0.1%、0.01% FPR。
+输出 AUC、ROC 以及 TPR@1%、0.1%、0.01% FPR。TPR 以百分比形式显示，例如 `TPR@1%FPR: 40.00%`。
 
 ## 文件
 

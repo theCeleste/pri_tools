@@ -1,8 +1,5 @@
-模型：fm9g，微调方式：explicit，数据集：sst2
+方法：间接评估 模型：fm9g，微调方式：显式，数据集：sst2
 lora: AUC=0.758648, member=1200, nonmember=1200
-  TPR@FPR=1: 0.999167 (实际 FPR=1)
-  TPR@FPR=0.5: 0.848333 (实际 FPR=0.5)
-  TPR@FPR=0.1: 0.387500 (实际 FPR=0.1)
-  TPR@FPR=0.01: 0.103333 (实际 FPR=0.01)
-  TPR@FPR=0.001: 0.034167 (实际 FPR=0.000833333)
-  TPR@FPR=0.0001: 0.014167 (实际 FPR=0)
+TPR@1%FPR: 10.33%
+TPR@0.1%FPR: 3.42%
+TPR@0.01%FPR: 1.42%

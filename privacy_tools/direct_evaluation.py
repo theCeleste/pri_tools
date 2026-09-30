@@ -489,7 +489,10 @@ def run_match(args) -> int:
 
 
 def format_summary(summary: dict, *, include_output: bool = True) -> str:
-    lines = [f"模型：{summary['model']}，微调方式：{summary['finetune_type']}，数据集：{summary['dataset']}"]
+    finetune = {"explicit": "显式", "implicit": "隐式"}.get(
+        summary["finetune_type"], summary["finetune_type"]
+    )
+    lines = [f"方法：直接评估 模型：{summary['model']}，微调方式：{finetune}，数据集：{summary['dataset']}"]
     metrics = summary.get("matching", {})
     lines.append(f"候选数：{metrics.get('candidate_count', 0)}，匹配数：{metrics.get('matched_count', 0)}，匹配率：{metrics.get('match_rate', 0):.4%}")
     if include_output:

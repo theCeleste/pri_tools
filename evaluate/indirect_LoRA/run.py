@@ -14,7 +14,7 @@ import time
 sys.dont_write_bytecode = True
 
 ROOT = Path(__file__).resolve().parent
-FPRS = ("1.00", "0.50", "0.10", "0.01", "0.001", "0.0001")
+FPRS = ("0.01", "0.001", "0.0001")
 MODELS = {"fm9g": ("9G7B_MHA", "FM9G_MODEL_DIR"),
           "chatglm3": ("chatglm3-6b", "CHATGLM_MODEL_DIR")}
 DATASETS = {"sst2": ("sentence", "sentence"),

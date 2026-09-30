@@ -87,9 +87,12 @@ class DeliveryTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             import pandas as pd
             result_csv = pd.read_csv(root / "output/mia_evaluation_results.csv")
-            self.assertEqual(len(result_csv), 6)
+            self.assertEqual(len(result_csv), 3)
+            self.assertEqual(set(result_csv.target_fpr), {0.01, 0.001, 0.0001})
             self.assertTrue((result_csv.auc == 0.75).all())
             self.assertTrue((result_csv.actual_fpr <= result_csv.target_fpr).all())
+            for label in ("1%", "0.1%", "0.01%"):
+                self.assertRegex(result.stdout, rf"TPR@{re.escape(label)}FPR: \d+\.\d{{2}}%")
 
 
 if __name__ == "__main__":

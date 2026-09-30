@@ -18,7 +18,7 @@ score(x) = mean_logprob(x | prompt)
            - mean_i(mean_logprob(neighbor_i | prompt))
 ```
 
-分数越大越像member；它是论文中 `loss(x)-mean(loss(neighbor))` 的反号。两种提示分别计算AUC、ROC及TPR@100%、50%、10%、1%、0.1%、0.01% FPR。固定FPR指标取ROC上实际FPR不超过目标值时的最大TPR，不插值。
+分数越大越像member；它是论文中 `loss(x)-mean(loss(neighbor))` 的反号。两种提示分别计算 AUC、ROC 及 TPR@1%、0.1%、0.01% FPR。固定 FPR 指标取 ROC 上实际 FPR 不超过目标值时的最大 TPR，不插值。TPR 以百分比形式显示，例如 `TPR@1%FPR: 40.00%`。
 
 | 固定参数 | 值 |
 | --- | --- |

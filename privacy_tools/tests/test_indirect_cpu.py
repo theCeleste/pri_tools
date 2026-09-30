@@ -69,7 +69,7 @@ class NativeOfflineTests(unittest.TestCase):
                             self.assertEqual(metrics["nonmember_count"], 1200 if kind == "explicit" else 500)
                         manifest = e.read_json(summaries[0].parent / "run_manifest.json")
                         self.assertEqual(manifest["status"], "completed")
-                        self.assertEqual(len(manifest["stage_results"]), 1 if kind == "explicit" else 4)
+                        self.assertEqual(len(manifest["stage_results"]), 1 if kind == "explicit" else 2)
                         self.assertTrue(all(stage["returncode"] == 0 for stage in manifest["stage_results"]))
                         self.assertEqual(source_before, {str(f): f.read_bytes() for f in source.rglob("*") if f.is_file()})
                         with contextlib.redirect_stdout(io.StringIO()) as history:

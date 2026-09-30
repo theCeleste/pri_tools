@@ -4,6 +4,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import sys
 import subprocess
 import tempfile
@@ -91,7 +92,8 @@ class DeliveryTests(unittest.TestCase):
             p = Path(directory)
             pd.DataFrame(dict(diff_score=[.9, .7])).to_csv(p / "member.csv", index=False)
             pd.DataFrame(dict(diff_score=[.8, .1])).to_csv(p / "nonmember.csv", index=False)
-            with contextlib.redirect_stdout(io.StringIO()):
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
                 combine(["--member-file", str(p / "member.csv"), "--nonmember-file",
                          str(p / "nonmember.csv"), "--output", str(p / "combined.csv")])
                 metrics = compute_metrics(p / "combined.csv", plot=False)
@@ -102,9 +104,10 @@ class DeliveryTests(unittest.TestCase):
             self.assertAlmostEqual(metrics["AUC"], .75)
             self.assertAlmostEqual(metrics["AUC"], roc_auc_score(labels, scores))
             fpr, tpr, _ = roc_curve(labels, scores)
-            for name, target in [("100%", 1), ("50%", .5), ("10%", .1),
-                                 ("1%", .01), ("0.1%", .001), ("0.01%", .0001)]:
+            for name, target in [("1%", .01), ("0.1%", .001), ("0.01%", .0001)]:
                 self.assertEqual(metrics[f"TPR@{name}"], float(max(tpr[fpr <= target])))
+                self.assertRegex(output.getvalue(), rf"TPR@{re.escape(name)}FPR: \d+\.\d{{2}}%")
+            self.assertFalse({"TPR@100%", "TPR@50%", "TPR@10%"} & set(metrics))
 
     def test_sample_sources_and_order(self):
         tokenizer = AutoTokenizer.from_pretrained(ROOT / "resources/bert-base-uncased", use_fast=False,

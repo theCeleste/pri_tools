@@ -419,7 +419,7 @@ METRIC_PATTERNS: list[tuple[str, re.Pattern[str], bool]] = [
     ("attack_success_pct", re.compile(r"占[^\n]{0,40}比例(?:为|是)?\s*([0-9]+(?:\.[0-9]+)?)\s*%", re.I), False),
     ("attack_success_pct", re.compile(r"整段命中[^\n]{0,40}\(([0-9]+(?:\.[0-9]+)?)\s*%\)", re.I), False),
     ("attack_auc", re.compile(r"\bAUC\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)", re.I), False),
-    ("attack_tpr_at_1pct", re.compile(r"TPR@1%\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)", re.I), False),
+    ("attack_tpr_at_1pct", re.compile(r"TPR@1%(?:FPR)?\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)", re.I), False),
     ("runtime_seconds", re.compile(r"(?:all done in|elapsed(?:_program)?|overall runtime(?:\s*\(s\))?|total time|training wall(?: time)?)\s*[=: ]+\s*([0-9]+(?:\.[0-9]+)?)\s*s?", re.I), False),
 ]
 

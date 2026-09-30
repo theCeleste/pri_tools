@@ -88,6 +88,8 @@ ICL 的实验规模和 seed 固定遵守交付方法，不继承旧 chatglm_icl 
 - backend/：完整原生产物。LoRA 保留 PKL、metadata、CSV；ICL 保留两组提示的 CSV、metrics.json、ROC 和生成记录。
 - summary.json：仅在所有步骤成功且结果完整时生成；读取实际 AUC、TPR 和样本数，不填入推测结果。
 
+固定 FPR 指标只计算 1%、0.1%、0.01% 三项，不再计算 10%、50%、100%。用户可见摘要统一标明“方法：间接评估”，将 `explicit` / `implicit` 显示为“显式”/“隐式”，并按 `TPR@1%FPR: 40.00%` 的百分比格式输出 TPR。
+
 正式样本规模：LoRA 1200+1200、seed=42；ICL 10+500、seed=0。ICL 分开显示 original_text 与 synthetic_text，默认不加噪声，不声称差分隐私保证。
 ICL 的 num-test=20 是 SST-2 分类效用测试数，不是攻击样本数。WikiText-2 不运行情感分类效用测试。
 历史查询按模型、微调方式和数据集直接定位唯一目录，优先读取 `summary.json`；摘要缺失、损坏或字段不兼容时原样输出 `result.txt`。
