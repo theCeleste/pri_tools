@@ -101,7 +101,7 @@
 - ChatGLM 隐式 → `direct_evaluation.run(..., model="chatglm3", finetune="implicit")`
 - FM9G 显式或隐式 → 对应 `model="fm9g"` 分支
 
-保留立即执行、预览命令和查看历史结果三种模式，并沿用统一结果目录和运行清单格式：
+统一入口保留立即执行和查看历史结果两种模式；底层模块仍可通过预览模式输出命令，并沿用统一结果目录和运行清单格式：
 
 `results/direct_evaluation/<model>/<finetune>/<dataset>/<run_id>/`
 

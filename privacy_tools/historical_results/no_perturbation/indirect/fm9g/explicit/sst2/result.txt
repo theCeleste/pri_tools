@@ -1,5 +1,5 @@
 方法：间接评估 模型：fm9g，微调方式：显式，数据集：sst2
-lora: AUC=0.758648, member=1200, nonmember=1200
-TPR@1%FPR: 10.33%
-TPR@0.1%FPR: 3.42%
-TPR@0.01%FPR: 1.42%
+lora: AUC=0.6433, member=1200, nonmember=1200
+TPR@1%FPR: 3.917%
+TPR@0.1%FPR: 0.750%
+TPR@0.01%FPR: 0.750%

@@ -131,7 +131,7 @@ CSV 仍保留 `target_fpr`、`actual_fpr`、`threshold`、`tp/fp/tn/fn` 等结�
 
 - 新运行生成的 `summary.json` 只写三个低 FPR 指标。
 - 读取旧的六点间接评估摘要时，只展示 `FPR <= 0.01` 的三项，不在新摘要中显示高 FPR 项。
-- 一次性更新现有 `no_perturbation/indirect/*/*/*/result.txt`，保证 JSON 损坏后回退文本也使用新格式。
+- 不改写已有 `no_perturbation/indirect/*/*/*/result.txt`；TXT 首次归档后固定，历史查询优先原样读取。
 - 原始运行目录中的旧 CSV、JSON 和日志不删除，保留实验追溯信息。
 - `summary.json` 的机器字段仍使用英文枚举；中文只用于摘要和 `result.txt` 展示。
 - 旧的 `historical_results/direct/*.txt` 和 `historical_results/indirect/*.txt` 仍作为旧方法资料，不自动导入无扰动历史结果。
@@ -174,5 +174,4 @@ CSV 仍保留 `target_fpr`、`actual_fpr`、`threshold`、`tp/fp/tn/fn` 等结�
 - 所有新摘要中的 TPR 均符合 `TPR@1%FPR: 40.00%` 形式；
 - AUC、样本数和三个低 FPR 下的 TPR 数值保持正确；
 - 旧历史结果仍可读取，但用户不可见摘要不再展示高 FPR 项；
-- 直接/间接、显式/隐式的四类无扰动组合均通过菜单预览、历史查询和 CPU 离线测试。
-
+- 直接/间接、显式/隐式的四类无扰动组合均通过菜单历史查询和 CPU 离线测试；预览仅保留为底层模块命令能力。

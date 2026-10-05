@@ -638,7 +638,7 @@ def _run_model_evaluation(selection: TaskSelection, settings: dict[str, Any]) ->
     if selection.experiment_id == "direct_attack":
         try:
             mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
-                                   ("history", "查看最近历史结果"), ("preview", "预览评估命令")])
+                                   ("history", "查看最近历史结果")])
         except (EOFError, OSError):
             # Library/test callers may intentionally invoke the route without
             # an interactive stdin; cancellation remains a successful no-op.
@@ -650,7 +650,7 @@ def _run_model_evaluation(selection: TaskSelection, settings: dict[str, Any]) ->
             mode=mode, dataset=dataset,
         )
     mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
-                           ("history", "查看最近历史结果"), ("preview", "预览评估命令")])
+                           ("history", "查看最近历史结果")])
     if mode is None:
         return 0
     return run_indirect(

@@ -303,18 +303,16 @@ class IntegrationTests(unittest.TestCase):
         (Path(plan['resources']['adapter'])/'adapter_model.safetensors').write_bytes(b'wrong adapter')
         with self.assertRaisesRegex(ValueError,'指纹不匹配'): d.validate_data(plan)
 
-    def test_real_subprocess_menu_preview(self):
+    def test_real_subprocess_menu_has_no_preview_option(self):
         env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}
         for model in ('1','2'):
             for kind,group in (('1','3'),('2','2')):
-                for dataset, dataset_name in (('1', 'sst2'), ('2', 'wikitext2')):
+                for dataset in ('1', '2'):
                     result=subprocess.run([sys.executable,'-B',str(e.PROJECT_ROOT/'privacy_tool.py')],
-                         input=f'2\n2\n{kind}\n{group}\n{model}\n{dataset}\n3\n',text=True,capture_output=True,env=env)
+                         input=f'2\n2\n{kind}\n{group}\n{model}\n{dataset}\n2\n',text=True,capture_output=True,env=env)
                     self.assertEqual(result.returncode,0,result.stderr)
-                    self.assertIn('命令预览',result.stdout)
-                    self.assertIn('evaluate/indirect_',result.stdout)
-                    self.assertIn(f'/{"explicit" if kind == "1" else "implicit"}/{dataset_name}/', result.stdout)
-                    self.assertNotIn('glm/GLM_',result.stdout)
+                    self.assertIn('查看最近历史结果',result.stdout)
+                    self.assertNotIn('预览评估命令',result.stdout)
 
 
 if __name__=='__main__':

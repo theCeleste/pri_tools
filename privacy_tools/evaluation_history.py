@@ -19,7 +19,12 @@ def history_dir(settings: dict, evaluation_type: str, ident: dict) -> Path:
 
 
 def archive_result(settings: dict, evaluation_type: str, summary: dict, result_text: str) -> Path:
-    """Atomically replace the latest archived JSON and text result."""
+    """Archive the latest summary while preserving the first result text.
+
+    ``result.txt`` is the stable, user-visible record for a no-perturbation
+    evaluation identity.  Once created it must never be replaced by a later
+    run; the structured summary may still be refreshed independently.
+    """
     ident = {key: summary[key] for key in ("model", "finetune_type", "dataset")}
     target = history_dir(settings, evaluation_type, ident)
     target.mkdir(parents=True, exist_ok=True)
@@ -36,10 +41,19 @@ def archive_result(settings: dict, evaluation_type: str, summary: dict, result_t
     try:
         json_tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
         text_tmp.write_text(result_text, encoding="utf-8")
-        # Replace the text first and the identity-bearing JSON last. Readers
-        # therefore continue to see the previous complete summary during an
-        # interrupted update and can fall back to the new text if necessary.
-        os.replace(text_tmp, target / "result.txt")
+        # Keep the first user-visible text permanently.  Do not remove or
+        # replace an existing file, even when a newer summary is archived.
+        text_file = target / "result.txt"
+        try:
+            # Linking is an exclusive, atomic create on the same filesystem;
+            # concurrent archives therefore cannot replace the first TXT.
+            os.link(text_tmp, text_file)
+        except FileExistsError:
+            text_tmp.unlink()
+        else:
+            text_tmp.unlink()
+        # The identity-bearing JSON is updated last so readers never observe
+        # a new summary before its corresponding archive operation completes.
         os.replace(json_tmp, target / "summary.json")
     finally:
         for temporary in (json_tmp, text_tmp):
@@ -51,8 +65,16 @@ def archive_result(settings: dict, evaluation_type: str, summary: dict, result_t
 
 
 def load_result(settings: dict, evaluation_type: str, ident: dict) -> dict | None:
-    """Load structured history, or return the raw text fallback."""
+    """Load the stable raw text first, then fall back to structured JSON."""
     target = history_dir(settings, evaluation_type, ident)
+    text_file = target / "result.txt"
+    try:
+        # The text archive is intentionally authoritative: it is immutable and
+        # represents the first completed user-visible result for this identity.
+        return {"kind": "text", "path": target, "text": text_file.read_text(encoding="utf-8")}
+    except (OSError, UnicodeError):
+        pass
+
     summary_file = target / "summary.json"
     try:
         summary = json.loads(summary_file.read_text(encoding="utf-8"))
@@ -72,8 +94,4 @@ def load_result(settings: dict, evaluation_type: str, ident: dict) -> dict | Non
     except (OSError, UnicodeError, json.JSONDecodeError, TypeError):
         pass
 
-    text_file = target / "result.txt"
-    try:
-        return {"kind": "text", "path": target, "text": text_file.read_text(encoding="utf-8")}
-    except (OSError, UnicodeError):
-        return None
+    return None

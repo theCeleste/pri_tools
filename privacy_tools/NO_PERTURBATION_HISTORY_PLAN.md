@@ -4,10 +4,10 @@
 
 为无扰动微调的直接评估和间接评估建立独立的历史结果目录。
 
-每个“评估类型、模型、微调方式、数据集”组合只保留一份最新结果，同时提供结构化 JSON 和原样 TXT 两种格式：
+每个“评估类型、模型、微调方式、数据集”组合只保留一份最新结构化摘要，同时保留首次归档的原样 TXT 两种格式：
 
 - `summary.json`：供程序读取和展示指标。
-- `result.txt`：结构化结果不可用时的最终兜底，读取时原样输出。
+- `result.txt`：首次成功归档的稳定文本记录，读取时优先原样输出，之后不再修改。
 
 旧的 `historical_results/direct/*.txt`、`historical_results/indirect/*.txt` 保持不变，不自动转换为新的无扰动评估结果。
 
@@ -38,11 +38,11 @@ historical_results/
 └── no_perturbation/indirect/chatglm3/implicit/sst2/
 ```
 
-目录中的结果代表该组合最近一次成功评估。新结果成功后覆盖旧的 `summary.json` 和 `result.txt`；失败或中断的运行不更新历史目录。
+`summary.json` 代表该组合最近一次成功评估；`result.txt` 在首次成功归档后固定不变。新结果成功后只覆盖 `summary.json`，不会修改已有 TXT；失败或中断的运行不更新历史目录。
 
 ## 3. `summary.json` 内容
 
-摘要文件是程序读取的首选来源，至少包含以下字段：
+摘要文件用于保存最近一次结构化指标，至少包含以下字段；历史查询优先读取固定 TXT：
 
 ```json
 {
@@ -104,8 +104,8 @@ historical_results/
    historical_results_dir/no_perturbation/<direct|indirect>/<model>/<explicit|implicit>/<dataset>/
    ```
 
-4. 创建临时 JSON 和 TXT 文件，写入完成后再替换正式文件，避免留下半写入内容。
-5. 先更新 `result.txt`，再更新 `summary.json`；读取方以有效的 `summary.json` 为主，必要时回退到 TXT。
+4. 创建临时 JSON 和 TXT 文件；TXT 仅在目标不存在时写入，已有 TXT 不替换。
+5. 更新 `summary.json`；读取方优先读取固定 TXT，TXT 缺失时再校验并读取结构化摘要。
 6. 不创建新的 `<run_id>` 目录，不覆盖 `results_dir` 中的原始运行记录。
 
 ## 6. 读取逻辑
@@ -118,13 +118,10 @@ historical_results_dir/no_perturbation/<direct|indirect>/<model>/<explicit|impli
 
 读取顺序如下：
 
-1. 读取 `summary.json`。
-2. 检查 JSON 可解析，且 `status` 为 `completed`。
-3. 核对 `baseline_type`、`evaluation_type`、`model`、`finetune_type` 和 `dataset`。
-4. 字段完整时，按结构化指标展示结果。
-5. 如果 `summary.json` 缺失、损坏、字段不完整或身份不匹配，则读取 `result.txt`。
-6. `result.txt` 存在时直接原样打印，不尝试从文本中提取指标。
-7. 两个文件都不存在时，提示当前组合没有历史结果。
+1. 优先读取 `result.txt`，存在时直接原样打印，不尝试从文本中提取指标。
+2. TXT 缺失时读取 `summary.json`，检查 JSON 可解析、`status` 为 `completed`，并核对 `baseline_type`、`evaluation_type`、`model`、`finetune_type` 和 `dataset`。
+3. 字段完整时按结构化指标展示结果。
+4. 两个文件都不存在或摘要无效时，提示当前组合没有历史结果。
 
 历史查询不再读取以下旧版文件：
 

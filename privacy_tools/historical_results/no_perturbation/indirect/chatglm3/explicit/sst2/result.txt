@@ -1,5 +1,5 @@
 方法：间接评估 模型：chatglm3，微调方式：显式，数据集：sst2
-lora: AUC=0.895450, member=1200, nonmember=1200
-TPR@1%FPR: 46.67%
-TPR@0.1%FPR: 17.75%
-TPR@0.01%FPR: 9.67%
+lora: AUC=0.6438, member=1200, nonmember=1200
+TPR@1%FPR: 3.583%
+TPR@0.1%FPR: 0.417%
+TPR@0.01%FPR: 0.000%

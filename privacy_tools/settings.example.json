@@ -2,7 +2,7 @@
   "results_dir": "privacy_tools/results",
   "historical_results_dir": "privacy_tools/historical_results",
   "common": {
-    "gpu": "2",
+    "gpu": "1",
     "dataset": "sst2",
     "dataset_path": "privacy_tools/datasets/sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
@@ -168,7 +168,7 @@
         "num_queries": 20
       },
       "matching": {
-        "fuzzy_threshold": 0.85,
+        "fuzzy_threshold": 0.95,
         "contains_min_chars": 50,
         "min_chars": 1,
         "window_min_tokens": 8

@@ -38,14 +38,15 @@ class DirectHistoryTests(unittest.TestCase):
             "output": output,
         }
 
-    def test_latest_result_overwrites_previous_result(self):
+    def test_latest_summary_preserves_first_result_text(self):
         e.archive_result(self.settings, "direct", self.summary("old"), "旧结果")
         e.archive_result(self.settings, "direct", self.summary("new"), "新结果")
         history = e.load_result(self.settings, "direct", self.ident)
-        self.assertEqual(history["kind"], "summary")
-        self.assertEqual(history["summary"]["output"], "new")
+        self.assertEqual(history["kind"], "text")
+        self.assertEqual(history["text"], "旧结果")
         target = Path(self.settings["historical_results_dir"]) / "no_perturbation/direct/chatglm3/explicit/sst2"
-        self.assertEqual((target / "result.txt").read_text(encoding="utf-8"), "新结果")
+        self.assertEqual((target / "result.txt").read_text(encoding="utf-8"), "旧结果")
+        self.assertEqual(json.loads((target / "summary.json").read_text(encoding="utf-8"))["output"], "new")
         self.assertEqual(len(list(target.iterdir())), 2)
 
     def test_summary_uses_evaluation_method_and_chinese_finetune_type(self):
