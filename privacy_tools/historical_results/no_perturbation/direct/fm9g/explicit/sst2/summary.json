@@ -3,27 +3,27 @@
   "finetune_type": "explicit",
   "dataset": "sst2",
   "engine": "evaluate-direct-v1",
-  "backend_digest": "3b36b5aac8d5b2ecf59e1c0fd60e2e398b2aee3c81ce2882215c7d4b8d16dc54",
+  "backend_digest": "fe9604ba32f20029c3e433ae695be2066714f98539772a3b77d4a6e46d836d46",
   "resources": {
     "base_model": "/home/zjs/llm/9G7B_MHA",
     "adapter": "/home/zjs/code/x73/x73-privacy-tool/evaluate/direct/lora/9g/sst2_memorize_final/checkpoint-32000",
     "tokenizer": "/home/zjs/llm/9G7B_MHA",
     "dataset": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2",
-    "candidate_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/sst2/20260929_235045_225912_32ce12d6/backend/candidates_top100.txt",
-    "generated_json": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/sst2/20260929_235045_225912_32ce12d6/backend/candidates_all.json",
-    "match_dir": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/sst2/20260929_235045_225912_32ce12d6/backend/matching",
-    "physical_gpu": "3",
+    "candidate_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/sst2/20261005_144838_091958_93e7a463/backend/candidates_top100.txt",
+    "generated_json": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/sst2/20261005_144838_091958_93e7a463/backend/candidates_all.json",
+    "match_dir": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/sst2/20261005_144838_091958_93e7a463/backend/matching",
+    "physical_gpu": "1",
     "logical_device": "cuda:0",
     "python": "/home/zjs/anaconda3/envs/mia/bin/python"
   },
-  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/sst2/20260929_235045_225912_32ce12d6",
+  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/direct_evaluation/fm9g/explicit/sst2/20261005_144838_091958_93e7a463",
   "source_run": null,
   "schema_version": 1,
   "baseline_type": "no_perturbation",
   "evaluation_type": "direct",
   "status": "completed",
-  "completed_at": "2026-09-29T16:53:38.014643+00:00",
-  "updated_at": "2026-09-29T16:53:38.014643+00:00",
+  "completed_at": "2026-10-05T07:52:51.658269+00:00",
+  "updated_at": "2026-10-05T07:52:51.658269+00:00",
   "matching": {
     "candidate_count": 100,
     "matched_count": 100,
@@ -31,7 +31,7 @@
     "match_type_counts": {
       "contains": 100
     },
-    "fuzzy_threshold": 0.85,
+    "fuzzy_threshold": 0.99,
     "contains_min_chars": 50,
     "min_chars": 1,
     "window_min_tokens": 8,
@@ -45,7 +45,7 @@
     "match_type_counts": {
       "contains": 100
     },
-    "fuzzy_threshold": 0.85,
+    "fuzzy_threshold": 0.99,
     "contains_min_chars": 50,
     "min_chars": 1,
     "window_min_tokens": 8,

@@ -2,7 +2,7 @@
   "results_dir": "privacy_tools/results",
   "historical_results_dir": "privacy_tools/historical_results",
   "common": {
-    "gpu": "1",
+    "gpu": "0",
     "dataset": "sst2",
     "dataset_path": "privacy_tools/datasets/sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
@@ -37,6 +37,9 @@
     "logical_batch_size": 256,
     "learning_rate": 0.0002,
     "lora_r": 4
+  },
+  "kal_dp_dpsgd": {
+    "num_epochs": 2
   },
   "methods": {
     "cliptext": {
@@ -168,7 +171,7 @@
         "num_queries": 20
       },
       "matching": {
-        "fuzzy_threshold": 0.95,
+        "fuzzy_threshold": 0.99,
         "contains_min_chars": 50,
         "min_chars": 1,
         "window_min_tokens": 8

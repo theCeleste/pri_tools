@@ -568,6 +568,7 @@ def _dpsgd_performance(settings: dict[str, Any], run_dir: Path, *, method_id: st
     profile = "kal_dp" if use_kal_script else "dpsgd"
     if use_kal_script:
         source = KAL_ROOT / "dpsgd.py"
+        kal_dpsgd_epochs = get_nested(settings, "kal_dp_dpsgd.num_epochs", 2)
         args = [
             "--batch_size", get_nested(settings, "methods.kal_dp.batch_size", 32),
             "--max_physical_batch_size", get_nested(settings, "methods.kal_dp.dpsgd_max_physical_batch_size", 12),
@@ -575,14 +576,14 @@ def _dpsgd_performance(settings: dict[str, Any], run_dir: Path, *, method_id: st
             "--lora_rank", get_nested(settings, "dpsgd.lora_rank", 16),
             "--learning_rate", get_nested(settings, "methods.kal_dp.learning_rate", 1e-4),
             "--max_grad_norm", get_nested(settings, "methods.kal_dp.max_grad_norm", 3.0),
-            "--epochs", 1,
+            "--epochs", kal_dpsgd_epochs,
             "--model_name", _common_value(settings, "model_7b", "meta-llama/Llama-2-7b-hf"),
         ]
         replacements = _patch_dp_accounting(
             source,
             float(get_nested(settings, "dpsgd.target_epsilon", 8.0)),
             float(get_nested(settings, "dpsgd.target_delta", 1e-5)),
-            1,
+            kal_dpsgd_epochs,
         )
     else:
         source = DPSGD_SCRIPT
@@ -591,7 +592,7 @@ def _dpsgd_performance(settings: dict[str, Any], run_dir: Path, *, method_id: st
             "--target_epsilon", get_nested(settings, "dpsgd.target_epsilon", 8.0),
             "--target_delta", get_nested(settings, "dpsgd.target_delta", 1e-5),
             "--max_grad_norm", get_nested(settings, "dpsgd.max_grad_norm", 1.0),
-            "--num_epochs", 1,
+            "--num_epochs", get_nested(settings, "dpsgd.num_epochs", 1),
             "--per_device_batch_size", get_nested(settings, "dpsgd.per_device_batch_size", 8),
             "--max_physical_batch_size", get_nested(settings, "dpsgd.max_physical_batch_size", 8),
             "--logical_batch_size", get_nested(settings, "dpsgd.logical_batch_size", 256),

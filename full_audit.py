@@ -158,10 +158,15 @@ def _semantic_failures(label: str, actual, source_text: str) -> list[str]:
 def structural_audit() -> int:
     settings = load_settings(None, [])
     failures: list[str] = []
+    dpsgd_epochs = settings.get("dpsgd", {}).get("num_epochs", 1)
+    kal_dpsgd_epochs = settings.get("kal_dp_dpsgd", {}).get("num_epochs", 2)
     if settings["methods"]["cliptext"].get("epsilon") != 10.0:
         failures.append("ClipText 默认隐私预算必须为 epsilon=10.0")
     if settings["methods"]["kal_dp"].get("dpsgd_max_physical_batch_size") != 12:
         failures.append("Kal-DP 的 DP-SGD 默认 max_physical_batch_size 必须为 12")
+    for label, value in (("通用 dpsgd", dpsgd_epochs), ("Kal-DP DPSGD", kal_dpsgd_epochs)):
+        if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
+            failures.append(f"{label} num_epochs 必须是正整数，当前为 {value!r}")
     confirmation_output = io.StringIO()
     with patch("builtins.input", side_effect=["输错", "RUN"]), redirect_stdout(confirmation_output):
         if not _confirm_real_run():
@@ -267,11 +272,17 @@ def structural_audit() -> int:
                             "--lora_rank": "16",
                             "--learning_rate": "0.0001",
                             "--max_grad_norm": "3.0",
-                            "--epochs": "1",
+                            "--epochs": str(kal_dpsgd_epochs),
                         }
                         for option, expected in expected_options.items():
                             if option not in command or command[command.index(option) + 1] != expected:
                                 failures.append(f"{label}: {option} 未严格采用 Kal-DP/readme.md 的 {expected}")
+                        if step.replacements.get("epochs=2,") != f"epochs={kal_dpsgd_epochs},":
+                            failures.append(f"{label}: Opacus 隐私会计 epoch 未与 Kal-DP DPSGD 配置保持一致")
+                    if label == "cliptext/performance_baseline":
+                        command = step.command
+                        if "--num_epochs" not in command or command[command.index("--num_epochs") + 1] != str(dpsgd_epochs):
+                            failures.append(f"{label}: 通用 DPSGD 的 num_epochs 未采用当前配置")
                     if label in {"dadp_icl/utility", "dadp_icl/baseline"} and Path(step.command[1]).name != "run_exp_sst2_loca_monitor.py":
                         failures.append(f"{label}: 未使用原始代码中带时间、吞吐率和内存监测的实验脚本")
                     if not step.cwd.exists():
