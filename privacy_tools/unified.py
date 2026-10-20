@@ -703,8 +703,8 @@ def interactive(settings: dict[str, Any]) -> int:
         current_method_title = METHODS[method_id].title
         baseline_finetune_type = "Prompt微调" if selection.perturbation_group == "example" else "PEFT微调"
         if model == "ChatGLM3-6B":
-            baseline_finetune_type = {"cliptext": "Raw causal LoRA", "privsv": "Raw LoRA + Mean Steering",
-                                      "zo_dpga": "MeZO causal LoRA"}[method_id]
+            baseline_finetune_type = {"cliptext": "PEFT微调", "privsv": "Prompt微调",
+                                      "zo_dpga": "PEFT微调"}[method_id]
         comparison_labels = {
             # "utility": f"否，运行当前方法 {current_method_title}",
             "utility": f"否，运行当前方法",

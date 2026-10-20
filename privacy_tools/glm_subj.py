@@ -161,15 +161,16 @@ def build_steps(settings, run_dir: Path, method: str, experiment: str):
                                 *_options(config(settings, 'zo', {}))])
         artifacts['training_report'] = str(adapter / 'training_report.json')
         products['adapter'] = str(adapter)
-        utility = model_dir / 'utility.json'
-        args = [*shared, '--data-dir', raw, '--adapter', adapter, '--output', utility,
-                '--max-samples', config(settings, 'utility_samples', 0)]
-        if steering:
-            args += ['--steering', steering]
-        steps.append(Step('统一 Subj holdout 分类效用', [configured_python(settings, 'glm_subj'),
-                          str(PROJECT_ROOT / 'privacy_tools' / 'glm_subj_utility.py'), *map(str, args)],
-                          ROOT, method_env(settings, ROOT, PROJECT_ROOT)))
-        artifacts['utility'] = str(utility)
+        # GLM 微调完成后不再追加统一 Subj holdout 分类效用评估。
+        # utility = model_dir / 'utility.json'
+        # args = [*shared, '--data-dir', raw, '--adapter', adapter, '--output', utility,
+        #         '--max-samples', config(settings, 'utility_samples', 0)]
+        # if steering:
+        #     args += ['--steering', steering]
+        # steps.append(Step('统一 Subj holdout 分类效用', [configured_python(settings, 'glm_subj'),
+        #                   str(PROJECT_ROOT / 'privacy_tools' / 'glm_subj_utility.py'), *map(str, args)],
+        #                   ROOT, method_env(settings, ROOT, PROJECT_ROOT)))
+        # artifacts['utility'] = str(utility)
     return steps, artifacts, products
 
 
@@ -216,8 +217,8 @@ def task_summary(settings, method, experiment, mode, selection=None):
         if selection is not None:
             print(f"微调方式：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
     else:
-        baseline = {'cliptext': 'Raw causal LoRA', 'privsv': 'Raw LoRA + Mean Steering',
-                    'zo_dpga': 'MeZO causal LoRA'}[method]
+        baseline = {'cliptext': 'PEFT微调', 'privsv': 'Prompt微调',
+                    'zo_dpga': 'PEFT微调'}[method]
         comparison = ('是，运行 DP-SGD' if experiment == 'performance_baseline' else
                       f'是，运行 {baseline}' if experiment == 'baseline' else '否')
         print(f'是否运行对比方法：{comparison}')
