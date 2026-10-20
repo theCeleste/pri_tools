@@ -32,3 +32,46 @@ python3 privacy_tool.py
 - indirect_evaluation.py：ChatGLM / FM9G 显式、隐式间接评估的共享执行层。
 - indirect_data_check.py：成员来源、数据划分与后端运行环境检查。
 - [新版间接评估接入说明](INDIRECT_EVALUATION.md)：配置、历史查询、命令预览和离线重算。
+
+### ChatGLM3-6B / Subj（Glm-subj 后端）
+
+ClipText、PrivSV、ZO-DPGA 的微调和评估菜单现可选择 ChatGLM3-6B。
+微调仅新增支持 ChatGLM3-6B + Subj；评估选择该模型后自动使用 Subj。
+该分支提供立即执行、查看历史、命令预览三种模式，使用独立的 `glm_subj`
+配置和 `python.glm_subj` 环境（依赖见 `Glm-subj/requirements.txt`）。
+
+```bash
+# 训练命令预览；baseline 是同一方法的非保护效用对照
+python privacy_tool.py run --backend glm_subj --method cliptext --experiment utility --dry-run
+python privacy_tool.py run --backend glm_subj --method privsv --experiment baseline --dry-run
+# 读取匹配身份的最近成功结果
+python privacy_tool.py run --backend glm_subj --method cliptext --experiment utility --history
+# 已完成对应两侧训练后，预览成对直接攻击
+python privacy_tool.py run --backend glm_subj --method zo_dpga --experiment direct_attack --dry-run
+```
+
+移除 `--dry-run` 会实际执行。运行前配置 `glm_subj.base_model`、`raw_data`、
+`embedding_data` 和 `output_root`；外部已有模型可填写 `glm_subj.artifacts` 中
+各方法的保护/基线 adapter 和 steering 路径。未填写时从同方法的成功训练
+manifest 解析产物。PrivSV 的 `raw_adapter` 优先指定两侧共同使用的 Raw LoRA；
+未指定时复用已有 Raw LoRA，首次运行则先训练 Raw LoRA。Steering 构造沿用
+上游在 base model 上提取向量的实现，推理时将向量注入 Raw LoRA。
+Private Steering 当前没有 epsilon accountant，不能宣称形式化 DP 保证。
+
+三种方法均使用原始 Subj `test` holdout、固定 subjective/objective 提示，
+按两个标签续写的平均 token log likelihood 选择类别，记录 accuracy、正确数、
+分母及 holdout SHA256。`utility_samples=0` 表示全部 holdout；调整该值后应对
+保护和基线两侧重新评估。PrivSV 的 Mean/Private 也使用同一评估器。
+训练报告中的 loss/perplexity 另行保存，不能视作分类准确率。
+
+直接评估只调用 known-prefix causal extraction，两侧使用相同的原始 Subj
+source reference、固定 raw prompt 模式、seed 和攻击参数，并由 `compare.py`
+验证目标和配置匹配。保存 train、holdout、差值、命中数/分母及 comparison。
+本阶段 `performance_baseline`（DP-SGD）和 `indirect_attack` 仅显示“尚未接入”，
+不执行实验或生成成功记录。
+
+实际运行写入 `Glm-subj/outputs/<run_id>/run_manifest.json`、`models/`、
+`attacks/` 和 `run.log`。只有所有步骤成功且报告齐全才标记成功；历史按
+后端、方法、模型、数据集、实验、角色和成功状态过滤，再按 manifest 完成时间
+取最新结果。旧目录没有 manifest 的实验不会自动混入本分支历史。
+预览和历史读取均不执行命令、不创建运行记录。

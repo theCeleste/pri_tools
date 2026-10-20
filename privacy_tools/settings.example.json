@@ -2,7 +2,7 @@
   "results_dir": "privacy_tools/results",
   "historical_results_dir": "privacy_tools/historical_results",
   "common": {
-    "gpu": "3",
+    "gpu": "1",
     "dataset": "sst2",
     "dataset_path": "privacy_tools/datasets/sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
@@ -21,12 +21,12 @@
     "zo_dpga": "/home/zjs/anaconda3/envs/dpzero/bin/python",
     "dadp_icl": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
     "privsv": "/home/zjs/anaconda3/envs/dp-few-shot/bin/python",
-    "glm_subj": "/home/zjs/anaconda3/envs/glm-subj/bin/python",
     "dpsgd": "/home/zjs/anaconda3/envs/dpsgd/bin/python",
     "indirect_lora": "/home/zjs/anaconda3/envs/mia/bin/python",
     "indirect_icl": "/home/zjs/anaconda3/envs/few-shot/bin/python",
     "direct_lora": "/home/zjs/anaconda3/envs/mia/bin/python",
-    "direct_icl": "/home/zjs/anaconda3/envs/few-shot/bin/python"
+    "direct_icl": "/home/zjs/anaconda3/envs/few-shot/bin/python",
+    "glm_subj": "/home/zjs/anaconda3/envs/glm-subj/bin/python"
   },
   "dpsgd": {
     "target_epsilon": 8.0,
@@ -128,57 +128,6 @@
       "native_attack_neighbors": 10
     }
   },
-  "glm_subj": {
-    "base_model": "/home/zjs/llm/chatglm3-6b",
-    "raw_data_dir": "Glm-subj/data/subj_raw_prepared/subj/none_a3c561096c597e10",
-    "embedding_data_dir": "Glm-subj/data/subj_embedding_protected",
-    "output_dir": "Glm-subj/outputs",
-    "prefer_latest_training_runs": true,
-    "lora_rank": 128,
-    "lora_alpha": 256,
-    "lora_epochs": 1,
-    "lora_batch_size": 1,
-    "lora_learning_rate": 0.0001,
-    "max_length": 512,
-    "zo_rank": 1,
-    "zo_lora_alpha": 2,
-    "zo_steps": 9000,
-    "zo_batch_size": 64,
-    "zo_learning_rate": 0.005,
-    "zo_epsilon": 0.05,
-    "zo_eval_steps": 500,
-    "zo_eval_samples": 100,
-    "zo_checkpoint_steps": 500,
-    "zo_max_length": 14,
-    "zo_target_modules": "query_key_value",
-    "zo_layers": 27,
-    "zo_loss_prefix_tokens": 8,
-    "dp_epsilon": 8.0,
-    "dp_delta": 0.00001,
-    "dpzero_clip": 0.1,
-    "steering_samples": 7200,
-    "steering_layers": [11, 12, 13, 14, 15],
-    "steering_clip": 18.0,
-    "steering_noise_multiplier": 0.005,
-    "steering_multiplier": 128.0,
-    "attack_targets": 100,
-    "attack_samples_per_prefix": 1,
-    "attack_prefix_tokens": 2,
-    "attack_min_suffix_tokens": 8,
-    "attack_max_new_tokens": 128,
-    "attack_temperature_start": 1.0,
-    "attack_temperature_end": 1.0,
-    "attack_top_p": 1.0,
-    "attack_top_k": 50,
-    "attack_seed": 42,
-    "cliptext_protected_adapter": "Glm-subj/outputs/embedding_full_parallel/models/embedding",
-    "cliptext_baseline_adapter": "Glm-subj/outputs/embedding_full_parallel/models/raw",
-    "privsv_raw_adapter": "Glm-subj/outputs/embedding_full_parallel/models/raw",
-    "privsv_private_steering": "Glm-subj/outputs/example_reproduce/models/example/private",
-    "privsv_mean_steering": "Glm-subj/outputs/example_reproduce/models/example/mean",
-    "zo_protected_adapter": "Glm-subj/outputs/gradient_natural_100_gpu23/models/gradient/dpzero",
-    "zo_baseline_adapter": "Glm-subj/outputs/gradient_natural_100_gpu23/models/gradient/mezo"
-  },
   "evaluation": {
     "direct": {
       "seed": 0,
@@ -207,8 +156,12 @@
         }
       },
       "datasets": {
-        "sst2": {"path": "privacy_tools/datasets/sst2"},
-        "wikitext2": {"path": "privacy_tools/datasets/WikiText-2-raw-v1"}
+        "sst2": {
+          "path": "privacy_tools/datasets/sst2"
+        },
+        "wikitext2": {
+          "path": "privacy_tools/datasets/WikiText-2-raw-v1"
+        }
       },
       "generation": {
         "candidates": 100,
@@ -266,6 +219,61 @@
           "lora_dir": "evaluate/indirect_LoRA/data/wikitext2",
           "icl_dir": "evaluate/indirect_ICL/data/WikiText-2-raw-v1"
         }
+      }
+    }
+  },
+  "glm_subj": {
+    "base_model": "/home/zjs/llm/chatglm3-6b",
+    "raw_data": "Glm-subj/data/subj_raw_prepared/subj/none_a3c561096c597e10",
+    "embedding_data": "Glm-subj/data/subj_embedding_protected",
+    "output_root": "Glm-subj/outputs",
+    "seed": 42,
+    "dtype": "bfloat16",
+    "utility_samples": 0,
+    "lora": {
+      "epochs": 1,
+      "rank": 128,
+      "lora_alpha": 256,
+      "batch_size": 1,
+      "learning_rate": 0.0001
+    },
+    "zo": {
+      "max_steps": 6750,
+      "rank": 64,
+      "lora_alpha": 128,
+      "batch_size": 16,
+      "learning_rate": 5e-05,
+      "dp_epsilon": 8.0,
+      "dp_delta": 1e-05
+    },
+    "steering": {
+      "construction_samples": 1000,
+      "clip": 18.0,
+      "noise_multiplier": 0.005,
+      "multiplier": 256.0
+    },
+    "attack": {
+      "targets_per_split": 100,
+      "samples_per_prefix": 1,
+      "prefix_tokens": 2,
+      "min_suffix_tokens": 8,
+      "max_new_tokens": 512
+    },
+    "artifacts": {
+      "cliptext": {
+        "protected_adapter": "Glm-subj/outputs/embedding_full_parallel/models/embedding",
+        "baseline_adapter": "Glm-subj/outputs/embedding_full_parallel/models/raw"
+      },
+      "privsv": {
+        "protected_adapter": "",
+        "baseline_adapter": "",
+        "raw_adapter": "Glm-subj/outputs/embedding_full_parallel/models/raw",
+        "protected_steering": "Glm-subj/outputs/example_reproduce/models/example/private",
+        "baseline_steering": "Glm-subj/outputs/example_reproduce/models/example/mean"
+      },
+      "zo_dpga": {
+        "protected_adapter": "Glm-subj/outputs/gradient_natural_100_gpu23/models/gradient/dpzero",
+        "baseline_adapter": "Glm-subj/outputs/gradient_natural_100_gpu23/models/gradient/mezo"
       }
     }
   }

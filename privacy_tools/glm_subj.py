@@ -1,457 +1,343 @@
-"""ChatGLM3-6B/Subj experiment builders and manifest-backed history."""
-
+"""Isolated ChatGLM3/Subj command routing and manifest-backed history."""
 from __future__ import annotations
 
 import json
-from datetime import datetime
+import subprocess
+import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .core import (
-    PROJECT_ROOT,
-    Experiment,
-    Method,
-    Step,
-    get_nested,
-    method_env,
-    project_path,
-    python_step,
-)
+from .core import (PROJECT_ROOT, Step, configured_python, get_nested, method_env,
+                   printable_command, project_path, safe_console_write)
+
+ROOT = PROJECT_ROOT / 'Glm-subj'
+METHODS = {'cliptext', 'privsv', 'zo_dpga'}
+PLACEHOLDERS = {'performance_baseline', 'indirect_attack'}
 
 
-GLM_ROOT = PROJECT_ROOT / "Glm-subj"
-ATTACK_ROOT = GLM_ROOT / "privacy_attack"
-ENTRY = GLM_ROOT / "attack_chatglm.py"
-METHOD_NAMES = {"cliptext": "ClipText", "privsv": "PrivSV", "zo_dpga": "ZO-DPGA"}
+def config(settings, key, default=None):
+    return get_nested(settings, f'glm_subj.{key}', default)
 
 
-def value(settings: dict[str, Any], key: str, default: Any = None) -> Any:
-    return get_nested(settings, f"glm_subj.{key}", default)
+def path(settings, key, default):
+    return project_path(config(settings, key, default)).resolve()
 
 
-def path(settings: dict[str, Any], key: str, default: str) -> Path:
-    return project_path(str(value(settings, key, default))).resolve()
+def identity(method, experiment):
+    if method not in METHODS:
+        raise ValueError('Glm-subj 仅支持 ClipText、PrivSV、ZO-DPGA')
+    return dict(backend='glm_subj', method=method, model='chatglm3-6b', dataset='subj',
+                experiment=experiment, role='paired' if experiment == 'direct_attack' else
+                'baseline' if experiment == 'baseline' else 'protected')
 
 
-def _gpu_id(settings: dict[str, Any]) -> str:
-    # method_env exposes configured physical GPU ids through CUDA_VISIBLE_DEVICES;
-    # each Glm-subj process therefore addresses the first selected GPU as cuda:0.
-    return "0"
+def output_root(settings):
+    return path(settings, 'output_root', 'Glm-subj/outputs')
 
 
-def _step(settings: dict[str, Any], name: str, command: str, args: list[Any], run_dir: Path) -> Step:
-    return python_step(
-        settings, "glm_subj", name, ENTRY, [command, *args], run_dir,
-        env=method_env(settings, GLM_ROOT),
-    )
-
-
-def finetune_steps(method_id: str, role: str, settings: dict[str, Any], run_dir: Path) -> list[Step]:
-    """Create protected or matched non-protected Subj training/build commands."""
-    base_model = str(value(settings, "base_model", get_nested(settings, "common.chatglm3_6b", "")))
-    raw_data = path(settings, "raw_data_dir", "Glm-subj/data/subj_raw_prepared/subj/none_a3c561096c597e10")
-    embedding_data = path(settings, "embedding_data_dir", "Glm-subj/data/subj_embedding_protected")
-    models = run_dir / "models"
-    gpu = _gpu_id(settings)
-
-    if method_id == "cliptext":
-        protected = role == "protected"
-        return [_step(settings, "训练 ClipText+ Subj LoRA" if protected else "训练 Raw Subj LoRA 对照", "train-lora", [
-            "--base-model", base_model,
-            "--data-dir", embedding_data if protected else raw_data,
-            "--output-dir", models / ("cliptext" if protected else "raw"),
-            "--rank", value(settings, "lora_rank", 128),
-            "--lora-alpha", value(settings, "lora_alpha", 256),
-            "--epochs", value(settings, "lora_epochs", 15),
-            "--batch-size", value(settings, "lora_batch_size", 1),
-            "--learning-rate", value(settings, "lora_learning_rate", 1e-4),
-            "--max-length", value(settings, "max_length", 512),
-            "--gpu-id", gpu,
-        ], run_dir)]
-
-    if method_id == "zo_dpga":
-        method = "dpzero" if role == "protected" else "mezo"
-        return [_step(settings, f"训练 {method.upper()} causal LoRA", "train-zero-order", [
-            "--method", method,
-            "--base-model", base_model,
-            "--data-dir", raw_data,
-            "--output-dir", models / "gradient" / method,
-            "--rank", value(settings, "zo_rank", 1),
-            "--lora-alpha", value(settings, "zo_lora_alpha", 2),
-            "--max-steps", value(settings, "zo_steps", 9000),
-            "--batch-size", value(settings, "zo_batch_size", 64),
-            "--learning-rate", value(settings, "zo_learning_rate", 0.005),
-            "--zo-epsilon", value(settings, "zo_epsilon", 0.05),
-            "--eval-steps", value(settings, "zo_eval_steps", 500),
-            "--eval-samples", value(settings, "zo_eval_samples", 100),
-            "--checkpoint-steps", value(settings, "zo_checkpoint_steps", 500),
-            "--max-length", value(settings, "zo_max_length", 14),
-            "--target-modules", value(settings, "zo_target_modules", "query_key_value"),
-            "--layers-to-transform", value(settings, "zo_layers", 27),
-            "--loss-prefix-tokens", value(settings, "zo_loss_prefix_tokens", 8),
-            "--dp-epsilon", value(settings, "dp_epsilon", 8.0),
-            "--dp-delta", value(settings, "dp_delta", 1e-5),
-            "--clip-threshold", value(settings, "dpzero_clip", 0.1),
-            "--gpu-id", gpu,
-        ], run_dir)]
-
-    # Example Steering consists of a raw causal LoRA plus a selected steering vector.
-    variant = "private" if role == "protected" else "mean"
-    raw_adapter = _latest_privsv_raw_adapter(settings)
-    if raw_adapter is None:
-        configured_raw = path(settings, "privsv_raw_adapter", "Glm-subj/outputs/embedding_full_parallel/models/raw")
-        if (configured_raw / "adapter_config.json").is_file():
-            raw_adapter = configured_raw
-    train_raw = raw_adapter is None
-    if train_raw:
-        raw_adapter = models / "raw"
-    steering_root = models / "example"
-    steps: list[Step] = []
-    if train_raw:
-        steps.append(_step(settings, "训练 Raw Subj causal LoRA（PrivSV 共享底座）", "train-lora", [
-            "--base-model", base_model,
-            "--data-dir", raw_data,
-            "--output-dir", raw_adapter,
-            "--rank", value(settings, "lora_rank", 128),
-            "--lora-alpha", value(settings, "lora_alpha", 256),
-            "--epochs", value(settings, "lora_epochs", 15),
-            "--batch-size", value(settings, "lora_batch_size", 1),
-            "--learning-rate", value(settings, "lora_learning_rate", 1e-4),
-            "--max-length", value(settings, "max_length", 512),
-            "--gpu-id", gpu,
-        ], run_dir))
-    steps.append(_step(settings, f"构建 {'Private' if variant == 'private' else 'Mean'} Steering", "build-steering", [
-            "--base-model", base_model,
-            "--data-dir", raw_data,
-            "--output-dir", steering_root,
-            "--variants", variant,
-            "--construction-samples", value(settings, "steering_samples", 7200),
-            "--layers", *value(settings, "steering_layers", [11, 12, 13, 14, 15]),
-            "--clip", value(settings, "steering_clip", 18.0),
-            "--noise-multiplier", value(settings, "steering_noise_multiplier", 0.005),
-            "--multiplier", value(settings, "steering_multiplier", 128.0),
-            "--gpu-id", gpu,
-        ], run_dir))
-    return steps
-
-
-def _attack_step(
-    settings: dict[str, Any], run_dir: Path, role: str, *,
-    adapter: Path, data_dir: Path, steering: Path | None = None,
-) -> Step:
-    base_model = str(value(settings, "base_model", get_nested(settings, "common.chatglm3_6b", "")))
-    output = run_dir / "attacks" / role / "prefix"
-    args: list[Any] = ["--base-model", base_model, "--adapter", adapter]
-    if steering is not None:
-        args += ["--steering", steering, "--steering-multiplier", value(settings, "steering_multiplier", 128.0)]
-    args += [
-        "--data-dir", data_dir,
-        "--output-dir", output,
-        "--targets-per-split", value(settings, "attack_targets", 100),
-        "--samples-per-prefix", value(settings, "attack_samples_per_prefix", 1),
-        "--prefix-tokens", value(settings, "attack_prefix_tokens", 2),
-        "--min-suffix-tokens", value(settings, "attack_min_suffix_tokens", 8),
-        "--max-new-tokens", value(settings, "attack_max_new_tokens", 128),
-        "--temperature-start", value(settings, "attack_temperature_start", 1.0),
-        "--temperature-end", value(settings, "attack_temperature_end", 1.0),
-        "--top-p", value(settings, "attack_top_p", 1.0),
-        "--top-k", value(settings, "attack_top_k", 50),
-        "--seed", value(settings, "attack_seed", 42),
-        "--gpu-id", _gpu_id(settings),
-    ]
-    return _step(settings, f"直接前缀攻击：{role}", "prefix-attack", args, run_dir)
-
-
-def _latest_training_outputs(settings: dict[str, Any], method_id: str, experiment_id: str) -> list[Path]:
-    for manifest, _run_dir in history_records(settings):
-        if (manifest.get("method") == method_id and manifest.get("experiment") == experiment_id
-                and manifest.get("model") == "chatglm3-6b" and manifest.get("dataset") == "subj"
-                and manifest.get("status") == "completed" and _matches_current_training_context(manifest, settings)):
-            outputs = manifest.get("artifacts", {}).get("model_outputs", [])
-            existing = [Path(item) for item in outputs if Path(item).exists()]
-            if existing:
-                return existing
-    return []
-
-
-def _matches_current_training_context(manifest: dict[str, Any], settings: dict[str, Any]) -> bool:
-    current_base = str(value(settings, "base_model", get_nested(settings, "common.chatglm3_6b", "")))
-    current_raw = str(path(settings, "raw_data_dir", "Glm-subj/data/subj_raw_prepared/subj/none_a3c561096c597e10"))
-    if manifest.get("base_model", current_base) != current_base or manifest.get("raw_data_dir", current_raw) != current_raw:
-        return False
-    training = manifest.get("training_config")
-    if isinstance(training, dict):
-        defaults = {
-            "lora_rank": 128,
-            "lora_alpha": 256,
-            "lora_epochs": 15,
-            "lora_batch_size": 1,
-            "lora_learning_rate": 1e-4,
-        }
-        return all(training.get(key) == value(settings, key, default)
-                   for key, default in defaults.items())
-    return True
-
-
-def _latest_privsv_raw_adapter(settings: dict[str, Any]) -> Path | None:
-    for manifest, _run_dir in history_records(settings):
-        if (manifest.get("method") == "privsv" and manifest.get("experiment") in {"utility", "baseline"}
-                and manifest.get("model") == "chatglm3-6b" and manifest.get("dataset") == "subj"
-                and manifest.get("status") == "completed" and _matches_current_training_context(manifest, settings)):
-            candidates = [Path(item) for item in manifest.get("artifacts", {}).get("model_outputs", [])
-                          if Path(item).name == "raw" and (Path(item) / "adapter_config.json").is_file()]
-            if candidates:
-                return candidates[0]
-    return None
-
-
-def direct_model_paths(settings: dict[str, Any], method_id: str) -> tuple[Path, Path, Path | None, Path | None]:
-    """Return protected/baseline adapters and optional steering from latest runs or config."""
-    if method_id == "cliptext":
-        protected = path(settings, "cliptext_protected_adapter", "Glm-subj/outputs/embedding_full_parallel/models/embedding")
-        baseline = path(settings, "cliptext_baseline_adapter", "Glm-subj/outputs/embedding_full_parallel/models/raw")
-        if value(settings, "prefer_latest_training_runs", True):
-            protected_runs = _latest_training_outputs(settings, method_id, "utility")
-            baseline_runs = _latest_training_outputs(settings, method_id, "baseline")
-            if protected_runs:
-                protected = next((item for item in protected_runs if (item / "adapter_config.json").is_file()), protected)
-            if baseline_runs:
-                baseline = next((item for item in baseline_runs if (item / "adapter_config.json").is_file()), baseline)
-        return protected, baseline, None, None
-    if method_id == "zo_dpga":
-        protected = path(settings, "zo_protected_adapter", "Glm-subj/outputs/gradient_natural_100_gpu23/models/gradient/dpzero")
-        baseline = path(settings, "zo_baseline_adapter", "Glm-subj/outputs/gradient_natural_100_gpu23/models/gradient/mezo")
-        if value(settings, "prefer_latest_training_runs", True):
-            protected_runs = _latest_training_outputs(settings, method_id, "utility")
-            baseline_runs = _latest_training_outputs(settings, method_id, "baseline")
-            if protected_runs:
-                protected = next((item for item in protected_runs if (item / "adapter_config.json").is_file()), protected)
-            if baseline_runs:
-                baseline = next((item for item in baseline_runs if (item / "adapter_config.json").is_file()), baseline)
-        return protected, baseline, None, None
-
-    raw_adapter = path(settings, "privsv_raw_adapter", "Glm-subj/outputs/embedding_full_parallel/models/raw")
-    private = path(settings, "privsv_private_steering", "Glm-subj/outputs/example_reproduce/models/example/private")
-    mean = path(settings, "privsv_mean_steering", "Glm-subj/outputs/example_reproduce/models/example/mean")
-    if value(settings, "prefer_latest_training_runs", True):
-        protected_runs = _latest_training_outputs(settings, method_id, "utility")
-        baseline_runs = _latest_training_outputs(settings, method_id, "baseline")
-        if protected_runs:
-            raw_candidates = [item for item in protected_runs if item.name == "raw"]
-            steering_candidates = [item for item in protected_runs if item.name == "example"]
-            if steering_candidates:
-                private = steering_candidates[0] / "private"
-        if baseline_runs:
-            steering_candidates = [item for item in baseline_runs if item.name == "example"]
-            if steering_candidates:
-                mean = steering_candidates[0] / "mean"
-        raw_adapter = _latest_privsv_raw_adapter(settings) or raw_adapter
-    return raw_adapter, raw_adapter, private, mean
-
-
-def direct_attack_steps(method_id: str, settings: dict[str, Any], run_dir: Path) -> list[Step]:
-    raw_data = path(settings, "raw_data_dir", "Glm-subj/data/subj_raw_prepared/subj/none_a3c561096c597e10")
-    protected, baseline, protected_steering, baseline_steering = direct_model_paths(settings, method_id)
-    labels = {"cliptext": ("ClipTextPlus", "RawLoRA"), "privsv": ("PrivateSteering", "MeanSteering"),
-              "zo_dpga": ("DPZero", "MeZO")}[method_id]
-
-    steps = [
-        _attack_step(settings, run_dir, "protected", adapter=protected, data_dir=raw_data, steering=protected_steering),
-        _attack_step(settings, run_dir, "baseline", adapter=baseline, data_dir=raw_data, steering=baseline_steering),
-    ]
-    compare = [
-        "--require-matched-targets",
-        "--result", METHOD_NAMES[method_id], "protected", run_dir / "attacks/protected/prefix/summary.json",
-        "--result", labels[1], "baseline", run_dir / "attacks/baseline/prefix/summary.json",
-        "--output-json", run_dir / "attacks/comparison.json",
-        "--output-csv", run_dir / "attacks/comparison.csv",
-    ]
-    steps.append(_step(settings, "汇总保护方法与非保护对照攻击结果", "compare", compare, run_dir))
-    return steps
-
-
-def make_method(method_id: str, experiment_id: str, settings: dict[str, Any]) -> Method:
-    name = METHOD_NAMES[method_id]
-    if experiment_id in {"utility", "baseline"}:
-        role = "protected" if experiment_id == "utility" else "baseline"
-        builder = lambda current, run_dir: finetune_steps(method_id, role, current, run_dir)
-        exp = Experiment(experiment_id, "保护方法" if role == "protected" else "效用对比方法",
-                         "ChatGLM3-6B / Subj causal-LM 微调或配套非保护对照。", builder)
-    elif experiment_id == "direct_attack":
-        exp = Experiment(experiment_id, "直接评估", "Glm-subj known-prefix causal extraction 与配对比较。",
-                         lambda current, run_dir: direct_attack_steps(method_id, current, run_dir))
-    elif experiment_id == "indirect_attack":
-        exp = Experiment(experiment_id, "间接评估占位", "ChatGLM3-6B / Subj 间接评估尚未接入。", lambda *_: [])
-    else:
-        raise ValueError(f"Unsupported Glm-subj experiment: {experiment_id}")
-    return Method(method_id, name, f"{name} ChatGLM3-6B / Subj 后端", GLM_ROOT,
-                  [ENTRY, ATTACK_ROOT / "train_lora.py", ATTACK_ROOT / "train_zo.py",
-                   ATTACK_ROOT / "build_steering.py", ATTACK_ROOT / "prefix_attack.py",
-                   ATTACK_ROOT / "compare.py"], [exp], path_name=f"glm-subj-{method_id}")
-
-
-def output_root(settings: dict[str, Any]) -> Path:
-    return path(settings, "output_dir", "Glm-subj/outputs")
-
-
-def history_records(settings: dict[str, Any]) -> list[tuple[dict[str, Any], Path]]:
-    root = output_root(settings)
-    records: list[tuple[dict[str, Any], Path]] = []
-    if not root.exists():
-        return records
-    for manifest_path in root.rglob("run_manifest.json"):
-        try:
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            continue
-        if manifest.get("backend") != "glm_subj":
-            continue
-        records.append((manifest, manifest_path.parent))
-    return sorted(records, key=lambda item: str(item[0].get("created_at", "")), reverse=True)
-
-
-def _legacy_history_files(settings: dict[str, Any], method_id: str, experiment_id: str) -> list[Path]:
-    """Read the repository's pre-manifest Glm-subj outputs without mixing other backends."""
-    root = output_root(settings)
-    if experiment_id in {"utility", "baseline"}:
-        if method_id == "cliptext":
-            folder = "embedding" if experiment_id == "utility" else "raw"
-            return [root / "embedding_full_parallel" / "models" / folder / "training_report.json"]
-        if method_id == "zo_dpga":
-            method = "dpzero" if experiment_id == "utility" else "mezo"
-            return [root / "gradient_natural_100_gpu23" / "models" / "gradient" / method / "training_report.json"]
-        return [root / "example_reproduce" / "models" / "example" / "build_report.json"]
-    if experiment_id == "direct_attack":
-        if method_id == "cliptext":
-            base = root / "embedding_full_parallel" / "attacks_prefix2_random"
-            return [base / "embedding" / "original" / "prefix" / "summary.json",
-                    base / "raw" / "prefix" / "summary.json",
-                    base / "embedding_original_comparison.json"]
-        if method_id == "privsv":
-            base = root / "example_reproduce" / "attacks" / "example"
-            return [base / "private" / "prefix" / "summary.json",
-                    base / "mean" / "prefix" / "summary.json",
-                    base.parent / "example_direct_comparison.json"]
-        base = root / "gradient_natural_100_gpu23"
-        return [base / "attacks" / "gradient" / "dpzero" / "prefix" / "summary.json",
-                base / "attacks" / "gradient" / "mezo" / "prefix" / "summary.json",
-                base / "attacks" / "gradient_direct_comparison.json"]
-    return []
-
-
-def _display_history_file(resolved: Path, root: Path) -> None:
-    try:
-        data = json.loads(resolved.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return
-    try:
-        shown = resolved.relative_to(root)
-    except ValueError:
-        shown = resolved
-    print(f"\n{shown}:")
-    if resolved.name == "summary.json":
-        for split in ("train", "holdout"):
-            stats = data.get(split, {})
-            print(f"  {split}: targets={stats.get('targets')} fuzzy={stats.get('fuzzy_success_rate')} exact={stats.get('exact_success_rate')}")
-        print(f"  train_minus_holdout={data.get('train_minus_holdout')}")
-    elif resolved.name == "comparison.json" or resolved.name.endswith("comparison.json"):
-        for row in data.get("rows", []):
-            print(f"  {row}")
-        if data.get("pairwise_comparison"):
-            print(f"  pairwise_comparison={data['pairwise_comparison']}")
-    else:
-        for key in ("method", "base_model", "data_dir", "elapsed_seconds", "privacy", "evaluation", "final_metrics"):
-            if key in data:
-                print(f"  {key}: {data[key]}")
-        history = data.get("history")
-        if isinstance(history, list) and history:
-            latest = history[-1]
-            print(f"  latest_epoch: {latest.get('epoch')}")
-            print(f"  train: {latest.get('train', latest.get('online_train_loss'))}")
-            print(f"  validation: {latest.get('validation')}")
-
-
-def print_history(settings: dict[str, Any], method_id: str, experiment_id: str, *, role: str | None = None) -> None:
-    expected_role = role or ("protected" if experiment_id == "utility" else "baseline" if experiment_id == "baseline" else None)
-    matches = []
-    for manifest, run_dir in history_records(settings):
-        if (manifest.get("method") == method_id and manifest.get("experiment") == experiment_id
-                and manifest.get("model") == "chatglm3-6b" and manifest.get("dataset") == "subj"
-                and manifest.get("status") == "completed"
-                and (expected_role is None or manifest.get("role") == expected_role)):
-            matches.append((manifest, run_dir))
-    title = METHOD_NAMES[method_id]
-    print(f"\n===== Glm-subj {title} {experiment_id} 历史结果 =====")
-    if not matches:
-        legacy = [item for item in _legacy_history_files(settings, method_id, experiment_id) if item.is_file()]
-        if not legacy:
-            print("未找到匹配的已成功运行结果。")
-            return
-        print("读取 Glm-subj 中已有的历史产物（旧结果无统一 run manifest）：")
-        for item in legacy:
-            _display_history_file(item, output_root(settings))
-        return
-    manifest, run_dir = matches[0]
-    artifacts = manifest.get("artifacts", {})
+def history(settings, method, experiment):
+    """Select by manifest identity and recorded completion time, never directory mtime."""
+    if experiment in PLACEHOLDERS:
+        return None
+    expected = identity(method, experiment)
     candidates = []
-    if experiment_id in {"utility", "baseline"}:
-        candidates = [Path(item) for item in artifacts.get("reports", [])]
-        if not candidates:
-            candidates = list(run_dir.rglob("training_report.json")) + list(run_dir.rglob("build_report.json"))
-    elif experiment_id == "direct_attack":
-        candidates = [Path(item) for item in artifacts.get("summaries", [])]
-        if not candidates:
-            candidates = list((run_dir / "attacks").rglob("summary.json"))
-        comparison = artifacts.get("comparison") or str(run_dir / "attacks/comparison.json")
-        candidates.append(Path(comparison))
-    printed = set()
-    for report_path in candidates:
-        resolved = report_path if report_path.is_absolute() else run_dir / report_path
-        if resolved in printed or not resolved.is_file():
+    for manifest in output_root(settings).glob('*/run_manifest.json'):
+        try:
+            data = json.loads(manifest.read_text(encoding='utf-8'))
+            if not isinstance(data, dict):
+                continue
+            if data.get('status') != 'success' or any(data.get(k) != v for k, v in expected.items()):
+                continue
+            artifacts = data.get('artifacts', {})
+            if not isinstance(artifacts, dict) or not artifacts or not all(Path(p).is_file() for p in artifacts.values()):
+                continue
+            completed = datetime.fromisoformat(data['completed_at'])
+            if completed.tzinfo is None:
+                continue
+            candidates.append((completed, str(manifest), data))
+        except (OSError, ValueError, TypeError, KeyError):
             continue
-        printed.add(resolved)
-        _display_history_file(resolved, output_root(settings))
+    return max(candidates, key=lambda item: (item[0], item[1]))[2] if candidates else None
 
 
-def preflight(method_id: str, experiment_id: str, settings: dict[str, Any]) -> tuple[bool, str]:
-    base_model = str(value(settings, "base_model", get_nested(settings, "common.chatglm3_6b", "")))
-    if not base_model:
-        return False, "未配置 ChatGLM3-6B 基座模型。"
-    if Path(base_model).is_absolute() or base_model.startswith((".", "~")):
-        if not project_path(base_model).exists():
-            return False, f"ChatGLM3-6B 模型路径不存在：{project_path(base_model)}"
-    if experiment_id in {"utility", "baseline", "direct_attack"}:
-        raw = path(settings, "raw_data_dir", "Glm-subj/data/subj_raw_prepared/subj/none_a3c561096c597e10")
-        if not raw.is_dir():
-            return False, f"Subj 原始数据目录不存在：{raw}"
-        if experiment_id == "utility" and method_id == "cliptext":
-            embedding = path(settings, "embedding_data_dir", "Glm-subj/data/subj_embedding_protected")
-            if not embedding.is_dir():
-                return False, f"ClipText+ Subj 数据目录不存在：{embedding}"
-    if experiment_id == "direct_attack":
-        protected, baseline, private_steering, mean_steering = direct_model_paths(settings, method_id)
-        needed = [protected, baseline]
-        if private_steering is not None:
-            needed += [private_steering, mean_steering]
-        missing = [item for item in needed if not item.exists()]
-        if missing:
-            return False, "直接评估缺少已完成的模型/steering 产物：" + ", ".join(map(str, missing))
-    return True, ""
+def artifact_pair(settings, method):
+    """Explicit artifacts win; otherwise resolve successful training manifests."""
+    result = {}
+    for role, experiment in [('protected', 'utility'), ('baseline', 'baseline')]:
+        previous = history(settings, method, experiment)
+        produced = previous.get('products', {}) if previous else {}
+        for kind in ('adapter', 'steering'):
+            configured = config(settings, f'artifacts.{method}.{role}_{kind}')
+            value = str(project_path(configured).resolve()) if configured else produced.get(kind)
+            if value:
+                result[f'{role}_{kind}'] = Path(value)
+    if method == 'privsv':
+        raw = config(settings, 'artifacts.privsv.raw_adapter')
+        if raw:
+            adapter = project_path(raw).resolve()
+        else:
+            adapter = result.get('protected_adapter') or result.get('baseline_adapter')
+        if adapter:
+            result.update(protected_adapter=adapter, baseline_adapter=adapter)
+    return result
 
 
-def manifest_metadata(method_id: str, experiment_id: str, settings: dict[str, Any] | None = None) -> dict[str, Any]:
-    settings = settings or {}
-    return {
-        "backend": "glm_subj", "model": "chatglm3-6b", "dataset": "subj",
-        "method": method_id, "experiment": experiment_id,
-        "role": "protected" if experiment_id in {"utility", "direct_attack"} else "baseline" if experiment_id == "baseline" else "placeholder",
-        "base_model": str(value(settings, "base_model", get_nested(settings, "common.chatglm3_6b", ""))),
-        "raw_data_dir": str(path(settings, "raw_data_dir", "Glm-subj/data/subj_raw_prepared/subj/none_a3c561096c597e10")),
-        "training_config": {
-            key: value(settings, key, default) for key, default in (
-                ("lora_rank", 128), ("lora_alpha", 256), ("lora_epochs", 15),
-                ("lora_batch_size", 1), ("lora_learning_rate", 1e-4),
-            )
-        },
-        "created_at": datetime.now().isoformat(timespec="seconds"),
-    }
+def build_steps(settings, run_dir: Path, method: str, experiment: str):
+    identity(method, experiment)
+    if experiment in PLACEHOLDERS:
+        raise NotImplementedError('ChatGLM3-6B + Subj：DP-SGD / 间接评估尚未接入')
+    if experiment not in {'utility', 'baseline', 'direct_attack'}:
+        raise ValueError(f'Glm-subj 不支持实验 {experiment}')
+    run_dir = run_dir.resolve()
+    base = path(settings, 'base_model', get_nested(settings, 'common.chatglm3_6b', 'models/chatglm3-6b'))
+    raw = path(settings, 'raw_data', 'Glm-subj/data/subj_raw_prepared/subj/none_a3c561096c597e10')
+    embedding = path(settings, 'embedding_data', 'Glm-subj/data/subj_embedding_protected')
+    seed = config(settings, 'seed', 42)
+    shared = ['--base-model', base, '--seed', seed, '--dtype', config(settings, 'dtype', 'bfloat16')]
+    steps = []
+    artifacts, products = {}, {}
+
+    def module(name, args):
+        steps.append(Step(name, [configured_python(settings, 'glm_subj'), '-m',
+                               f'privacy_attack.{name}', *map(str, args)], ROOT,
+                          method_env(settings, ROOT, PROJECT_ROOT)))
+
+    if experiment == 'direct_attack':
+        pair = artifact_pair(settings, method)
+        for role in ('protected', 'baseline'):
+            adapter = pair.get(f'{role}_adapter')
+            if adapter is None:
+                raise ValueError(f'缺少 {method} {role} adapter；请先完成对应训练或配置 glm_subj.artifacts')
+            args = [*shared, '--data-dir', raw, '--adapter', adapter,
+                    '--prompt-mode', 'raw', '--output-dir', run_dir / 'attacks' / role / 'prefix']
+            if method == 'privsv':
+                steering = pair.get(f'{role}_steering')
+                if steering is None:
+                    raise ValueError(f'缺少 {role} steering；请先完成对应构建')
+                args += ['--steering', steering]
+            attack = config(settings, 'attack', {})
+            allowed_attack = {'targets_per_split', 'samples_per_prefix', 'prefix_tokens',
+                              'min_suffix_tokens', 'max_new_tokens', 'temperature_start',
+                              'temperature_end', 'top_p', 'top_k', 'fuzzy_threshold', 'minimum_fuzzy_tokens'}
+            if set(attack) - allowed_attack:
+                raise ValueError('攻击配置不能覆盖模型、reference、seed 或输出路径')
+            for key, value in attack.items():
+                args += ['--' + key.replace('_', '-'), value]
+            module('prefix_attack', args)
+            artifacts[role + '_summary'] = str(run_dir / 'attacks' / role / 'prefix' / 'summary.json')
+        comparison = run_dir / 'attacks' / 'comparison.json'
+        module('compare', ['--result', 'baseline', 'source-original', artifacts['baseline_summary'],
+                           '--result', 'protected', 'source-original', artifacts['protected_summary'],
+                           '--require-matched-targets', '--output-json', comparison,
+                           '--output-csv', comparison.with_suffix('.csv')])
+        artifacts['comparison'] = str(comparison)
+    else:
+        protected = experiment == 'utility'
+        model_dir = run_dir / 'models' / ('protected' if protected else 'baseline')
+        adapter = model_dir / 'adapter'
+        data = embedding if method == 'cliptext' and protected else raw
+        steering = None
+        if method == 'privsv':
+            pair = artifact_pair(settings, method)
+            adapter = pair.get('protected_adapter') or pair.get('baseline_adapter') or run_dir / 'models' / 'raw'
+            # A configured or previously trained raw adapter is shared by both variants.
+            if adapter == run_dir / 'models' / 'raw':
+                module('train_lora', [*shared, '--data-dir', raw, '--output-dir', adapter,
+                                      *_options(config(settings, 'lora', {}))])
+            variant = 'private' if protected else 'mean'
+            module('build_steering', [*shared, '--data-dir', raw, '--output-dir', model_dir / 'steering',
+                                      '--variants', variant, *_options(config(settings, 'steering', {}))])
+            steering = model_dir / 'steering' / variant
+            artifacts['build_report'] = str(model_dir / 'steering' / 'build_report.json')
+            products['steering'] = str(steering)
+        elif method == 'cliptext':
+            module('train_lora', [*shared, '--data-dir', data, '--output-dir', adapter,
+                                  *(['--original-data-dir', raw] if protected else []),
+                                  *_options(config(settings, 'lora', {}))])
+        else:
+            module('train_zo', [*shared, '--method', 'dpzero' if protected else 'mezo',
+                                '--data-dir', raw, '--output-dir', adapter,
+                                *_options(config(settings, 'zo', {}))])
+        artifacts['training_report'] = str(adapter / 'training_report.json')
+        products['adapter'] = str(adapter)
+        utility = model_dir / 'utility.json'
+        args = [*shared, '--data-dir', raw, '--adapter', adapter, '--output', utility,
+                '--max-samples', config(settings, 'utility_samples', 0)]
+        if steering:
+            args += ['--steering', steering]
+        steps.append(Step('统一 Subj holdout 分类效用', [configured_python(settings, 'glm_subj'),
+                          str(PROJECT_ROOT / 'privacy_tools' / 'glm_subj_utility.py'), *map(str, args)],
+                          ROOT, method_env(settings, ROOT, PROJECT_ROOT)))
+        artifacts['utility'] = str(utility)
+    return steps, artifacts, products
+
+
+def _options(values):
+    # Reserved paths/identity cannot be overridden through arbitrary command flags.
+    allowed = {'rank', 'lora_alpha', 'lora_dropout', 'epochs', 'batch_size', 'gradient_accumulation',
+               'learning_rate', 'max_length', 'max_train_samples', 'eval_samples', 'max_steps',
+               'zo_epsilon', 'clip_threshold', 'dp_epsilon', 'dp_delta', 'eval_steps',
+               'construction_samples', 'clip', 'noise_multiplier', 'multiplier'}
+    if set(values) - allowed:
+        raise ValueError(f'不支持的 Glm-subj 参数: {sorted(set(values) - allowed)}')
+    return [item for key, value in values.items() for item in ('--' + key.replace('_', '-'), value)]
+
+
+def doctor(settings, steps):
+    """Check the selected backend's actual model, data and external products."""
+    import sys
+    sys.path.insert(0, str(ROOT))
+    from privacy_attack.common import load_split, validate_adapter, validate_chatglm_base
+    from privacy_attack.steering import validate_steering
+    generated = {Path(s.command[s.command.index('--output-dir') + 1]) for s in steps
+                 if '--output-dir' in s.command and s.command[3] != 'privacy_attack.prefix_attack'}
+    for step in steps:
+        args = step.command
+        for flag, validator in [('--base-model', validate_chatglm_base), ('--adapter', validate_adapter),
+                                 ('--steering', validate_steering)]:
+            if flag in args:
+                target = Path(args[args.index(flag) + 1])
+                if not any(target == p or p in target.parents for p in generated):
+                    validator(target)
+        if '--data-dir' in args:
+            for split in ('train', 'validation', 'test'):
+                load_split(args[args.index('--data-dir') + 1], split)
+
+
+def task_summary(settings, method, experiment, mode, selection=None):
+    titles = {'cliptext': 'ClipText', 'privsv': 'PrivSV', 'zo_dpga': 'ZO-DPGA'}
+    evaluation = experiment in {'direct_attack', 'indirect_attack'}
+    print('\n---------------- 任务确认 ----------------')
+    print(f"任务：{'评估' if evaluation else '微调'}")
+    print(f'方法：{titles[method]}（{method}）')
+    if evaluation:
+        print(f"评估类型：{'直接评估' if experiment == 'direct_attack' else '间接评估'}")
+        if selection is not None:
+            print(f"微调方式：{'显式微调' if selection.finetune_type == 'explicit' else '隐式微调'}")
+    else:
+        baseline = {'cliptext': 'Raw causal LoRA', 'privsv': 'Raw LoRA + Mean Steering',
+                    'zo_dpga': 'MeZO causal LoRA'}[method]
+        comparison = ('是，运行 DP-SGD' if experiment == 'performance_baseline' else
+                      f'是，运行 {baseline}' if experiment == 'baseline' else '否')
+        print(f'是否运行对比方法：{comparison}')
+    print('模型：ChatGLM3-6B')
+    print('数据集：Subj')
+    mode_title = {'run': '立即执行', 'history': '查看最近历史结果', 'dry': '预览命令（不执行）'}[mode]
+    print(f'模式：{mode_title}')
+
+
+def run(settings, method, experiment, mode='run', *, confirm=None, selection=None):
+    identity(method, experiment)
+    if experiment in PLACEHOLDERS:
+        task_summary(settings, method, experiment, mode, selection)
+        print('ChatGLM3-6B + Subj：尚未接入，无可用结果。')
+        return 0
+    if mode == 'history':
+        print(f"  查看最近历史结果使用默认配置的 Python环境：{configured_python(settings, 'glm_subj')}")
+        print('  查看最近历史结果不会安装依赖或检查 GPU。')
+        task_summary(settings, method, experiment, mode, selection)
+        previous = history(settings, method, experiment)
+        if not previous:
+            print('Glm-subj 无匹配的成功历史结果；请先完成对应训练/评估。')
+            return 0
+        if previous.get('run_directory'):
+            print(f"\n运行目录：{previous['run_directory']}")
+        print(json.dumps(previous, ensure_ascii=False, indent=2))
+        for name, file in previous['artifacts'].items():
+            print(f'\n{name}: {file}')
+            print(Path(file).read_text(encoding='utf-8'))
+        return 0
+    run_dir = output_root(settings) / (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S') + '_' + uuid.uuid4().hex[:8])
+    try:
+        steps, artifacts, products = build_steps(settings, run_dir, method, experiment)
+        if mode == 'dry':
+            print(f"  命令预览使用默认配置的 Python环境：{configured_python(settings, 'glm_subj')}")
+            print('  命令预览不会检查 GPU 或执行实验。')
+            task_summary(settings, method, experiment, mode, selection)
+            print(f'\n运行目录（预览，不创建）：{run_dir}')
+            for step in steps:
+                print(printable_command(step))
+            return 0
+        from .bootstrap import check_cuda, check_imports, environment_plan
+        plan = environment_plan('glm_subj', experiment)
+        python = configured_python(settings, 'glm_subj')
+        print(f'  {plan.explanation}')
+        ready, missing = check_imports(python, plan.imports)
+        if not ready:
+            raise ValueError('Glm-subj Python 环境缺少依赖: ' + ', '.join(missing))
+        print(f'  [OK] 所需依赖已就绪：{python}')
+        ready, detail = check_cuda(python, str(get_nested(settings, 'common.gpu', '0')))
+        print(f"  [{'OK' if ready else 'FAIL'}] GPU：{detail}")
+        if not ready:
+            return 1
+        doctor(settings, steps)
+        task_summary(settings, method, experiment, mode, selection)
+        if confirm is not None and not confirm():
+            return 0
+    except (OSError, ValueError, NotImplementedError) as exc:
+        print(f'Glm-subj：{exc}')
+        return 1
+    print(f'\n运行目录：{run_dir}')
+    print(f'日志文件：{run_dir / "run.log"}')
+    try:
+        run_dir.mkdir(parents=True)
+    except OSError as exc:
+        print(f'Glm-subj 输出目录不可写：{exc}')
+        return 1
+    manifest = {**identity(method, experiment), 'status': 'running',
+                'run_directory': str(run_dir),
+                'started_at': datetime.now(timezone.utc).isoformat(),
+                'artifacts': artifacts, 'products': products,
+                'commands': [step.command for step in steps]}
+    manifest_file = run_dir / 'run_manifest.json'
+
+    def save():
+        temporary = manifest_file.with_suffix('.tmp')
+        temporary.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
+        temporary.replace(manifest_file)
+
+    save()
+    try:
+        import os
+        with (run_dir / 'run.log').open('w', encoding='utf-8') as log:
+            for step in steps:
+                log.write(f"\n===== STEP: {step.name} =====\n")
+                log.flush()
+                env = {**os.environ, **step.env, 'PYTHONUNBUFFERED': '1'}
+                process = subprocess.Popen(
+                    step.command, cwd=step.cwd, env=env,
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True, encoding='utf-8', errors='replace', bufsize=1,
+                )
+                assert process.stdout is not None
+                try:
+                    for line in process.stdout:
+                        safe_console_write(line)
+                        log.write(line)
+                        log.flush()
+                    return_code = process.wait()
+                except BaseException:
+                    process.terminate()
+                    try:
+                        process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        process.wait()
+                    raise
+                finally:
+                    process.stdout.close()
+                if return_code:
+                    raise subprocess.CalledProcessError(return_code, step.command)
+        if not all(Path(p).is_file() for p in artifacts.values()):
+            raise ValueError('运行未生成全部报告，不能标记为成功')
+        manifest['status'] = 'success'
+        return 0
+    except (OSError, ValueError, subprocess.CalledProcessError, KeyboardInterrupt) as exc:
+        manifest.update(status='failed', error=str(exc))
+        print(f'Glm-subj 失败；详情见 {run_dir / "run.log"}: {exc}')
+        return 1
+    finally:
+        manifest['completed_at'] = datetime.now(timezone.utc).isoformat()
+        save()
+        print(f'运行记录：{manifest_file}')

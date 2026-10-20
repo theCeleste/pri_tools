@@ -1578,3 +1578,9 @@ def example_methods() -> dict[str, Method]:
             path_name="PrivSV",
         ),
     }
+
+
+def glm_subj_steps(settings: dict[str, Any], run_dir: Path, method_id: str, experiment_id: str) -> list[Step]:
+    """Dedicated backend; never replace the existing method builders."""
+    from .glm_subj import build_steps
+    return build_steps(settings, run_dir, method_id, experiment_id)[0]

@@ -45,12 +45,13 @@ FULL_IMPORTS: dict[str, tuple[str, ...]] = {
     "privsv": ("torch", "transformers", "datasets", "steering_vectors", "sklearn", "pandas"),
 }
 FULL_IMPORTS["dpsgd"] = ("torch", "transformers", "datasets", "peft", "opacus", "numpy", "pandas", "sklearn", "psutil")
-FULL_IMPORTS["glm_subj"] = ("torch", "transformers", "peft", "opacus", "accelerate", "safetensors", "numpy", "sklearn", "tqdm")
 
 FULL_REQUIREMENTS = {
     method: REQUIREMENTS_ROOT / f"{method}.txt" for method in FULL_IMPORTS
 }
 FULL_REQUIREMENTS["dpsgd"] = REQUIREMENTS_ROOT / "dpsgd.txt"
+FULL_IMPORTS["glm_subj"] = ("torch", "transformers", "peft", "opacus", "numpy", "scipy",
+                           "sklearn", "safetensors", "sentencepiece", "accelerate", "tqdm")
 FULL_REQUIREMENTS["glm_subj"] = PROJECT_ROOT / "Glm-subj" / "requirements.txt"
 
 NO_DEPENDENCY_EXPERIMENTS = {

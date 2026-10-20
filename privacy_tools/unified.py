@@ -92,6 +92,7 @@ class TaskSelection:
     evaluation_model_title: str | None = None
     backend_method_id: str | None = None
     display_method_title: str | None = None
+    backend: str | None = None
 
 
 PYTHON = PromptSpec("", "Python 解释器", "str", "直接回车使用当前激活环境")
@@ -534,55 +535,34 @@ def _choose_model_and_dataset(
     experiment_id: str,
     choose_dataset: bool = True,
 ) -> tuple[str | None, str | None]:
-    """Choose the existing Llama path or the supported ChatGLM3/Subj branch."""
+    """Select only JSON-defined model/dataset values; custom input is disabled."""
     uses_chat_model = experiment_id == "indirect_attack" and method_id in {"dadp_icl", "privsv"}
     model_key = "common.model_7b_chat" if uses_chat_model else "common.model_7b"
     fallback = "meta-llama/Llama-2-7b-chat-hf" if uses_chat_model else "meta-llama/Llama-2-7b-hf"
-    llama_model = str(get_nested(settings, model_key, fallback))
-    configured_dataset = str(get_nested(settings, "common.dataset", "sst2"))
-    settings["_glm_subj_selected"] = False
+    model = str(get_nested(settings, model_key, fallback))
+    options = [("configured", "Llama-2-7b")]
     if method_id in {"cliptext", "privsv", "zo_dpga"}:
-        model_choice = choose_from_menu("请选择模型", [
-            ("llama", f"Llama-2（{llama_model}）"),
-            ("chatglm3_6b", f"ChatGLM3-6B（{get_nested(settings, 'glm_subj.base_model', get_nested(settings, 'common.chatglm3_6b', 'chatglm3-6b'))}）"),
-        ])
-    else:
-        model_choice = choose_from_menu("请选择模型", [("llama", llama_model)])
-    if model_choice is None:
+        options.append(("glm_subj", "ChatGLM3-6B"))
+    selected_model = choose_from_menu("请选择模型", options)
+    if selected_model is None:
         return None, None
-
-    if model_choice == "chatglm3_6b":
-        model = "chatglm3-6b"
-        dataset_choices = [("configured", configured_dataset), ("subj", "Subj")]
-    else:
-        model = "Llama-2-7b-chat" if uses_chat_model else "Llama-2-7b"
-        dataset_choices = (
-            [("configured", configured_dataset), ("subj", "Subj")]
-            if method_id in {"cliptext", "privsv", "zo_dpga"}
-            else [("configured", configured_dataset)]
-        )
+    model = "ChatGLM3-6B" if selected_model == "glm_subj" else model
 
     if not choose_dataset:
-        if model_choice == "chatglm3_6b":
-            settings["_glm_subj_selected"] = True
-            return model, "subj"
-        settings["_glm_subj_selected"] = False
         return model, None
 
-    dataset_choice = choose_from_menu("请选择数据集", dataset_choices)
-    if dataset_choice is None:
+    dataset = str(get_nested(settings, "common.dataset", "sst2"))
+    datasets = [("configured", dataset)]
+    if method_id in {"cliptext", "privsv", "zo_dpga"}:
+        datasets.append(("subj", "Subj"))
+    selected_dataset = choose_from_menu("请选择数据集", datasets)
+    if selected_dataset is None:
         return None, None
-    supported = model_choice == "chatglm3_6b" and dataset_choice == "subj"
-    if dataset_choice == "subj" and model_choice != "chatglm3_6b":
-        print("当前仅支持 ChatGLM3-6B + Subj；该模型/数据集组合尚未接入。")
+    dataset = "subj" if selected_dataset == "subj" else dataset
+    if (model == "ChatGLM3-6B") != (dataset.lower() == "subj"):
+        print("不支持该模型/数据集组合；ChatGLM3-6B 仅支持 Subj。")
         return None, None
-    if model_choice == "chatglm3_6b" and dataset_choice != "subj":
-        print("当前 ChatGLM3-6B 分支隐含使用 Subj 数据集，不支持其他数据集。")
-        return None, None
-    if dataset_choice == "configured":
-        dataset_choice = configured_dataset
-    settings["_glm_subj_selected"] = supported
-    return model, dataset_choice
+    return model, dataset
 
 
 def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
@@ -644,23 +624,6 @@ def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
     )
     if method_id is None:
         return None
-    if method_id in {"cliptext", "privsv", "zo_dpga"}:
-        model = choose_from_menu("请选择待评估模型", [
-            ("llama", f"Llama-2（{get_nested(settings, 'common.model_7b_chat' if evaluation_type == 'indirect_attack' else 'common.model_7b', 'Llama-2')}）"),
-            ("chatglm_subj", "ChatGLM3-6B（隐含评估数据集：Subj）"),
-        ])
-        if model is None:
-            return None
-        if model == "chatglm_subj":
-            return TaskSelection(
-                "evaluation", method_id, evaluation_type, group, evaluation_type, finetune_type,
-                dataset="subj", evaluation_model="chatglm_subj", evaluation_model_title="ChatGLM3-6B",
-            )
-        return TaskSelection(
-            "evaluation", method_id, evaluation_type, group, evaluation_type, finetune_type,
-            evaluation_model="llama_perturbed",
-            evaluation_model_title=("Llama-2-7b-chat" if evaluation_type == "indirect_attack" else "Llama-2-7b"),
-        )
     return TaskSelection("evaluation", method_id, evaluation_type, group, evaluation_type, finetune_type)
 
 
@@ -709,100 +672,6 @@ def _run_model_evaluation(selection: TaskSelection, settings: dict[str, Any]) ->
     )
 
 
-def _run_glm_subj_task(
-    selection: TaskSelection,
-    settings: dict[str, Any],
-    *,
-    experiment_id: str | None = None,
-    mode_override: str | None = None,
-    confirm: bool = True,
-) -> int:
-    """Run or read the isolated ChatGLM3-6B/Subj backend."""
-    from . import glm_subj
-
-    if selection.task_kind == "evaluation":
-        chosen_experiment = selection.experiment_id
-        mode = mode_override or choose_from_menu("请选择执行模式", [
-            ("run", "立即执行"),
-            ("history", "读取 Glm-subj 历史结果"),
-        ])
-        if mode is None:
-            return 0
-        if mode == "history":
-            glm_subj.print_history(settings, selection.method_id, chosen_experiment)
-            return 0
-        if chosen_experiment == "indirect_attack":
-            print("ChatGLM3-6B / Subj 间接评估接口已保留，后端尚未接入；未启动旧邻居攻击。")
-            return 2
-    else:
-        chosen_experiment = experiment_id
-        if chosen_experiment is None:
-            return 0
-        if chosen_experiment == "performance_baseline":
-            mode = mode_override or choose_from_menu("DP-SGD 性能对比接口（尚未接入）", [
-                ("run", "尝试运行（将提示尚未接入）"),
-                ("history", "读取 Glm-subj 历史结果"),
-            ])
-            if mode is None:
-                return 0
-            if mode == "history":
-                glm_subj.print_history(settings, selection.method_id, chosen_experiment)
-                return 0
-            print("ChatGLM3-6B / Subj 的 DP-SGD 性能对比尚未接入；未调用旧 DPSGD 实现。")
-            return 2
-        mode = mode_override or choose_from_menu("请选择执行模式", [
-            ("run", "立即执行"),
-            ("dry", "预览命令，不启动实验"),
-            ("history", "读取 Glm-subj 历史结果"),
-        ])
-        if mode is None:
-            return 0
-        if mode == "history":
-            glm_subj.print_history(settings, selection.method_id, chosen_experiment)
-            return 0
-
-    dry_run = mode == "dry"
-    ready, reason = glm_subj.preflight(selection.method_id, chosen_experiment, settings)
-    if not ready and not dry_run:
-        print(f"[ChatGLM3-6B / Subj 检查失败] {reason}")
-        return 1
-    if not _prepare_runtime("glm_subj", chosen_experiment, settings, dry_run):
-        return 1
-    if not dry_run:
-        gpu = str(get_nested(settings, "common.gpu", "0"))
-        python = str(get_nested(settings, "python.glm_subj", get_nested(settings, "python.default", sys.executable)))
-        ok, detail = check_cuda(python, gpu)
-        print(f"  [{'OK' if ok else 'FAIL'}] GPU：{detail}")
-        if not ok:
-            return 1
-        if confirm and not _confirm_real_run():
-            return 0
-    elif confirm and not _yes_no("确认生成预演结果吗？"):
-        return 0
-
-    method = glm_subj.make_method(selection.method_id, chosen_experiment, settings)
-    experiment = method.experiments[0]
-    previous_results_dir = settings.get("results_dir")
-    previous_metadata = settings.get("_manifest_metadata")
-    settings["results_dir"] = str(glm_subj.output_root(settings))
-    settings["_manifest_metadata"] = glm_subj.manifest_metadata(selection.method_id, chosen_experiment, settings)
-    try:
-        return run_experiment(
-            "evaluation" if selection.task_kind == "evaluation" else "finetune",
-            method, experiment, settings, dry_run=dry_run,
-            display_title=f"{METHODS[selection.method_id].title} / ChatGLM3-6B / Subj",
-        )
-    finally:
-        if previous_results_dir is None:
-            settings.pop("results_dir", None)
-        else:
-            settings["results_dir"] = previous_results_dir
-        if previous_metadata is None:
-            settings.pop("_manifest_metadata", None)
-        else:
-            settings["_manifest_metadata"] = previous_metadata
-
-
 def interactive(settings: dict[str, Any]) -> int:
     print("\n=========================================================")
     print(" 具备敏感信息保护能力的大模型微调支撑工具集原型系统 v1.1")
@@ -813,15 +682,11 @@ def interactive(settings: dict[str, Any]) -> int:
     if selection is None:
         print("已退出。")
         return 0
-    if selection.evaluation_model == "chatglm_subj":
-        return _run_glm_subj_task(selection, settings)
     if selection.evaluation_model in {"chatglm", "fm9g"}:
         return _run_model_evaluation(selection, settings)
     no_perturbation = selection.perturbation_group == "none"
     method_id = selection.backend_method_id or selection.method_id
     if no_perturbation:
-        model, dataset = selection.evaluation_model_title, None
-    elif selection.task_kind == "evaluation" and selection.evaluation_model == "llama_perturbed":
         model, dataset = selection.evaluation_model_title, None
     else:
         model, dataset = _choose_model_and_dataset(
@@ -837,6 +702,9 @@ def interactive(settings: dict[str, Any]) -> int:
     if selection.task_kind == "finetune":
         current_method_title = METHODS[method_id].title
         baseline_finetune_type = "Prompt微调" if selection.perturbation_group == "example" else "PEFT微调"
+        if model == "ChatGLM3-6B":
+            baseline_finetune_type = {"cliptext": "Raw causal LoRA", "privsv": "Raw LoRA + Mean Steering",
+                                      "zo_dpga": "MeZO causal LoRA"}[method_id]
         comparison_labels = {
             # "utility": f"否，运行当前方法 {current_method_title}",
             "utility": f"否，运行当前方法",
@@ -851,8 +719,19 @@ def interactive(settings: dict[str, Any]) -> int:
             return 0
     else:
         experiment_id = selection.experiment_id
-    if selection.task_kind == "finetune" and settings.get("_glm_subj_selected"):
-        return _run_glm_subj_task(selection, settings, experiment_id=experiment_id)
+    if model == "ChatGLM3-6B":
+        from dataclasses import replace
+        from .glm_subj import run as run_glm_subj
+        selection = replace(selection, backend="glm_subj", model="chatglm3-6b", dataset="subj")
+        mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
+                               ("history", "查看最近历史结果"), ("dry", "预览命令（不执行）")])
+        if mode is None:
+            return 0
+        # print(f"Glm-subj：{selection.method_id} / ChatGLM3-6B / Subj")
+        # if method_id == "privsv":
+        #     print("Private Steering 当前没有 epsilon accountant，不能宣称形式化 DP 保证。")
+        return run_glm_subj(settings, selection.method_id, experiment_id, mode,
+                           confirm=_confirm_real_run, selection=selection)
     method = METHODS[method_id]
     experiment = next(item for item in method.experiments if item.id == experiment_id)
     if selection.evaluation_model == "llama":
@@ -948,6 +827,13 @@ def list_path_options(settings: dict[str, Any]) -> None:
         value = get_nested(settings, key, "") if "." in key else settings.get(key, "")
         print(f"│  {'└─' if index == len(common_keys) - 1 else '├─'} {key}: {value}")
 
+    print("\n├─ ChatGLM3-6B / Subj（ClipText、PrivSV、ZO-DPGA）")
+    for key in ("python.glm_subj", "glm_subj.base_model", "glm_subj.raw_data",
+                "glm_subj.embedding_data", "glm_subj.output_root"):
+        print(f"│  ├─ {key}: {get_nested(settings, key, '')}")
+    for method in ("cliptext", "privsv", "zo_dpga"):
+        for name, value in get_nested(settings, f"glm_subj.artifacts.{method}", {}).items():
+            print(f"│  ├─ glm_subj.artifacts.{method}.{name}: {value or '自动解析成功训练产物'}")
     seen: set[tuple[str, str, str]] = set()
     groups = (("微调", FINETUNE_METHOD_GROUPS), ("评估", EVALUATION_METHOD_GROUPS))
     for task_title, task_groups in groups:
@@ -1012,10 +898,8 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser = subparsers.add_parser("run", help="跳过菜单，直接执行指定实验")
     run_parser.add_argument("--method", required=True, choices=METHODS.keys())
     run_parser.add_argument("--experiment", required=True)
-    run_parser.add_argument("--model", choices=("llama", "chatglm3_6b"), default="llama",
-                            help="ChatGLM3-6B 仅与 Subj 数据集组合受支持")
-    run_parser.add_argument("--dataset", choices=("sst2", "subj"),
-                            help="ChatGLM3-6B 分支隐含使用 subj")
+    run_parser.add_argument("--backend", choices=["legacy", "glm_subj"], default="legacy")
+    run_parser.add_argument("--history", action="store_true", help="读取所选后端的历史结果")
     run_parser.add_argument("--dry-run", action="store_true", help="只生成命令，不执行实验")
     return parser
 
@@ -1039,31 +923,20 @@ def main(argv: Iterable[str] | None = None) -> int:
         selected = [METHODS[args.method]] if args.method else list(METHODS.values())
         return max((doctor(method, settings) for method in selected), default=0)
     if args.action == "run":
+        if args.backend == "glm_subj":
+            from .glm_subj import run as run_glm_subj
+            if args.method not in {"cliptext", "privsv", "zo_dpga"}:
+                parser.error("Glm-subj 仅支持 ClipText、PrivSV、ZO-DPGA")
+            return run_glm_subj(settings, args.method, args.experiment,
+                               "history" if args.history else "dry" if args.dry_run else "run")
+        if args.history:
+            parser.error("--history 用于 Glm-subj 后端")
         method = METHODS[args.method]
         try:
             experiment = next(item for item in method.experiments if item.id == args.experiment)
         except StopIteration:
             available = ", ".join(item.id for item in method.experiments)
             parser.error(f"方法 {method.id} 不包含实验 {args.experiment}；可选：{available}")
-        if args.model == "chatglm3_6b":
-            if args.method not in {"cliptext", "privsv", "zo_dpga"}:
-                parser.error("ChatGLM3-6B / Subj 本次仅接入 ClipText、PrivSV 和 ZO-DPGA")
-            if args.dataset not in (None, "subj"):
-                parser.error("ChatGLM3-6B 分支隐含使用 Subj 数据集")
-            is_finetune = args.experiment in {"utility", "baseline", "performance_baseline"}
-            group = CATEGORIES[args.method]
-            selection = TaskSelection(
-                "finetune" if is_finetune else "evaluation", args.method, args.experiment, group,
-                args.experiment if not is_finetune else None,
-                "implicit" if args.method == "privsv" else "explicit",
-                dataset="subj", evaluation_model="chatglm_subj", evaluation_model_title="ChatGLM3-6B",
-            )
-            return _run_glm_subj_task(
-                selection, settings, experiment_id=args.experiment,
-                mode_override="dry" if args.dry_run else "run", confirm=False,
-            )
-        if args.dataset == "subj":
-            parser.error("Subj 数据集当前仅支持与 ChatGLM3-6B 配套使用")
         return run_experiment(CATEGORIES[method.id], method, experiment, settings, dry_run=args.dry_run)
     parser.error("未知操作")
     return 2
