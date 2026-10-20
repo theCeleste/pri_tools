@@ -1,0 +1,15 @@
+# Python 3.11. Install the CUDA 12.1 PyTorch wheel before this file.
+torch==2.4.1
+transformers==4.40.2
+peft==0.10.0
+accelerate==0.29.3
+opacus==1.5.4
+numpy==1.26.4
+scipy==1.13.1
+scikit-learn==1.5.2
+tqdm==4.67.1
+huggingface-hub==0.23.4
+tokenizers==0.19.1
+safetensors==0.4.5
+sentencepiece==0.2.0
+protobuf==4.25.3

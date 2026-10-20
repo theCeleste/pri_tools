@@ -3,34 +3,31 @@
   "finetune_type": "implicit",
   "dataset": "sst2",
   "engine": "evaluate-indirect-v1",
-  "backend_digest": "fee922f5aad76576447b9e662d573a771793936ed9faa50c584b03592cd20d9a",
+  "backend_digest": "cb038d62afcb2aac8a5f1fd15eb42a74218769f44539522b7d04749c1c7e6a49",
   "resources": {
     "base_model": "/home/zjs/llm/chatglm3-6b",
-    "physical_gpu": 3,
+    "physical_gpu": 1,
     "python": "/home/zjs/anaconda3/envs/few-shot/bin/python",
     "neighbor_model": "/home/zjs/code/x73/x73-privacy-tool/evaluate/indirect_ICL/resources/bert-base-uncased",
     "dataset_dir": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2"
   },
-  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/chatglm3/implicit/sst2/20260929_211608_894069_7e01be64",
+  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/chatglm3/implicit/sst2/20261014_100748_979517_673196e6",
   "source_run": null,
   "schema_version": 1,
   "baseline_type": "no_perturbation",
   "evaluation_type": "indirect",
   "status": "completed",
-  "completed_at": "2026-09-29T13:34:41.851003+00:00",
-  "updated_at": "2026-09-29T13:34:41.851003+00:00",
+  "completed_at": "2026-10-14T02:22:58.625827+00:00",
+  "updated_at": "2026-10-14T02:22:58.625827+00:00",
   "results": {
     "original_text": {
       "AUC": 0.8298,
       "member_count": 10,
       "nonmember_count": 500,
-      "TPR@100%": 1.0,
-      "TPR@50%": 0.8,
-      "TPR@10%": 0.7,
       "TPR@1%": 0.4,
       "TPR@0.1%": 0.4,
       "TPR@0.01%": 0.4,
-      "metrics_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/chatglm3/implicit/sst2/20260929_211608_894069_7e01be64/backend/original_text/evaluation/metrics.json"
+      "metrics_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/chatglm3/implicit/sst2/20261014_100748_979517_673196e6/backend/original_text/evaluation/metrics.json"
     }
   },
   "data_validation": {

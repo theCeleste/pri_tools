@@ -1,0 +1,48 @@
+{
+  "spec": {
+    "version": 2,
+    "dataset": "subj",
+    "variant": "subj",
+    "method": "none",
+    "source": {
+      "source": "/home/wrc/ZO-DPGA/chatglm_subj/data/subj",
+      "revision": "local",
+      "validation_source": "stratified_from_train",
+      "split_seed": 42,
+      "validation_ratio": 0.1
+    },
+    "clean_fingerprints": {
+      "train": "5e84edb6ccb7af8dba9d4ccc3cf985ef6eae35053e4e95cd1c338fe250162933",
+      "test": "2f510ca2c5b6c1db6a341d3deff223105ac8a39d90875c8e1739f4aa7d274833",
+      "validation": "9ccd2fbe4f2139839557503130d97957c203950673403012fd7537532c6f53f3"
+    },
+    "seed": 42,
+    "eps": null,
+    "top_k": null,
+    "mapping_strategy": null,
+    "mapping_fit_split": "train",
+    "evaluation_text": "original",
+    "label_names": [
+      "objective",
+      "subjective"
+    ],
+    "embedding_dim": null,
+    "stopwords_sha256": null
+  },
+  "files": {
+    "train": "train.jsonl",
+    "test": "test.jsonl",
+    "validation": "validation.jsonl"
+  },
+  "file_fingerprints": {
+    "train": "5e84edb6ccb7af8dba9d4ccc3cf985ef6eae35053e4e95cd1c338fe250162933",
+    "test": "2f510ca2c5b6c1db6a341d3deff223105ac8a39d90875c8e1739f4aa7d274833",
+    "validation": "9ccd2fbe4f2139839557503130d97957c203950673403012fd7537532c6f53f3"
+  },
+  "rows": {
+    "train": 7200,
+    "test": 2000,
+    "validation": 800
+  },
+  "stats": {}
+}

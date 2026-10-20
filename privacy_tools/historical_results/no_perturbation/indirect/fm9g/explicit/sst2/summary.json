@@ -3,10 +3,10 @@
   "finetune_type": "explicit",
   "dataset": "sst2",
   "engine": "evaluate-indirect-v1",
-  "backend_digest": "72558546b1a99c5e4c104c98f97392bb8d84515916d539bc69925ee7e83b2057",
+  "backend_digest": "9e71e44ae9cbcb79edbcbc7855160ddf6dd8581186f67e9ea72d1258ecc00bfa",
   "resources": {
     "base_model": "/home/zjs/llm/9G7B_MHA",
-    "physical_gpu": 0,
+    "physical_gpu": 1,
     "python": "/home/zjs/anaconda3/envs/mia/bin/python",
     "adapter": "/home/zjs/code/x73/x73-privacy-tool/evaluate/indirect_LoRA/weights/fm9g/sst2",
     "tokenizer": "/home/zjs/code/x73/x73-privacy-tool/evaluate/indirect_LoRA/weights/fm9g/sst2",
@@ -15,68 +15,20 @@
     "member_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2/train.tsv",
     "nonmember_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/datasets/sst2/test.tsv"
   },
-  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/fm9g/explicit/sst2/20260930_094941_699525_254729d9",
+  "output": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/fm9g/explicit/sst2/20261014_102753_916723_bda391df",
   "source_run": null,
   "schema_version": 1,
   "baseline_type": "no_perturbation",
   "evaluation_type": "indirect",
   "status": "completed",
-  "completed_at": "2026-09-30T02:26:27.359080+00:00",
-  "updated_at": "2026-09-30T02:26:27.359080+00:00",
+  "completed_at": "2026-10-14T02:58:54.197357+00:00",
+  "updated_at": "2026-10-14T02:58:54.197357+00:00",
   "results": {
     "lora": {
       "auc": 0.7586479166666668,
       "member_count": 1200,
       "nonmember_count": 1200,
       "rows": [
-        {
-          "target_fpr": 1.0,
-          "target_fpr_percent": "100.0000%",
-          "threshold": "-2.049007296562195",
-          "actual_fpr": 1.0,
-          "actual_fpr_percent": "100.0000%",
-          "tpr": 0.9991666666666666,
-          "tpr_percent": "99.9167%",
-          "tp": 1199.0,
-          "fp": 1200.0,
-          "tn": 0.0,
-          "fn": 1.0,
-          "auc": 0.7586479166666668,
-          "member_count": 1200.0,
-          "nonmember_count": 1200.0
-        },
-        {
-          "target_fpr": 0.5,
-          "target_fpr_percent": "50.0000%",
-          "threshold": "1.234689288139343",
-          "actual_fpr": 0.5,
-          "actual_fpr_percent": "50.0000%",
-          "tpr": 0.8483333333333334,
-          "tpr_percent": "84.8333%",
-          "tp": 1018.0,
-          "fp": 600.0,
-          "tn": 600.0,
-          "fn": 182.0,
-          "auc": 0.7586479166666668,
-          "member_count": 1200.0,
-          "nonmember_count": 1200.0
-        },
-        {
-          "target_fpr": 0.1,
-          "target_fpr_percent": "10.0000%",
-          "threshold": "2.196284251213074",
-          "actual_fpr": 0.1,
-          "actual_fpr_percent": "10.0000%",
-          "tpr": 0.3875,
-          "tpr_percent": "38.7500%",
-          "tp": 465.0,
-          "fp": 120.0,
-          "tn": 1080.0,
-          "fn": 735.0,
-          "auc": 0.7586479166666668,
-          "member_count": 1200.0,
-          "nonmember_count": 1200.0
-        },
         {
           "target_fpr": 0.01,
           "target_fpr_percent": "1.0000%",
@@ -126,7 +78,7 @@
           "nonmember_count": 1200.0
         }
       ],
-      "metrics_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/fm9g/explicit/sst2/20260930_094941_699525_254729d9/backend/mia_evaluation_results.csv"
+      "metrics_file": "/home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/fm9g/explicit/sst2/20261014_102753_916723_bda391df/backend/mia_evaluation_results.csv"
     }
   },
   "data_validation": {

@@ -1,0 +1,24 @@
+
+
+Saved evaluation CSV: /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/chatglm3/explicit/sst2/20261010_111438_130363_6654df50/backend/mia_evaluation_results.csv
+
+Completed: /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/chatglm3/explicit/sst2/20261010_111438_130363_6654df50/backend
+
+方法：间接评估 模型：chatglm3，微调方式：显式，数据集：sst2
+lora: AUC=0.6438
+TPR@1%FPR: 3.583%
+TPR@0.1%FPR: 0.417%
+TPR@0.01%FPR: 0.000%
+
+
+Saved evaluation CSV: /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/fm9g/explicit/sst2/20261014_102753_916723_bda391df/backend/mia_evaluation_results.csv
+
+Completed: /home/zjs/code/x73/x73-privacy-tool/privacy_tools/results/indirect_evaluation/fm9g/explicit/sst2/20261014_102753_916723_bda391df/backend
+
+方法：间接评估 模型：fm9g，微调方式：显式，数据集：sst2
+lora: AUC=0.6433
+TPR@1%FPR: 3.917%
+TPR@0.1%FPR: 0.750%
+TPR@0.01%FPR: 0.750%
+
+

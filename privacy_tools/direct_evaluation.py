@@ -568,7 +568,14 @@ def run_direct(settings: dict, model: str, kind: str, *, mode: str = "preview", 
             write_json(output / "summary.json", summary)
             archive_result(settings, "direct", summary, format_summary(summary, include_output=False))
             manifest["status"] = "completed"
-            print_summary(summary)
+            # Explicit no-perturbation direct evaluation displays the stable
+            # historical TXT after archiving.  This keeps repeated runs
+            # consistent with the history view and avoids presenting the
+            # current run's potentially different summary as the result.
+            if kind == "explicit":
+                show_history(settings, ident)
+            else:
+                print_summary(summary)
         except (Exception, KeyboardInterrupt) as exc:
             manifest.update(status="failed", error=str(exc))
             raise

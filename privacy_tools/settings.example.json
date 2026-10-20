@@ -2,7 +2,7 @@
   "results_dir": "privacy_tools/results",
   "historical_results_dir": "privacy_tools/historical_results",
   "common": {
-    "gpu": "0",
+    "gpu": "1",
     "dataset": "sst2",
     "dataset_path": "privacy_tools/datasets/sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",

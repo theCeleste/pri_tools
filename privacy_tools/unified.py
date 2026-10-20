@@ -553,7 +553,7 @@ def _choose_model_and_dataset(
 
 
 def _select_task(settings: dict[str, Any]) -> TaskSelection | None:
-    task_kind = choose_from_menu("第一步：请选择待执行方法类型", [("finetune", "敏感信息保护微调方法"), ("evaluation", "敏感信息泄露风险评估方法")])
+    task_kind = choose_from_menu("第一步：请选择待执行方法类型", [("finetune", "敏感信息保护微调方法"), ("evaluation", "敏感信息泄露风险多维度评估方法")])
     if task_kind is None:
         return None
     if task_kind == "finetune":
@@ -661,7 +661,7 @@ def _run_model_evaluation(selection: TaskSelection, settings: dict[str, Any]) ->
 
 def interactive(settings: dict[str, Any]) -> int:
     print("\n=========================================================")
-    print(" 具备敏感信息保护能力的大模型微调支撑工具集原型系统 v1.0")
+    print(" 具备敏感信息保护能力的大模型微调支撑工具集原型系统 v1.1")
     print("=========================================================")
     print("  请按提示进行后续操作 ")
     print("=========================================================")

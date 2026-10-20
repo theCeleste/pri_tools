@@ -1,0 +1,66 @@
+{
+  "spec": {
+    "version": 2,
+    "dataset": "subj",
+    "variant": "subj",
+    "method": "cliptext-plus",
+    "source": {
+      "source": "/home/wrc/ClipText/ClipText_Subj_Server/data/subj",
+      "revision": "local",
+      "validation_source": "stratified_from_train",
+      "split_seed": 42,
+      "validation_ratio": 0.1
+    },
+    "clean_fingerprints": {
+      "train": "5e84edb6ccb7af8dba9d4ccc3cf985ef6eae35053e4e95cd1c338fe250162933",
+      "test": "2f510ca2c5b6c1db6a341d3deff223105ac8a39d90875c8e1739f4aa7d274833",
+      "validation": "9ccd2fbe4f2139839557503130d97957c203950673403012fd7537532c6f53f3"
+    },
+    "seed": 42,
+    "eps": 1.0,
+    "top_k": 20,
+    "mapping_strategy": "conservative",
+    "mapping_fit_split": "train",
+    "evaluation_text": "original",
+    "label_names": [
+      "objective",
+      "subjective"
+    ],
+    "embedding_dim": 300,
+    "stopwords_sha256": "6be6f5b07bbe637af9fb2589f07415511c093488a4ae619bbf394dbd8b8420c1",
+    "embedding": {
+      "path": "/home/wrc/disk_optimizer/ClipText/sst/ClipText/ClipText/sst2/embeddings/glove_840B-300d.txt",
+      "bytes": 5646236541,
+      "mtime_ns": 1785319408421317268
+    }
+  },
+  "files": {
+    "train": "train.jsonl",
+    "test": "test.jsonl",
+    "validation": "validation.jsonl"
+  },
+  "file_fingerprints": {
+    "train": "55d71487f808af562a4ef292226dfde4d5576f5351c168889272bc9e14aef45a",
+    "test": "2f510ca2c5b6c1db6a341d3deff223105ac8a39d90875c8e1739f4aa7d274833",
+    "validation": "9ccd2fbe4f2139839557503130d97957c203950673403012fd7537532c6f53f3"
+  },
+  "rows": {
+    "train": 7200,
+    "test": 2000,
+    "validation": 800
+  },
+  "stats": {
+    "mapping": {
+      "training_vocabulary": 19138,
+      "embedding_vocabulary": 17776,
+      "mapped_vocabulary": 17776
+    },
+    "perturbation": {
+      "tokens": 177056,
+      "mapped_tokens": 108329,
+      "changed_tokens": 100233,
+      "preserved_stopword_tokens": 67043,
+      "changed_fraction": 0.5661090276522682
+    }
+  }
+}
