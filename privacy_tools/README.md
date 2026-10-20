@@ -48,7 +48,24 @@ python privacy_tool.py run --backend glm_subj --method privsv --experiment basel
 python privacy_tool.py run --backend glm_subj --method cliptext --experiment utility --history
 # 已完成对应两侧训练后，预览成对直接攻击
 python privacy_tool.py run --backend glm_subj --method zo_dpga --experiment direct_attack --dry-run
+# ChatGLM 性能对比：调用 dpsgd/chatglm（同样支持 privsv、zo_dpga）
+python privacy_tool.py run --backend glm_subj --method cliptext --experiment performance_baseline --dry-run
+python privacy_tool.py run --backend glm_subj --method cliptext --experiment performance_baseline --history
 ```
+
+`performance_baseline` 使用 `python.glm_subj_dpsgd` 解释器和
+`dpsgd/chatglm/requirements.txt`，环境安装步骤见该目录 README。
+通过 `glm_subj.dpsgd` 配置批量大小、物理微批量、序列长度、LoRA rank、
+学习率、裁剪阈值和训练轮数；默认 epsilon=8、delta=5e-6、种子 1337。
+`common.gpu` 必须指定单张 GPU。基础模型沿用 `glm_subj.base_model`，
+需包含 `AutoModelForSequenceClassification` 映射和对应分类模型源码。
+该脚本从 Hugging Face 缓存或网络加载 `SetFit/subj`，使用其原始 train，
+将原始 test 分层拆为 validation/test 各 1000 条，不读取 `glm_subj.raw_data`。
+输出独立保存到 `glm_subj.output_root` 下的本次运行目录，含 checkpoint、
+CSV、日志、manifest 和 `training_report.json`，可按原方法查询成功历史。
+报告记录训练步骤耗时、吞吐量、峰值已分配显存和实际 epsilon；
+吞吐量仅计算同步后的训练步骤，不包含加载、验证和保存耗时。
+分类头 checkpoint 用于性能对比，不会作为直接攻击的生成式 adapter 自动解析。
 
 移除 `--dry-run` 会实际执行。运行前配置 `glm_subj.base_model`、`raw_data`、
 `embedding_data` 和 `output_root`；外部已有模型可填写 `glm_subj.artifacts` 中

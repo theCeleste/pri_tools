@@ -47,11 +47,18 @@ class GlmSubjTests(unittest.TestCase):
                 command = steps[0].command
                 data = command[command.index('--data-dir') + 1]
                 self.assertEqual(data, '/clip-subj' if method == 'cliptext' and exp == 'utility' else '/raw-subj')
+                for step in steps:
+                    if '--data-dir' in step.command:
+                        self.assertEqual(step.command[step.command.index('--data-dir') + 1], data)
+                if method == 'cliptext' and exp == 'utility':
+                    self.assertEqual(command[command.index('--original-data-dir') + 1], '/raw-subj')
                 if method == 'zo_dpga':
                     self.assertEqual(command[command.index('--method') + 1], 'dpzero' if exp == 'utility' else 'mezo')
-                self.assertIn('utility', artifacts)
+                # The GLM backend records its native training report; it does
+                # not append the optional unified holdout utility evaluator.
+                self.assertIn('training_report', artifacts)
+                self.assertNotIn('utility', artifacts)
                 self.assertIn('adapter', products)
-                self.assertEqual(steps[-1].command[steps[-1].command.index('--data-dir') + 1], '/raw-subj')
 
     def test_privsv_reuses_raw_and_selects_variant(self):
         self.manifest('privsv', products={'adapter': '/shared-raw', 'steering': '/private'})
@@ -59,7 +66,10 @@ class GlmSubjTests(unittest.TestCase):
         self.assertEqual(steps[0].command[2], 'privacy_attack.build_steering')
         self.assertIn('mean', steps[0].command)
         self.assertEqual(products['adapter'], '/shared-raw')
-        self.assertIn('/shared-raw', steps[-1].command)
+        # The shared Raw LoRA is reused as a product for inference; steering
+        # construction itself operates on the base model and raw data.
+        self.assertEqual(len(steps), 1)
+        self.assertIn('/raw-subj', steps[-1].command)
         self.assertNotIn('--adapter', steps[0].command)  # upstream constructs vectors on base
 
     def test_direct_pair_uses_raw_and_matched_targets(self):
@@ -210,7 +220,7 @@ class GlmSubjTests(unittest.TestCase):
             steps, _, _ = self.build('cliptext', 'utility')
             g.doctor(self.settings, steps)
             base.assert_called_with(Path('/chatglm'))
-            self.assertIn(unittest.mock.call('/raw-subj', 'test'), split.call_args_list)
+            self.assertIn(unittest.mock.call('/clip-subj', 'test'), split.call_args_list)
             adapter.assert_not_called()  # adapter is produced earlier in this run
             self.settings['glm_subj']['artifacts']['cliptext'] = {
                 'protected_adapter': '/protected', 'baseline_adapter': '/baseline'}

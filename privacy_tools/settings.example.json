@@ -26,7 +26,8 @@
     "indirect_icl": "/home/zjs/anaconda3/envs/few-shot/bin/python",
     "direct_lora": "/home/zjs/anaconda3/envs/mia/bin/python",
     "direct_icl": "/home/zjs/anaconda3/envs/few-shot/bin/python",
-    "glm_subj": "/home/zjs/anaconda3/envs/glm-subj/bin/python"
+    "glm_subj": "/home/zjs/anaconda3/envs/glm-subj/bin/python",
+    "glm_subj_dpsgd": "/home/zjs/anaconda3/envs/chatglm-subj-dp/bin/python"
   },
   "dpsgd": {
     "target_epsilon": 8.0,
@@ -223,6 +224,15 @@
     }
   },
   "glm_subj": {
+    "dpsgd": {
+      "batch_size": 32,
+      "max_physical_batch_size": 16,
+      "seq_length": 128,
+      "lora_rank": 16,
+      "learning_rate": 0.0001,
+      "max_grad_norm": 3.0,
+      "epochs": 4
+    },
     "base_model": "/home/zjs/llm/chatglm3-6b",
     "raw_data": "Glm-subj/data/subj_raw_prepared/subj/none_a3c561096c597e10",
     "embedding_data": "Glm-subj/data/subj_embedding_protected",

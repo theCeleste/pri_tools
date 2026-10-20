@@ -1,0 +1,17 @@
+# Python 3.11; versions from the local ChatGLM-compatible project environment.
+# Install the CUDA build of torch first; see README.md.
+torch==2.4.1
+transformers==4.40.2
+peft==0.10.0
+opacus==1.5.4
+datasets==2.19.2
+accelerate==0.29.3
+huggingface-hub==0.23.4
+numpy==1.26.4
+scipy==1.17.1
+sentencepiece==0.2.0
+protobuf==4.25.3
+tqdm==4.67.1
+safetensors==0.4.5
+pyarrow==23.0.0
+fsspec==2024.3.1

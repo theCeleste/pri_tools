@@ -828,7 +828,7 @@ def list_path_options(settings: dict[str, Any]) -> None:
         print(f"│  {'└─' if index == len(common_keys) - 1 else '├─'} {key}: {value}")
 
     print("\n├─ ChatGLM3-6B / Subj（ClipText、PrivSV、ZO-DPGA）")
-    for key in ("python.glm_subj", "glm_subj.base_model", "glm_subj.raw_data",
+    for key in ("python.glm_subj", "python.glm_subj_dpsgd", "glm_subj.base_model", "glm_subj.raw_data",
                 "glm_subj.embedding_data", "glm_subj.output_root"):
         print(f"│  ├─ {key}: {get_nested(settings, key, '')}")
     for method in ("cliptext", "privsv", "zo_dpga"):

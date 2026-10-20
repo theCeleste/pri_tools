@@ -13,7 +13,12 @@ from .core import (PROJECT_ROOT, Step, configured_python, get_nested, method_env
 
 ROOT = PROJECT_ROOT / 'Glm-subj'
 METHODS = {'cliptext', 'privsv', 'zo_dpga'}
-PLACEHOLDERS = {'performance_baseline', 'indirect_attack'}
+PLACEHOLDERS = {'indirect_attack'}
+DPSGD_ROOT = PROJECT_ROOT / 'dpsgd' / 'chatglm'
+
+
+def runtime_profile(experiment):
+    return 'glm_subj_dpsgd' if experiment == 'performance_baseline' else 'glm_subj'
 
 
 def config(settings, key, default=None):
@@ -29,7 +34,7 @@ def identity(method, experiment):
         raise ValueError('Glm-subj 仅支持 ClipText、PrivSV、ZO-DPGA')
     return dict(backend='glm_subj', method=method, model='chatglm3-6b', dataset='subj',
                 experiment=experiment, role='paired' if experiment == 'direct_attack' else
-                'baseline' if experiment == 'baseline' else 'protected')
+                'baseline' if experiment in {'baseline', 'performance_baseline'} else 'protected')
 
 
 def output_root(settings):
@@ -86,7 +91,9 @@ def artifact_pair(settings, method):
 def build_steps(settings, run_dir: Path, method: str, experiment: str):
     identity(method, experiment)
     if experiment in PLACEHOLDERS:
-        raise NotImplementedError('ChatGLM3-6B + Subj：DP-SGD / 间接评估尚未接入')
+        raise NotImplementedError('ChatGLM3-6B + Subj：间接评估尚未接入')
+    if experiment == 'performance_baseline':
+        return build_dpsgd_steps(settings, run_dir.resolve())
     if experiment not in {'utility', 'baseline', 'direct_attack'}:
         raise ValueError(f'Glm-subj 不支持实验 {experiment}')
     run_dir = run_dir.resolve()
@@ -174,6 +181,34 @@ def build_steps(settings, run_dir: Path, method: str, experiment: str):
     return steps, artifacts, products
 
 
+def build_dpsgd_steps(settings, run_dir):
+    base = path(settings, 'base_model', get_nested(settings, 'common.chatglm3_6b', 'models/chatglm3-6b'))
+    options = dict(batch_size=32, max_physical_batch_size=16, seq_length=128,
+                   lora_rank=16, learning_rate=1e-4, max_grad_norm=3.0, epochs=4)
+    values = config(settings, 'dpsgd', {})
+    if not isinstance(values, dict) or set(values) - options.keys():
+        raise ValueError('glm_subj.dpsgd 只能设置 batch_size、max_physical_batch_size、seq_length、'
+                         'lora_rank、learning_rate、max_grad_norm、epochs')
+    options.update(values)
+    for key, value in options.items():
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 < value < float('inf'):
+            raise ValueError(f'glm_subj.dpsgd.{key} 必须为正数')
+        if key not in {'learning_rate', 'max_grad_norm'} and not isinstance(value, int):
+            raise ValueError(f'glm_subj.dpsgd.{key} 必须为正整数')
+    gpu = str(get_nested(settings, 'common.gpu', '0'))
+    if not gpu.strip() or ',' in gpu:
+        raise ValueError('ChatGLM DP-SGD 仅支持单卡，请将 common.gpu 设为单个 GPU 编号')
+    command = [configured_python(settings, runtime_profile('performance_baseline')),
+               str(DPSGD_ROOT / 'dpsgd_chatglm3_subj.py'), '--model_name', str(base),
+               '--output_dir', str(run_dir)]
+    for key, value in options.items():
+        command += ['--' + key, str(value)]
+    return ([Step('ChatGLM Subj DP-SGD', command, DPSGD_ROOT,
+                  method_env(settings, DPSGD_ROOT, PROJECT_ROOT))],
+            {'training_report': str(run_dir / 'training_report.json')},
+            {'checkpoints': str(run_dir)})
+
+
 def _options(values):
     # Reserved paths/identity cannot be overridden through arbitrary command flags.
     allowed = {'rank', 'lora_alpha', 'lora_dropout', 'epochs', 'batch_size', 'gradient_accumulation',
@@ -187,6 +222,13 @@ def _options(values):
 
 def doctor(settings, steps):
     """Check the selected backend's actual model, data and external products."""
+    if steps and '--model_name' in steps[0].command:
+        args = steps[0].command
+        base = Path(args[args.index('--model_name') + 1])
+        model_config = json.loads((base / 'config.json').read_text(encoding='utf-8'))
+        if model_config.get('model_type') != 'chatglm' or not model_config.get('auto_map', {}).get('AutoModelForSequenceClassification'):
+            raise ValueError('ChatGLM DP-SGD 需要含 AutoModelForSequenceClassification 映射的本地 ChatGLM 模型')
+        return
     import sys
     sys.path.insert(0, str(ROOT))
     from privacy_attack.common import load_split, validate_adapter, validate_chatglm_base
@@ -230,12 +272,13 @@ def task_summary(settings, method, experiment, mode, selection=None):
 
 def run(settings, method, experiment, mode='run', *, confirm=None, selection=None):
     identity(method, experiment)
+    profile = runtime_profile(experiment)
     if experiment in PLACEHOLDERS:
         task_summary(settings, method, experiment, mode, selection)
         print('ChatGLM3-6B + Subj：尚未接入，无可用结果。')
         return 0
     if mode == 'history':
-        print(f"  查看最近历史结果使用默认配置的 Python环境：{configured_python(settings, 'glm_subj')}")
+        print(f"  查看最近历史结果使用默认配置的 Python环境：{configured_python(settings, profile)}")
         print('  查看最近历史结果不会安装依赖或检查 GPU。')
         task_summary(settings, method, experiment, mode, selection)
         previous = history(settings, method, experiment)
@@ -253,7 +296,7 @@ def run(settings, method, experiment, mode='run', *, confirm=None, selection=Non
     try:
         steps, artifacts, products = build_steps(settings, run_dir, method, experiment)
         if mode == 'dry':
-            print(f"  命令预览使用默认配置的 Python环境：{configured_python(settings, 'glm_subj')}")
+            print(f"  命令预览使用默认配置的 Python环境：{configured_python(settings, profile)}")
             print('  命令预览不会检查 GPU 或执行实验。')
             task_summary(settings, method, experiment, mode, selection)
             print(f'\n运行目录（预览，不创建）：{run_dir}')
@@ -261,8 +304,8 @@ def run(settings, method, experiment, mode='run', *, confirm=None, selection=Non
                 print(printable_command(step))
             return 0
         from .bootstrap import check_cuda, check_imports, environment_plan
-        plan = environment_plan('glm_subj', experiment)
-        python = configured_python(settings, 'glm_subj')
+        plan = environment_plan(profile, experiment)
+        python = configured_python(settings, profile)
         print(f'  {plan.explanation}')
         ready, missing = check_imports(python, plan.imports)
         if not ready:
