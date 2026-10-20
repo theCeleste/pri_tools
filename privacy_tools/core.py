@@ -239,6 +239,8 @@ INTERESTING_NAMES = {
     "benchmark.json",
     "evaluation_benchmark.json",
     "eval_metrics.json",
+    "training_report.json",
+    "build_report.json",
     "all_results.json",
     "overall_stats.json",
     "trainer_state.json",
@@ -709,7 +711,15 @@ def run_experiment(
         "project_root": str(PROJECT_ROOT),
         "config_file": settings.get("_config_file"),
         "steps": [],
+        "status": "previewed" if dry_run else "running",
     }
+    manifest.update(settings.get("_manifest_metadata", {}))
+
+    def save_manifest() -> None:
+        (run_dir / "run_manifest.json").write_text(
+            json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+
     materialized_steps: list[Step] = []
     try:
         steps: list[Step] = [] if experiment.internal_report else experiment.builder(settings, run_dir)
@@ -729,14 +739,16 @@ def run_experiment(
     except Exception as exc:
         (run_dir / "stdout.log").write_text(f"准备实验失败：{exc}\n", encoding="utf-8")
         manifest["prepare_error"] = str(exc)
-        (run_dir / "run_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+        manifest["status"] = "failed"
+        manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
+        save_manifest()
         print(f"准备实验失败：{exc}", file=sys.stderr)
         print(f"运行记录：{run_dir}")
         if not dry_run:
             print("运行异常，请重新运行")
         return 2
 
-    (run_dir / "run_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    save_manifest()
     print(f"\n运行目录：{run_dir}")
     for index, step in enumerate(materialized_steps, 1):
         print(f"[{index}/{len(materialized_steps)}] {step.name}")
@@ -796,20 +808,45 @@ def run_experiment(
                 if return_code != 0:
                     break
 
+    manifest["status"] = "previewed" if dry_run else ("completed" if return_code == 0 else "failed")
+    manifest["finished_at"] = datetime.now().isoformat(timespec="seconds")
     if not dry_run and return_code != 0:
+        manifest["return_code"] = return_code
+        save_manifest()
         print("\n运行异常，请重新运行")
         return return_code
 
+    glm_backend = manifest.get("backend") == "glm_subj"
+    if glm_backend:
+        model_outputs = []
+        for step_record in manifest.get("steps", []):
+            command = step_record.get("command", [])
+            for index, token in enumerate(command[:-1]):
+                if token == "--output-dir":
+                    model_outputs.append(command[index + 1])
+        manifest["artifacts"] = {
+            "reports": [str(path.resolve()) for name in ("training_report.json", "build_report.json")
+                        for path in run_dir.rglob(name)],
+            "model_outputs": model_outputs,
+            "summaries": [str(path.resolve()) for path in (run_dir / "attacks").rglob("summary.json")]
+                          if (run_dir / "attacks").exists() else [],
+            "comparison": str((run_dir / "attacks" / "comparison.json").resolve())
+                          if (run_dir / "attacks" / "comparison.json").is_file() else None,
+        }
+        manifest["return_code"] = return_code
+        save_manifest()
+
     history_root = project_path(str(settings.get("historical_results_dir", "privacy_tools/historical_results")))
-    print_historical_results(
-        history_root,
-        method.id,
-        method.title,
-        experiment.id,
-        real_execution=not dry_run,
-        display_title=display_title,
-        baseline_only=historical_baseline_only,
-    )
+    if not glm_backend:
+        print_historical_results(
+            history_root,
+            method.id,
+            method.title,
+            experiment.id,
+            real_execution=not dry_run,
+            display_title=display_title,
+            baseline_only=historical_baseline_only,
+        )
     artifact_since = None if experiment.internal_report else started_at
     artifacts = discover_artifacts(method.root, since=artifact_since)
     if experiment.internal_report:
@@ -823,6 +860,8 @@ def run_experiment(
         print(f"\n训练指标结果：{result_path}")
     else:
         print(f"\n评估结果目录：{run_dir}")
+    if glm_backend:
+        save_manifest()
     return return_code
 
 

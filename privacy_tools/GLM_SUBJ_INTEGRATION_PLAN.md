@@ -1,6 +1,6 @@
 # Glm-subj 接入规划
 
-本文规划将 `Glm-subj/` 中面向 ChatGLM3-6B / Subj 的微调与隐私评估实现接入统一工具。本文仅描述改动方案，不代表代码已完成接入。
+本文记录将 `Glm-subj/` 中面向 ChatGLM3-6B / Subj 的微调与隐私评估实现接入统一工具的规划及当前实现。统一工具新增后端位于 `privacy_tools/glm_subj.py`，不替换既有 Llama 方法实现。
 
 ## 1. 目标与边界
 
@@ -42,9 +42,9 @@ Glm-subj 的实现入口包括 [`train_lora.py`](../Glm-subj/privacy_attack/trai
 
 保留“性能对比方法：DP-SGD”选项和后端接口，但 ChatGLM + Subj 分支暂不调用已有 DPSGD 实现。选择该项时应明确提示“尚未接入”，不应返回旧模型的 DP-SGD 结果，也不应将占位运行记作成功实验。
 
-### 3.4 效用指标待定义
+### 3.4 效用指标与当前边界
 
-Glm-subj 训练报告主要记录训练/验证 loss、perplexity、运行时间及隐私相关信息；现有代码没有统一的 Subj 分类准确率评估。统一工具当前的效用展示更偏向 accuracy。实现前需确定统一效用口径：建议使用固定提示模板在相同 Subj holdout 上评估分类准确率，并可同时记录 loss/perplexity。PrivSV 的 Mean/Private 两个 steering 分支也必须使用同一效用评估器，否则该方法的保护与基线效用不可直接比较。
+Glm-subj 训练报告主要记录训练/验证 loss、perplexity、运行时间及隐私相关信息；当前没有统一的 Subj 分类准确率评估器。因此本次接入读取并展示原生训练/构建报告，不伪造分类准确率。后续若增加固定提示模板的 holdout 分类准确率，应在 PrivSV 的 Mean/Private 两侧共用同一评估器，再纳入统一效用指标。
 
 ## 4. 评估分支
 
@@ -78,10 +78,10 @@ ChatGLM + Subj 的间接评估保留选项和后端接口，但本阶段不调�
 
 ### 5.1 输出约定
 
-建议统一工具将每次 Glm-subj 运行写入 `Glm-subj/outputs/<run_id>/`，并通过现有 `MODEL_ROOT` / `ATTACK_ROOT` 参数约定分别放置模型和攻击产物：
+统一工具将每次 Glm-subj 运行写入 `Glm-subj/outputs/<task>/<method>/<experiment>/<run_id>/`，每个 run 目录包含运行 manifest，并在其下放模型、攻击产物：
 
 ```text
-Glm-subj/outputs/<run_id>/
+Glm-subj/outputs/finetune/<method>/<experiment>/<run_id>/
 ├── run_manifest.json
 ├── models/       # adapter、steering、training_report.json、build_report.json
 └── attacks/      # prefix/summary.json、逐条 records、方法比较 JSON
@@ -95,6 +95,7 @@ Glm-subj/outputs/<run_id>/
 - `baseline` 读取相同方法对应的非保护报告及同口径效用评估结果。
 - LoRA / DPZero / MeZO 训练主要读取 `training_report.json`；PrivSV 还需读取 `build_report.json` 和统一效用评估产物。
 - `performance_baseline` 在未实现前显示无可用结果，不回退到旧 DP-SGD 历史。
+- 微调成功 manifest 会记录模型输出目录；直接评估默认优先使用最近一次成功微调产物，也允许通过配置覆盖路径。
 
 ### 5.3 评估历史
 
@@ -114,7 +115,7 @@ Glm-subj/outputs/<run_id>/
 2. 增加 Glm-subj 配置、Python 环境与路径检查。
 3. 为三个方法分别接入保护微调和非保护效用对照 builder；为 DP-SGD 建占位接口。
 4. 增加三种方法的直接评估 builder，固定保护/对照映射、reference 和匹配攻击目标；为间接评估保留无执行的占位。
-5. 规范每次运行输出与 manifest，分别增加微调报告和评估 summary 的历史读取。
+5. 规范每次运行输出与 manifest，分别增加微调报告和评估 summary 的历史读取；效用报告沿用 Glm-subj 的 train/validation loss 与 perplexity，不标为 Subj 分类 accuracy。
 6. 补充选择路由、命令构造、历史筛选和旧路径兼容测试，并用 dry-run 验证命令、数据及产物路径。
 
 ## 8. 验收要点
