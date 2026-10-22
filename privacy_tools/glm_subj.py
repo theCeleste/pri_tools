@@ -13,11 +13,12 @@ from .core import (PROJECT_ROOT, Step, configured_python, get_nested, method_env
 
 ROOT = PROJECT_ROOT / 'Glm-subj'
 METHODS = {'cliptext', 'privsv', 'zo_dpga'}
-PLACEHOLDERS = {'indirect_attack'}
 DPSGD_ROOT = PROJECT_ROOT / 'dpsgd' / 'chatglm'
 
 
 def runtime_profile(experiment):
+    if experiment == 'indirect_attack':
+        return 'glm_subj_indirect'
     return 'glm_subj_dpsgd' if experiment == 'performance_baseline' else 'glm_subj'
 
 
@@ -33,7 +34,7 @@ def identity(method, experiment):
     if method not in METHODS:
         raise ValueError('Glm-subj 仅支持 ClipText、PrivSV、ZO-DPGA')
     return dict(backend='glm_subj', method=method, model='chatglm3-6b', dataset='subj',
-                experiment=experiment, role='paired' if experiment == 'direct_attack' else
+                experiment=experiment, role='paired' if experiment in {'direct_attack', 'indirect_attack'} else
                 'baseline' if experiment in {'baseline', 'performance_baseline'} else 'protected')
 
 
@@ -43,8 +44,6 @@ def output_root(settings):
 
 def history(settings, method, experiment):
     """Select by manifest identity and recorded completion time, never directory mtime."""
-    if experiment in PLACEHOLDERS:
-        return None
     expected = identity(method, experiment)
     candidates = []
     for manifest in output_root(settings).glob('*/run_manifest.json'):
@@ -54,6 +53,10 @@ def history(settings, method, experiment):
                 continue
             if data.get('status') != 'success' or any(data.get(k) != v for k, v in expected.items()):
                 continue
+            if experiment == 'indirect_attack':
+                from .glm_subj_indirect import history_matches
+                if not history_matches(data, settings, method):
+                    continue
             artifacts = data.get('artifacts', {})
             if not isinstance(artifacts, dict) or not artifacts or not all(Path(p).is_file() for p in artifacts.values()):
                 continue
@@ -90,8 +93,9 @@ def artifact_pair(settings, method):
 
 def build_steps(settings, run_dir: Path, method: str, experiment: str):
     identity(method, experiment)
-    if experiment in PLACEHOLDERS:
-        raise NotImplementedError('ChatGLM3-6B + Subj：间接评估尚未接入')
+    if experiment == 'indirect_attack':
+        from .glm_subj_indirect import build_steps as build_indirect
+        return build_indirect(settings, run_dir, method)
     if experiment == 'performance_baseline':
         return build_dpsgd_steps(settings, run_dir.resolve())
     if experiment not in {'utility', 'baseline', 'direct_attack'}:
@@ -222,6 +226,12 @@ def _options(values):
 
 def doctor(settings, steps):
     """Check the selected backend's actual model, data and external products."""
+    if steps and str(PROJECT_ROOT / 'Glm-subj/Indirect_attack/run.py') in steps[0].command:
+        from .glm_subj_indirect import doctor as indirect_doctor, METHODS as indirect_methods
+        native = steps[0].command[steps[0].command.index('--method') + 1]
+        method = next(m for m, values in indirect_methods.items() if values[0] == native)
+        indirect_doctor(settings, method)
+        return
     if steps and '--model_name' in steps[0].command:
         args = steps[0].command
         base = Path(args[args.index('--model_name') + 1])
@@ -266,6 +276,13 @@ def task_summary(settings, method, experiment, mode, selection=None):
         print(f'是否运行对比方法：{comparison}')
     print('模型：ChatGLM3-6B')
     print('数据集：Subj')
+    # if experiment == 'indirect_attack':
+    #     from .glm_subj_indirect import resources
+    #     info = resources(settings, method)
+    #     # print('资源来源：' + ('随包权重复现' if info['resource_source'] == 'bundled' else '外部训练产物'))
+    #     # print('保护/基线变体：' + str(info['variants']))
+    #     if method == 'privsv':
+    #         print('模型组成：ChatGLM 底座 + 运行时 Steering（不加载 LoRA）')
     mode_title = {'run': '立即执行', 'history': '查看最近历史结果', 'dry': '预览命令（不执行）'}[mode]
     print(f'模式：{mode_title}')
 
@@ -273,12 +290,20 @@ def task_summary(settings, method, experiment, mode, selection=None):
 def run(settings, method, experiment, mode='run', *, confirm=None, selection=None):
     identity(method, experiment)
     profile = runtime_profile(experiment)
-    if experiment in PLACEHOLDERS:
-        task_summary(settings, method, experiment, mode, selection)
-        print('ChatGLM3-6B + Subj：尚未接入，无可用结果。')
-        return 0
+    if experiment == 'indirect_attack':
+        from .glm_subj_indirect import python as indirect_python
+        python = indirect_python(settings)
+    else:
+        python = configured_python(settings, profile)
+    if experiment == 'indirect_attack':
+        from .glm_subj_indirect import resources
+        try:
+            resources(settings, method)
+        except (ValueError, TypeError, KeyError) as exc:
+            print(f'Glm-subj：{exc}')
+            return 1
     if mode == 'history':
-        print(f"  查看最近历史结果使用默认配置的 Python环境：{configured_python(settings, profile)}")
+        print(f"  查看最近历史结果使用默认配置的 Python环境：{python}")
         print('  查看最近历史结果不会安装依赖或检查 GPU。')
         task_summary(settings, method, experiment, mode, selection)
         previous = history(settings, method, experiment)
@@ -296,16 +321,15 @@ def run(settings, method, experiment, mode='run', *, confirm=None, selection=Non
     try:
         steps, artifacts, products = build_steps(settings, run_dir, method, experiment)
         if mode == 'dry':
-            print(f"  命令预览使用默认配置的 Python环境：{configured_python(settings, profile)}")
+            print(f"  命令预览使用默认配置的 Python环境：{python}")
             print('  命令预览不会检查 GPU 或执行实验。')
             task_summary(settings, method, experiment, mode, selection)
             print(f'\n运行目录（预览，不创建）：{run_dir}')
             for step in steps:
-                print(printable_command(step))
+                print(printable_command(step).replace('dpzero', 'zo_dpga'))
             return 0
         from .bootstrap import check_cuda, check_imports, environment_plan
         plan = environment_plan(profile, experiment)
-        python = configured_python(settings, profile)
         print(f'  {plan.explanation}')
         ready, missing = check_imports(python, plan.imports)
         if not ready:
@@ -316,10 +340,14 @@ def run(settings, method, experiment, mode='run', *, confirm=None, selection=Non
         if not ready:
             return 1
         doctor(settings, steps)
+        extra_manifest = {}
+        if experiment == 'indirect_attack':
+            from .glm_subj_indirect import metadata
+            extra_manifest = metadata(settings, method, fingerprints=True)
         task_summary(settings, method, experiment, mode, selection)
         if confirm is not None and not confirm():
             return 0
-    except (OSError, ValueError, NotImplementedError) as exc:
+    except (OSError, ValueError, TypeError, KeyError, NotImplementedError) as exc:
         print(f'Glm-subj：{exc}')
         return 1
     print(f'\n运行目录：{run_dir}')
@@ -329,7 +357,7 @@ def run(settings, method, experiment, mode='run', *, confirm=None, selection=Non
     except OSError as exc:
         print(f'Glm-subj 输出目录不可写：{exc}')
         return 1
-    manifest = {**identity(method, experiment), 'status': 'running',
+    manifest = {**identity(method, experiment), **extra_manifest, 'status': 'running',
                 'run_directory': str(run_dir),
                 'started_at': datetime.now(timezone.utc).isoformat(),
                 'artifacts': artifacts, 'products': products,
@@ -357,7 +385,7 @@ def run(settings, method, experiment, mode='run', *, confirm=None, selection=Non
                 assert process.stdout is not None
                 try:
                     for line in process.stdout:
-                        safe_console_write(line)
+                        safe_console_write(line.replace('dpzero', 'zo_dpga'))
                         log.write(line)
                         log.flush()
                     return_code = process.wait()
@@ -373,11 +401,15 @@ def run(settings, method, experiment, mode='run', *, confirm=None, selection=Non
                     process.stdout.close()
                 if return_code:
                     raise subprocess.CalledProcessError(return_code, step.command)
+        if experiment == 'indirect_attack':
+            from .glm_subj_indirect import finalize
+            result = finalize(settings, method, run_dir)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
         if not all(Path(p).is_file() for p in artifacts.values()):
             raise ValueError('运行未生成全部报告，不能标记为成功')
         manifest['status'] = 'success'
         return 0
-    except (OSError, ValueError, subprocess.CalledProcessError, KeyboardInterrupt) as exc:
+    except (OSError, ValueError, TypeError, KeyError, subprocess.CalledProcessError, KeyboardInterrupt) as exc:
         manifest.update(status='failed', error=str(exc))
         print(f'Glm-subj 失败；详情见 {run_dir / "run.log"}: {exc}')
         return 1

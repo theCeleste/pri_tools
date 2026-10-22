@@ -84,11 +84,86 @@ Private Steering 当前没有 epsilon accountant，不能宣称形式化 DP 保�
 直接评估只调用 known-prefix causal extraction，两侧使用相同的原始 Subj
 source reference、固定 raw prompt 模式、seed 和攻击参数，并由 `compare.py`
 验证目标和配置匹配。保存 train、holdout、差值、命中数/分母及 comparison。
-本阶段 `performance_baseline`（DP-SGD）和 `indirect_attack` 仅显示“尚未接入”，
-不执行实验或生成成功记录。
+`performance_baseline` 已接入 DP-SGD；`indirect_attack` 已接入配套间接评估包，
+其独立环境、配套资源与结果口径见下文。
 
 实际运行写入 `Glm-subj/outputs/<run_id>/run_manifest.json`、`models/`、
 `attacks/` 和 `run.log`。只有所有步骤成功且报告齐全才标记成功；历史按
 后端、方法、模型、数据集、实验、角色和成功状态过滤，再按 manifest 完成时间
 取最新结果。旧目录没有 manifest 的实验不会自动混入本分支历史。
 预览和历史读取均不执行命令、不创建运行记录。
+
+### ChatGLM3-6B / Subj 间接评估
+
+ClipText、PrivSV、ZO-DPGA 的 `indirect_attack` 已接入
+`Glm-subj/Indirect_attack/run.py`，分别运行 embedding（raw / cliptext_lora）、
+example（mean / private）、gradient（mezo / dpzero）成对评估。
+支持立即执行、只读历史和无写入命令预览：
+
+```bash
+python privacy_tool.py run --backend glm_subj --method cliptext --experiment indirect_attack --dry-run
+python privacy_tool.py run --backend glm_subj --method privsv --experiment indirect_attack --history
+# 正式执行：使用完整固定样本规模，需要 CUDA
+python privacy_tool.py run --backend glm_subj --method zo_dpga --experiment indirect_attack
+```
+
+底座使用 `glm_subj.base_model`，GPU 使用单个 `common.gpu` 物理编号。
+解释器优先使用 `python.glm_subj_indirect`，未配置时回退 `python.glm_subj`；
+依赖以 `Glm-subj/Indirect_attack/requirements.txt` 为准，另需兼容 CUDA 的 PyTorch。
+此环境不要求训练流程使用的 opacus；配置示例指向现有 mia 环境，部署时需核对本机环境。
+正式执行会检查导入、GPU、选中方法资源与数据，不自动安装依赖。
+
+默认 `glm_subj.indirect.resource_source=bundled`，使用交付包配套权重和固定数据，
+不会自动读取 `glm_subj.artifacts` 或最近训练模型。PrivSV 在底座上运行时构造 steering，
+不加载直接评估使用的 Raw LoRA / 保存的 steering。它的 member 是构造向量使用的样本，
+与另外两种方法的训练 member 含义不同。固定规模：PrivSV 1000/1000，另外两种 100/1000。
+
+外部 embedding / gradient 配置示例（路径可用项目相对路径）：
+
+```json
+{
+  "glm_subj": {
+    "indirect": {
+      "resource_source": "external",
+      "embedding": {
+        "baseline_adapter": "/models/raw",
+        "protected_adapter": "/models/cliptext",
+        "splits": "/data/subj_attack_splits",
+        "provenance": "/data/adapter_training_provenance.json"
+      }
+    }
+  }
+}
+```
+
+`splits` 包含 `train.jsonl`、`dev.jsonl`（可为空）和 `eval.jsonl`，格式与交付包一致；
+正式规模固定，不接受通过配置缩减。provenance 必须分别提供 `baseline`、`protected`，
+每组含实际 `adapter_model.safetensors` 的 `adapter_sha256` 及
+`original_training_texts` 字符串数组。该记录由模型提供者导出；ClipText 需映射回保护前正文。
+检查权重指纹、所有 member 属于该训练正文集合、nonmember 不属于该集合；
+来源记录不足会拒绝正式运行，不能仅凭 train 文件名认定成员身份。
+这些记录是训练来源证据，工具不会从权重本身反推或独立证明训练集。
+
+外部 example 使用 `glm_subj.indirect.example.interface_dir`，须含与新包相同契约的
+`subj_steered_model/` 接口代码及 `data/generate_dataset.json`、`test_dataset_ab.json`。
+构造向量与攻击成员使用同一份数据；不支持直接加载旧直接评估 steering。
+
+`glm_subj.indirect.proposal_model` 可覆盖 BERT 资源路径；可选 `neighbors` 复用邻居，
+同时必须提供同名 `.config.json`，匹配样本 ID、正文、提议模型路径和生成参数。
+embedding / gradient 此时转为 attack 模式；example 使用完整 1000+2000 攻击池缓存。
+默认重新生成邻居，成对变体共用邻居。运行固定使用逻辑 `cuda:0`，原生入口负责物理卡映射。
+
+每次运行写入 `Glm-subj/outputs/<run_id>/indirect/`、`indirect_summary.json`、
+`run_manifest.json` 和 `run.log`。摘要分别保存两侧 AUC、TPR、目标/实际 FPR、阈值、
+混淆计数和实际样本量；1000 nonmember 的 FPR 分辨率为 0.1%，0.01% 目标处实际为零假阳性。
+只有两侧分数、样本来源、配对与原生指标校验通过才标记成功；不会把小样本测试写成正式历史。
+历史按方法、模型、数据集、后端/schema、资源模式及配置路径匹配，不要求原始权重仍在本机。
+
+CPU 接入与原包交付测试：
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 /path/to/evaluation/python -B -m unittest privacy_tools.tests.test_glm_subj_indirect privacy_tools.tests.test_glm_subj privacy_tools.tests.test_glm_dpsgd -v
+```
+
+测试需要 numpy/pandas/scikit-learn，原包四项交付测试通过 unittest 适配运行，无需额外安装 pytest。
+实施和验收记录见 [接入规划](GLM_SUBJ_INDIRECT_EVALUATION_PLAN.md)。

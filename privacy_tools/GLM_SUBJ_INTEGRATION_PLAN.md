@@ -7,7 +7,7 @@
 - 保留现有方法和模型路径；只在选择 ClipText、PrivSV、ZO-DPGA 时增加 ChatGLM3-6B / Subj 分支。
 - 微调当前方法对应 Glm-subj 中的保护实现，效用对比对应配套的非保护实现。
 - 性能对比保留 DP-SGD 入口，但当前不运行 DP-SGD 实验。
-- ChatGLM3-6B 的直接评估接入 Glm-subj 的 `privacy_attack/`；间接评估仅留入口，后续补充。
+- ChatGLM3-6B 的直接评估接入 Glm-subj 的 `privacy_attack/`；间接评估已接入 `Indirect_attack/`，详见独立接入规划。
 - 微调与评估的历史结果分别从 `Glm-subj/outputs/` 下的训练和攻击结果读取，不与既有 Llama 或无扰动历史混用。
 
 ## 2. 现有统一入口与需要调整的边界
@@ -70,7 +70,7 @@ ChatGLM 分支应在进入现有 Llama builder 前路由至 Glm-subj 专用评�
 
 ### 4.3 间接评估占位
 
-ChatGLM + Subj 的间接评估保留选项和后端接口，但本阶段不调用现有 Llama 邻居攻击，也不将其他模型的历史结果显示为当前结果。选择该项时给出“尚未接入”的明确状态；待后续确定适用的攻击实现、数据格式和指标后再启用。
+ChatGLM + Subj 的间接评估已接入 `Glm-subj/Indirect_attack/`：ClipText 对应 embedding、PrivSV 对应 example、ZO-DPGA 对应 gradient。默认运行包内配套权重/数据的保护与非保护成对评估，不自动复用直接评估产物。PrivSV 使用底座 + 运行时 steering，不加载 Raw LoRA。详见 [独立规划与实施记录](GLM_SUBJ_INDIRECT_EVALUATION_PLAN.md) 和 [使用说明](README.md#chatglm3-6b--subj-间接评估)。
 
 ## 5. 历史结果读取与输出组织
 
@@ -100,7 +100,7 @@ Glm-subj/outputs/finetune/<method>/<experiment>/<run_id>/
 ### 5.3 评估历史
 
 - ChatGLM + Subj + 直接评估：按所选方法读取匹配的 `attacks/**/prefix/summary.json`，存在时同时读取相应的 comparison JSON；展示 train、holdout、差值及分母。
-- ChatGLM + Subj + 间接评估：目前显示无可用历史/尚未接入，不读取旧方法历史。
+- ChatGLM + Subj + 间接评估：读取匹配方法、后端版本、资源模式与路径的成功 manifest 和两侧指标，不读取旧方法历史。
 - Llama 与无扰动评估继续使用其现有历史读取方式。
 
 ## 6. 配置与环境检查

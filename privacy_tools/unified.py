@@ -828,12 +828,18 @@ def list_path_options(settings: dict[str, Any]) -> None:
         print(f"│  {'└─' if index == len(common_keys) - 1 else '├─'} {key}: {value}")
 
     print("\n├─ ChatGLM3-6B / Subj（ClipText、PrivSV、ZO-DPGA）")
-    for key in ("python.glm_subj", "python.glm_subj_dpsgd", "glm_subj.base_model", "glm_subj.raw_data",
+    for key in ("python.glm_subj", "python.glm_subj_dpsgd", "python.glm_subj_indirect", "glm_subj.base_model", "glm_subj.raw_data",
                 "glm_subj.embedding_data", "glm_subj.output_root"):
         print(f"│  ├─ {key}: {get_nested(settings, key, '')}")
     for method in ("cliptext", "privsv", "zo_dpga"):
         for name, value in get_nested(settings, f"glm_subj.artifacts.{method}", {}).items():
             print(f"│  ├─ glm_subj.artifacts.{method}.{name}: {value or '自动解析成功训练产物'}")
+    from .glm_subj_indirect import resources as indirect_resources
+    for method in ('cliptext', 'privsv', 'zo_dpga'):
+        try:
+            print(f'│  ├─ 间接评估 {method}: {indirect_resources(settings, method)}')
+        except ValueError as exc:
+            print(f'│  ├─ 间接评估 {method}: {exc}')
     seen: set[tuple[str, str, str]] = set()
     groups = (("微调", FINETUNE_METHOD_GROUPS), ("评估", EVALUATION_METHOD_GROUPS))
     for task_title, task_groups in groups:

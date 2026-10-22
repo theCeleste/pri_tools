@@ -57,6 +57,10 @@ FULL_IMPORTS["glm_subj_dpsgd"] = ("torch", "transformers", "datasets", "peft", "
                                  "numpy", "scipy", "sentencepiece", "accelerate", "tqdm")
 FULL_REQUIREMENTS["glm_subj_dpsgd"] = PROJECT_ROOT / "dpsgd" / "chatglm" / "requirements.txt"
 
+FULL_IMPORTS["glm_subj_indirect"] = ("torch", "transformers", "peft", "accelerate", "numpy",
+                                    "pandas", "sklearn", "sentencepiece", "safetensors", "tqdm")
+FULL_REQUIREMENTS["glm_subj_indirect"] = PROJECT_ROOT / "Glm-subj" / "Indirect_attack" / "requirements.txt"
+
 NO_DEPENDENCY_EXPERIMENTS = {
     ("zo_dpga", "summarize"),
     ("privsv", "direct_existing"),

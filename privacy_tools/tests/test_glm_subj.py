@@ -88,16 +88,9 @@ class GlmSubjTests(unittest.TestCase):
             self.assertIn('--require-matched-targets', steps[-1].command)
             self.assertIn('comparison', artifacts)
 
-    def test_missing_artifacts_and_placeholders(self):
+    def test_missing_direct_artifacts(self):
         with self.assertRaisesRegex(ValueError, '先完成'):
             self.build('cliptext', 'direct_attack')
-        for exp in g.PLACEHOLDERS:
-            with self.assertRaises(NotImplementedError):
-                self.build('cliptext', exp)
-            with patch.object(g, 'build_steps') as builder, contextlib.redirect_stdout(io.StringIO()):
-                self.assertEqual(g.run(self.settings, 'cliptext', exp), 0)
-                builder.assert_not_called()
-            self.assertIsNone(g.history(self.settings, 'cliptext', exp))
 
     def test_history_filters_identity_status_and_recorded_time(self):
         expected = self.manifest(name='match')

@@ -2,7 +2,7 @@
   "results_dir": "privacy_tools/results",
   "historical_results_dir": "privacy_tools/historical_results",
   "common": {
-    "gpu": "1",
+    "gpu": "2",
     "dataset": "sst2",
     "dataset_path": "privacy_tools/datasets/sst2",
     "model_7b": "/home/zjs/llm/Llama-2-7b-hf",
@@ -27,7 +27,8 @@
     "direct_lora": "/home/zjs/anaconda3/envs/mia/bin/python",
     "direct_icl": "/home/zjs/anaconda3/envs/few-shot/bin/python",
     "glm_subj": "/home/zjs/anaconda3/envs/glm-subj/bin/python",
-    "glm_subj_dpsgd": "/home/zjs/anaconda3/envs/chatglm-subj-dp/bin/python"
+    "glm_subj_dpsgd": "/home/zjs/anaconda3/envs/dpsgd/bin/python",
+    "glm_subj_indirect": "/home/zjs/anaconda3/envs/mia/bin/python"
   },
   "dpsgd": {
     "target_epsilon": 8.0,
@@ -285,6 +286,11 @@
         "protected_adapter": "Glm-subj/outputs/gradient_natural_100_gpu23/models/gradient/dpzero",
         "baseline_adapter": "Glm-subj/outputs/gradient_natural_100_gpu23/models/gradient/mezo"
       }
+    },
+    "indirect": {
+      "resource_source": "bundled",
+      "proposal_model": "Glm-subj/Indirect_attack/resources/bert-base-uncased",
+      "neighbors": ""
     }
   }
 }
