@@ -724,7 +724,7 @@ def interactive(settings: dict[str, Any]) -> int:
         from .glm_subj import run as run_glm_subj
         selection = replace(selection, backend="glm_subj", model="chatglm3-6b", dataset="subj")
         mode = choose_from_menu("请选择执行模式", [("run", "立即执行"),
-                               ("history", "查看最近历史结果"), ("dry", "预览命令（不执行）")])
+                               ("history", "查看最近历史结果")])
         if mode is None:
             return 0
         # print(f"Glm-subj：{selection.method_id} / ChatGLM3-6B / Subj")

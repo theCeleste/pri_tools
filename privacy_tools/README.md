@@ -37,7 +37,7 @@ python3 privacy_tool.py
 
 ClipText、PrivSV、ZO-DPGA 的微调和评估菜单现可选择 ChatGLM3-6B。
 微调仅新增支持 ChatGLM3-6B + Subj；评估选择该模型后自动使用 Subj。
-该分支提供立即执行、查看历史、命令预览三种模式，使用独立的 `glm_subj`
+交互菜单提供立即执行和查看历史两种模式，使用独立的 `glm_subj`
 配置和 `python.glm_subj` 环境（依赖见 `Glm-subj/requirements.txt`）。
 
 ```bash
