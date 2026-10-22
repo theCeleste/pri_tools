@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from .core import (PROJECT_ROOT, Step, configured_python, get_nested, method_env,
-                   printable_command, project_path, safe_console_write)
+                   print_historical_results, printable_command, project_path, safe_console_write)
 
 ROOT = PROJECT_ROOT / 'Glm-subj'
 METHODS = {'cliptext', 'privsv', 'zo_dpga'}
@@ -287,6 +287,13 @@ def task_summary(settings, method, experiment, mode, selection=None):
     print(f'模式：{mode_title}')
 
 
+def show_history(settings, method, experiment, *, real_execution=False):
+    history_root = project_path(str(settings.get('historical_results_dir', 'privacy_tools/historical_results')))
+    title = {'cliptext': 'ClipText', 'privsv': 'PrivSV', 'zo_dpga': 'ZO-DPGA'}[method]
+    print_historical_results(history_root / 'chatglm', method, title, experiment,
+                             real_execution=real_execution)
+
+
 def run(settings, method, experiment, mode='run', *, confirm=None, selection=None):
     identity(method, experiment)
     profile = runtime_profile(experiment)
@@ -295,6 +302,12 @@ def run(settings, method, experiment, mode='run', *, confirm=None, selection=Non
         python = indirect_python(settings)
     else:
         python = configured_python(settings, profile)
+    if mode == 'history':
+        print(f"  查看最近历史结果使用默认配置的 Python环境：{python}")
+        print('  查看最近历史结果不会安装依赖或检查 GPU。')
+        task_summary(settings, method, experiment, mode, selection)
+        show_history(settings, method, experiment)
+        return 0
     if experiment == 'indirect_attack':
         from .glm_subj_indirect import resources
         try:
@@ -302,21 +315,6 @@ def run(settings, method, experiment, mode='run', *, confirm=None, selection=Non
         except (ValueError, TypeError, KeyError) as exc:
             print(f'Glm-subj：{exc}')
             return 1
-    if mode == 'history':
-        print(f"  查看最近历史结果使用默认配置的 Python环境：{python}")
-        print('  查看最近历史结果不会安装依赖或检查 GPU。')
-        task_summary(settings, method, experiment, mode, selection)
-        previous = history(settings, method, experiment)
-        if not previous:
-            print('Glm-subj 无匹配的成功历史结果；请先完成对应训练/评估。')
-            return 0
-        if previous.get('run_directory'):
-            print(f"\n运行目录：{previous['run_directory']}")
-        print(json.dumps(previous, ensure_ascii=False, indent=2))
-        for name, file in previous['artifacts'].items():
-            print(f'\n{name}: {file}')
-            print(Path(file).read_text(encoding='utf-8'))
-        return 0
     run_dir = output_root(settings) / (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S') + '_' + uuid.uuid4().hex[:8])
     try:
         steps, artifacts, products = build_steps(settings, run_dir, method, experiment)
@@ -408,6 +406,7 @@ def run(settings, method, experiment, mode='run', *, confirm=None, selection=Non
         if not all(Path(p).is_file() for p in artifacts.values()):
             raise ValueError('运行未生成全部报告，不能标记为成功')
         manifest['status'] = 'success'
+        show_history(settings, method, experiment, real_execution=True)
         return 0
     except (OSError, ValueError, TypeError, KeyError, subprocess.CalledProcessError, KeyboardInterrupt) as exc:
         manifest.update(status='failed', error=str(exc))

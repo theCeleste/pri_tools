@@ -88,9 +88,13 @@ source reference、固定 raw prompt 模式、seed 和攻击参数，并由 `com
 其独立环境、配套资源与结果口径见下文。
 
 实际运行写入 `Glm-subj/outputs/<run_id>/run_manifest.json`、`models/`、
-`attacks/` 和 `run.log`。只有所有步骤成功且报告齐全才标记成功；历史按
-后端、方法、模型、数据集、实验、角色和成功状态过滤，再按 manifest 完成时间
-取最新结果。旧目录没有 manifest 的实验不会自动混入本分支历史。
+`attacks/` 和 `run.log`。只有所有步骤成功且报告齐全才标记成功。
+“查看最近历史结果”与 Llama 分支共用 TXT 读取及指标筛选逻辑，根目录为
+`privacy_tools/historical_results/chatglm`（配置 `historical_results_dir` 时使用其下的
+`chatglm` 子目录）。性能结果读取根目录下的方法 TXT，直接和间接评估分别读取
+`direct/`、`indirect/` 下的同名文件。训练产物的自动查找仍按 manifest 身份、
+成功状态和完成时间筛选。
+立即执行成功后也会展示一次对应的历史结果，使用相同路径和筛选逻辑。
 预览和历史读取均不执行命令、不创建运行记录。
 
 ### ChatGLM3-6B / Subj 间接评估
@@ -157,7 +161,8 @@ embedding / gradient 此时转为 attack 模式；example 使用完整 1000+2000
 `run_manifest.json` 和 `run.log`。摘要分别保存两侧 AUC、TPR、目标/实际 FPR、阈值、
 混淆计数和实际样本量；1000 nonmember 的 FPR 分辨率为 0.1%，0.01% 目标处实际为零假阳性。
 只有两侧分数、样本来源、配对与原生指标校验通过才标记成功；不会把小样本测试写成正式历史。
-历史按方法、模型、数据集、后端/schema、资源模式及配置路径匹配，不要求原始权重仍在本机。
+历史展示读取 `historical_results_dir/chatglm/indirect/` 下对应方法的 TXT，
+不检查原始权重或间接评估资源配置。
 
 CPU 接入与原包交付测试：
 
